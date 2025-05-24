@@ -25,7 +25,7 @@ cd portfolio
 - Create .env file from .env.example
 
 ```bash
-pcp .env.example .env
+cp .env.example .env
 ```
 
 - Replace the placeholders ({your-username}) with your actual usernames.
