@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  create-pr-if-needed:
+  create-pr-to-production:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout master branch
