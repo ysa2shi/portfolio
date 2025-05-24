@@ -1,0 +1,182 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== ベース設定 ===== */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+/* ===== 見出し ===== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-semibold text-gray-900;
+}
+
+h1 {
+  @apply text-2xl sm:text-3xl md:text-4xl mb-6;
+}
+h2 {
+  @apply text-xl sm:text-2xl md:text-3xl mb-5;
+}
+h3 {
+  @apply text-lg sm:text-xl md:text-2xl mb-4;
+}
+
+/* ===== テキスト・リンク ===== */
+
+p {
+  @apply mb-4 text-gray-800 text-base;
+}
+
+a {
+  @apply text-gray-900 underline underline-offset-2 hover:text-gray-600 transition-colors;
+  word-break: break-all;
+}
+
+/* ===== リスト ===== */
+
+ul,
+ol {
+  @apply mb-4 pl-5 list-disc;
+}
+li {
+  @apply mb-1;
+}
+
+/* ===== コードブロック・インラインコード ===== */
+
+pre {
+  @apply bg-gray-100 text-sm p-4 rounded-md overflow-x-auto;
+}
+
+code {
+  @apply font-mono bg-gray-100 px-1 rounded;
+}
+
+/* ===== ボタン ===== */
+
+.btn {
+  @apply inline-block px-4 py-2 rounded font-medium transition text-sm sm:text-base;
+}
+
+.btn-primary {
+  @apply bg-black text-white hover:bg-gray-800;
+}
+
+.btn-outline {
+  @apply border border-black text-black hover:bg-gray-100;
+}
+
+/* ===== カード ===== */
+
+.card {
+  @apply bg-white border border-gray-200 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition;
+}
+
+/* ===== レイアウト ===== */
+
+.container {
+  @apply max-w-5xl mx-auto px-4 sm:px-6 grid grid-rows-[auto_1fr_auto] grid-cols-[100%] min-h-screen;
+}
+
+section {
+  @apply py-5;
+}
+
+/* ===== ナビゲーション ===== */
+
+.hamburger {
+  padding-right: 20px;
+  cursor: pointer;
+}
+
+.hamburger .line {
+  display: block;
+  width: 40px;
+  height: 5px;
+  margin-bottom: 10px;
+  background: #000;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.nav-links {
+  position: fixed; /* 画面全体に固定 */
+  top: 75px; /* ヘッダーの下に配置 */
+  left: 0;
+  width: 100%; /* 幅を画面全体に */
+  background: white; /* 背景色を白に */
+  display: none; /* 初期状態では非表示 */
+  flex-direction: column; /* メニュー項目を縦並びに */
+  justify-content: center; /* 中央揃え */
+  align-items: center; /* 中央揃え */
+  z-index: 1000; /* 他の要素より前面に表示 */
+}
+
+.nav-links.expanded {
+  display: flex; /* ナビゲーションを表示 */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 下にシャドウラインを追加 */
+}
+
+.nav-links a {
+  display: block;
+  text-align: center;
+  padding: 10px 0;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* ハンバーガーがアクティブ（バツ）状態のスタイル */
+.hamburger.active .line:nth-child(1) {
+  transform: translateY(15px) rotate(45deg); /* 上の線を斜めに */
+}
+
+.hamburger.active .line:nth-child(2) {
+  opacity: 0; /* 真ん中の線を非表示 */
+}
+
+.hamburger.active .line:nth-child(3) {
+  transform: translateY(-15px) rotate(-45deg); /* 下の線を斜めに */
+}
+
+.nav-links a:hover,
+.nav-links a:focus {
+  color: #3b82f6; /* ホバー時の色を変更 */
+}
+
+.expanded {
+  display: unset;
+}
+
+@media screen and (min-width: 800px) {
+  .nav-links {
+    margin-left: 5em;
+    display: block;
+    position: static;
+    width: auto;
+    background: none;
+  }
+
+  .nav-links a {
+    display: inline-block;
+    padding: 15px 20px;
+  }
+
+  .hamburger {
+    display: none;
+  }
+}

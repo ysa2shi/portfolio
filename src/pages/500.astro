@@ -1,0 +1,27 @@
+---
+import "../styles/global.css"
+import ErrorLayout from "../layouts/ErrorLayout.astro"
+interface Props {
+  error: unknown
+}
+---
+
+<ErrorLayout pageTitle="500 Internal Server Error">
+  <section class="px-4 sm:px-8 max-w-6xl mx-auto py-8">
+    <h2 class="text-center text-2xl font-bold mb-4">
+      500 Internal Server Error
+    </h2>
+    <p class="text-center">
+      An unexpected error occurred on the server. <br />
+      Please try again later or contact support if the issue persists.
+    </p>
+    <div class="text-center mt-6">
+      <a
+        href={"/"}
+        class="inline-block px-6 py-3 bg-white text-black rounded-lg hover:text-blue-500 transition"
+      >
+        Go back to the Home screen.
+      </a>
+    </div>
+  </section>
+</ErrorLayout>
