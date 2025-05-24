@@ -1,5 +1,8 @@
 name: Create PR to production
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
