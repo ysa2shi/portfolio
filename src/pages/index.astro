@@ -4,10 +4,9 @@ import { formatDateJST } from "../utils/formatDate.ts"
 import { fetchZennArticles } from "../utils/fetchZennFeed"
 import BaseLayout from "../layouts/BaseLayout.astro"
 import { marketingConfig } from "../../config/marketing"
-import { siteConfig } from "../../config/site"
 const articles = await fetchZennArticles()
 // 最新5件だけ表示
-const latestArticles = articles.slice(0, 5)
+const latestArticles = articles.slice(0, 3)
 ---
 
 <BaseLayout pageTitle={marketingConfig.pageInfo.home.title}>
