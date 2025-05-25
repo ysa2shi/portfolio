@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout production branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: production
 
@@ -39,9 +39,8 @@ jobs:
         run: pnpm run build
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@2.0.0
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: portfolio
-          directory: ./dist
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          directory: pages publish --project-name=${{ secrets.CF_PROJECT_NAME }} ./dist
