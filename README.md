@@ -53,10 +53,13 @@ Inside of your Astro project, you'll see the following folders and files:
 
 ```text
 /
+├── config/
 ├── public/
 ├── src/
 │   └── pages/
-│       └── index.astro
+│   |   └── index.astro
+│   └── types/
+│       └── index.d.ts
 └── package.json
 ```
 
