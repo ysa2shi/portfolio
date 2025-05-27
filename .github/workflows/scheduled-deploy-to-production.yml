@@ -10,8 +10,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  trigger-deploy:
+  build-and-deploy-to-production:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Cloudflare Deploy Hook
+      - name: Deploy to Cloudflare Pages
         run: curl -X POST ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_URL }}
