@@ -1,5 +1,4 @@
-name: Scheduled Build and Deploy to Cloudflare Pages
-
+name: 🕒 本番環境へ定期デプロイ
 on:
   # 定期実行（毎週月曜・木曜の10:00 JST = 1:00 UTC）
   schedule:
@@ -8,6 +7,11 @@ on:
   
   # 手動実行も可能にする
   workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Run on master branch?"
+        required: true
+        default: "yes"
 
 jobs:
   build-and-deploy-to-production:
