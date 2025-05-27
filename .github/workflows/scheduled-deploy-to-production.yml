@@ -17,6 +17,11 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+      # ここで環境変数を定義
+    env:
+      NODE_VERSION: 22.15.0
+      PNPM_VERSION: 10.10.0
     
     steps:
       # リポジトリをチェックアウト
@@ -25,28 +30,17 @@ jobs:
         with:
           ref: production
       
-      # protoファイルからバージョンを読み取る
-      - name: Read versions from .prototools
-        id: proto-versions
-        run: |
-          NODE_VERSION=$(grep '^node ' .prototools | awk '{print $2}' | tr -d '"')
-          PNPM_VERSION=$(grep '^pnpm ' .prototools | awk '{print $2}' | tr -d '"')
-          echo "node-version=${NODE_VERSION}" >> $GITHUB_OUTPUT
-          echo "pnpm-version=${PNPM_VERSION}" >> $GITHUB_OUTPUT
-          echo "Using Node.js: ${NODE_VERSION}"
-          echo "Using pnpm: ${PNPM_VERSION}"
-      
       # Node.jsのセットアップ
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ steps.proto-versions.outputs.node-version }}
+          node-version: ${{ env.NODE_VERSION }}
       
       # pnpmのセットアップ
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: ${{ steps.proto-versions.outputs.pnpm-version }}
+          version: ${{ env.PNPM_VERSION }}
       
       # 依存関係のインストール
       - name: Install dependencies
