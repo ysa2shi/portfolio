@@ -1,4 +1,6 @@
-name: 🕒 本番環境へ定期デプロイ
+name: Scheduled Build and Deploy to Cloudflare Pages
+run-name: 🕒 本番環境へ定期デプロイ
+
 on:
   # 定期実行（毎週月曜・木曜の10:00 JST = 1:00 UTC）
   schedule:
