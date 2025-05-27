@@ -8,67 +8,10 @@ on:
   
   # 手動実行も可能にする
   workflow_dispatch:
-  
-  # productionブランチへのpushでも実行（オプション）
-  push:
-    branches:
-      - production
 
 jobs:
-  build-and-deploy:
+  build-and-deploy-to-production:
     runs-on: ubuntu-latest
-
-      # ここで環境変数を定義
-    env:
-      NODE_VERSION: 22.15.0
-      PNPM_VERSION: 10.10.0
-    
     steps:
-      # リポジトリをチェックアウト
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: production
-      
-      # Node.jsのセットアップ
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      
-      # pnpmのセットアップ
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: ${{ env.PNPM_VERSION }}
-      
-      # 依存関係のインストール
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      
-      # ビルド実行
-      - name: Build project
-        run: pnpm run build
-        env:
-          # ビルド時に必要な環境変数があれば追加
-          NODE_ENV: production
-      
-      # Cloudflare Pagesにデプロイ
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      
-      # デプロイ結果の通知（オプション）
-      - name: Notify deployment result
-        if: always()
-        run: |
-          if [ ${{ job.status }} == 'success' ]; then
-            echo "✅ Deployment succeeded"
-          else
-            echo "❌ Deployment failed"
-          fi
+        run: curl -X POST ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_URL }}
