@@ -1,0 +1,80 @@
+name: Scheduled Build and Deploy to Cloudflare Pages
+
+on:
+  # 定期実行（毎週月曜・木曜の10:00 JST = 1:00 UTC）
+  schedule:
+    - cron: '0 1 * * 1'  # 月曜日 1:00 UTC (10:00 JST)
+    - cron: '0 1 * * 4'  # 木曜日 1:00 UTC (10:00 JST)
+  
+  # 手動実行も可能にする
+  workflow_dispatch:
+  
+  # productionブランチへのpushでも実行（オプション）
+  push:
+    branches:
+      - production
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # リポジトリをチェックアウト
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: production
+      
+      # protoファイルからバージョンを読み取る
+      - name: Read versions from .prototools
+        id: proto-versions
+        run: |
+          NODE_VERSION=$(grep '^node ' .prototools | awk '{print $2}' | tr -d '"')
+          PNPM_VERSION=$(grep '^pnpm ' .prototools | awk '{print $2}' | tr -d '"')
+          echo "node-version=${NODE_VERSION}" >> $GITHUB_OUTPUT
+          echo "pnpm-version=${PNPM_VERSION}" >> $GITHUB_OUTPUT
+          echo "Using Node.js: ${NODE_VERSION}"
+          echo "Using pnpm: ${PNPM_VERSION}"
+      
+      # Node.jsのセットアップ
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.proto-versions.outputs.node-version }}
+      
+      # pnpmのセットアップ
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ steps.proto-versions.outputs.pnpm-version }}
+      
+      # 依存関係のインストール
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      # ビルド実行
+      - name: Build project
+        run: pnpm run build
+        env:
+          # ビルド時に必要な環境変数があれば追加
+          NODE_ENV: production
+      
+      # Cloudflare Pagesにデプロイ
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          directory: dist  # ビルド出力ディレクトリ（プロジェクトに応じて調整）
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+      
+      # デプロイ結果の通知（オプション）
+      - name: Notify deployment result
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ Deployment succeeded"
+          else
+            echo "❌ Deployment failed"
+          fi
