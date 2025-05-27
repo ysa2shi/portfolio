@@ -1,5 +1,5 @@
 name: Create a release pull request for production
-run-name: 本番リリース用のPRを作成✨
+run-name: 🚀 本番リリース用のPRを作成
 
 on:
   push:
