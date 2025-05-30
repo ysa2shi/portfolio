@@ -12,12 +12,12 @@ const currentPath = Astro.url.pathname
 ---
 
 <header
-  class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-neutral-200"
+  class="sticky top-0 z-50 w-full bg-white backdrop-blur-md border-b border-neutral-200"
 >
   <div class="container mx-auto px-4 py-4 flex justify-between items-center">
     <a
       href="/"
-      class="text-xl font-bold text-neutral-900 hover:text-primary-500 transition-colors"
+      class="text-xl font-bold text-neutral-900 hover:text-primary-500 transition-colors py-4"
     >
       {siteConfig.name}
     </a>
@@ -69,7 +69,7 @@ const currentPath = Astro.url.pathname
     id="mobileMenu"
     class="hidden md:hidden bg-white border-b border-neutral-200 fixed w-full"
   >
-    <nav class="container mx-auto px-4 py-4">
+    <nav class="container mx-auto px-4 py-4 text-center">
       <ul class="space-y-4">
         {
           navItems.map((item) => (
