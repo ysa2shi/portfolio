@@ -1,27 +1,40 @@
 ---
-import "../styles/global.css"
 import ErrorLayout from "../layouts/ErrorLayout.astro"
 interface Props {
   error: unknown
 }
 ---
 
-<ErrorLayout pageTitle="500 Internal Server Error">
-  <section class="px-4 sm:px-8 max-w-6xl mx-auto py-8">
-    <h2 class="text-center text-2xl font-bold mb-4">
-      500 Internal Server Error
-    </h2>
-    <p class="text-center">
-      An unexpected error occurred on the server. <br />
-      Please try again later or contact support if the issue persists.
-    </p>
-    <div class="text-center mt-6">
+<ErrorLayout pageTitle="Internal Server Error">
+  <div class="min-h-[calc(100vh-200px)] flex items-center justify-center px-4">
+    <div class="text-center">
+      <h1 class="text-6xl md:text-8xl font-bold text-neutral-900 mb-4">500</h1>
+      <h2 class="text-2xl md:text-3xl font-medium text-neutral-700 mb-6">
+        Internal Server Error
+      </h2>
+      <p class="text-neutral-600 mb-8 max-w-md mx-auto">
+        An unexpected error occurred on the server. <br />
+        Please try again later or contact support if the issue persists.
+      </p>
       <a
-        href={"/"}
-        class="inline-block px-6 py-3 bg-white text-black rounded-lg hover:text-blue-500 transition"
+        href="/"
+        class="inline-flex items-center px-6 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors"
       >
-        Go back to the Home screen.
+        Back to Home
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 ml-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 12l2-2m0 0l7-7 7 7m-7-7v18"></path>
+        </svg>
       </a>
     </div>
-  </section>
+  </div>
 </ErrorLayout>
