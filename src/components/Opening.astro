@@ -1,0 +1,46 @@
+---
+import { marketingConfig } from "../../config/marketing"
+---
+
+<section class="py-20 md:py-32 relative overflow-hidden">
+  <div class="container mx-auto px-4 relative z-10">
+    <div class="max-w-3xl">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+        Creative Web Engineer
+      </h1>
+      <p
+        class="text-xl md:text-2xl text-neutral-700 mb-8"
+        style="animation-delay: 0.2s"
+      >
+        Scalable. Reliable. Maintainable.
+      </p>
+      <div class="flex flex-wrap gap-4" style="animation-delay: 0.4s">
+        <a
+          href={marketingConfig.pageInfo.projects.href}
+          class="inline-flex items-center px-6 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors"
+        >
+          View Projects
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 ml-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+          </svg>
+        </a>
+        <a
+          href={marketingConfig.pageInfo.articles.href}
+          class="inline-flex items-center px-6 py-3 bg-white text-neutral-900 border border-neutral-300 rounded-lg hover:bg-neutral-100 transition-colors"
+        >
+          Read Articles
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

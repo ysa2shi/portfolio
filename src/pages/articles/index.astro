@@ -1,46 +1,32 @@
 ---
 import { fetchZennArticles } from "../../utils/fetchZennFeed"
-import { formatDateJST } from "../../utils/formatDate.ts"
-import "../../styles/global.css"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import { marketingConfig } from "../../../config/marketing"
-import { siteConfig } from "../../../config/site"
+import PageHeader from "../../components/PageHeader.astro"
+import ArticleCard from "../../components/ArticleCard.astro"
 const articles = await fetchZennArticles()
 ---
 
 <BaseLayout pageTitle={marketingConfig.pageInfo.articles.title}>
-  <section class="px-4 sm:px-8 max-w-6xl mx-auto py-8">
-    <h2 class="font-bold">
-      <a
-        href={siteConfig.links.zenn}
-        class="no-underline hover:text-blue-500"
-        target="_blank"
-        rel="noopener noreferrer">Zenn</a
-      >
-    </h2>
-    <ul class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        articles.map((article) => (
-          <li class="bg-white rounded-xl shadow-lg overflow-hidden border border-[#3EA8FF]/20 hover:shadow-blue-500 transition">
-            <a
-              href={article.link}
-              class="block p-4 sm:p-5 no-underline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <h3 class="text-lg font-semibold text-gray-800 mb-4 line-clamp-2">
-                {article.title}
-              </h3>
+  <PageHeader
+    title={marketingConfig.pageInfo.articles.title}
+    description="Thoughts, insights, and tutorials on web development, design, and technology."
+  />
 
-              <hr class="border-t border-[#3EA8FF]/30 mb-4" />
-
-              <div class="flex flex-col items-start text-sm text-[#3ea5ff]">
-                <span>{formatDateJST(article.pubDate)}</span>
-              </div>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {
+          articles.map((article) => (
+            <ArticleCard
+              title={article.title}
+              description={article.description}
+              publishDate={article.pubDate}
+              link={article.link}
+            />
+          ))
+        }
+      </div>
+    </div>
   </section>
 </BaseLayout>

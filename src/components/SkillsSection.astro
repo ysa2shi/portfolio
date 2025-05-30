@@ -1,0 +1,84 @@
+---
+import { Icon } from "astro-icon/components"
+
+const skills = [
+  // frontend
+  { name: "TypeScript", icon: "simple-icons:typescript", category: "Frontend" },
+  { name: "React", icon: "simple-icons:react", category: "Frontend" },
+  { name: "Next.js", icon: "simple-icons:nextdotjs", category: "Frontend" },
+  { name: "Astro", icon: "simple-icons:astro", category: "Frontend" },
+  {
+    name: "Tailwind CSS",
+    icon: "simple-icons:tailwindcss",
+    category: "Frontend",
+  },
+
+  // backend
+  { name: "java", icon: "mdi:language-java", category: "Backend" },
+  { name: "Spring Boot", icon: "simple-icons:springboot", category: "Backend" },
+  { name: "python", icon: "simple-icons:python", category: "Backend" },
+  { name: "FastAPI", icon: "simple-icons:fastapi", category: "Backend" },
+
+  // Database
+  { name: "MySQL", icon: "simple-icons:mysql", category: "Database" },
+  {
+    name: "DynamoDB",
+    icon: "simple-icons:amazondynamodb",
+    category: "Database",
+  },
+
+  // infra
+  { name: "Docker", icon: "simple-icons:docker", category: "Infra" },
+  { name: "AWS", icon: "simple-icons:amazonwebservices", category: "Infra" },
+  { name: "cloudflare", icon: "simple-icons:cloudflare", category: "Infra" },
+
+  // tools
+  {
+    name: "GitHub Actions",
+    icon: "simple-icons:githubactions",
+    category: "Tools",
+  },
+  {
+    name: "Postman",
+    icon: "simple-icons:postman",
+    category: "Tools",
+  },
+]
+
+const categories = ["Frontend", "Backend", "Database", "Infra", "Tools"]
+---
+
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold mb-12 text-center text-neutral-900">
+      Skills
+    </h2>
+    <div class="space-y-12 max-w-5xl mx-auto">
+      {
+        categories.map((category) => (
+          <div>
+            <h3 class="text-xl font-semibold mb-6 text-neutral-900">
+              {category}
+            </h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {skills
+                .filter((skill) => skill.category === category)
+                .map((skill) => (
+                  <div class="bg-white rounded-lg p-4 flex flex-col items-center border border-neutral-200 hover:shadow-md transition-all duration-300 hover:border-neutral-300">
+                    <Icon
+                      name={skill.icon}
+                      class="w-8 h-8 mb-3"
+                      aria-label={`${skill.name} icon`}
+                    />
+                    <span class="text-sm text-center text-neutral-900 font-medium">
+                      {skill.name}
+                    </span>
+                  </div>
+                ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

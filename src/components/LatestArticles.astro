@@ -1,0 +1,76 @@
+---
+import ArticleCard from "./ArticleCard.astro"
+import { fetchZennArticles } from "../utils/fetchZennFeed"
+const articles = await fetchZennArticles()
+
+// 最新3件だけ表示
+const latestArticles = articles.slice(0, 3)
+---
+
+<section class="py-16">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-end mb-12">
+      <div>
+        <h2 class="text-3xl font-bold mb-4">Latest Articles</h2>
+        <p class="text-neutral-600 max-w-2xl">
+          An overview of my recent thoughts and developments within the
+          technology field.
+        </p>
+      </div>
+      <a
+        href="/articles"
+        class="text-primary-500 hover:text-primary-600 hidden md:flex items-center font-medium"
+      >
+        View All Articles
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 ml-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+        </svg>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {
+        latestArticles.map((article) => (
+          <ArticleCard
+            title={article.title}
+            description={article.description}
+            publishDate={article.pubDate}
+            link={article.link}
+          />
+        ))
+      }
+    </div>
+
+    <div class="mt-12 text-center md:hidden">
+      <a
+        href="/articles"
+        class="inline-flex items-center text-primary-500 hover:text-primary-600 font-medium"
+      >
+        View All Articles
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 ml-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
