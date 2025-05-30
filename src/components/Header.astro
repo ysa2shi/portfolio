@@ -1,40 +1,120 @@
 ---
-import Hamburger from "./Hamburger.astro"
-import Navigation from "./Navigation.astro"
+import { marketingConfig } from "../../config/marketing"
 import { siteConfig } from "../../config/site"
+
+const navItems = [
+  { name: "Home", url: marketingConfig.pageInfo.home.href },
+  { name: "Projects", url: marketingConfig.pageInfo.projects.href },
+  { name: "Articles", url: marketingConfig.pageInfo.articles.href },
+]
+
+const currentPath = Astro.url.pathname
 ---
 
-<header class="py-2 fixed top-0 w-full bg-white shadow-md">
-  <nav class="max-w-5xl mx-auto flex items-center justify-between h-16 px-4">
-    <div class="flex items-center gap-6 w-full">
-      <a
-        href="/"
-        class="text-2xl font-extrabold flex-shrink-0 tracking-tight text-gray-900 hover:text-blue-500"
+<header
+  class="sticky top-0 z-50 w-full bg-white backdrop-blur-md border-b border-neutral-200"
+>
+  <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+    <a
+      href="/"
+      class="text-xl font-bold text-neutral-900 hover:text-primary-500 transition-colors py-4"
+    >
+      {siteConfig.name}
+    </a>
+
+    <nav class="hidden md:block">
+      <ul class="flex space-x-8">
+        {
+          navItems.map((item) => (
+            <li>
+              <a
+                href={item.url}
+                class={`font-medium transition-colors hover:text-primary-500 ${
+                  currentPath === item.url
+                    ? "text-primary-500"
+                    : "text-neutral-700"
+                }`}
+                aria-current={currentPath === item.url ? "page" : undefined}
+              >
+                {item.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <button
+      id="menuToggle"
+      class="md:hidden text-neutral-900 p-2"
+      aria-label="Toggle menu"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        class="w-6 h-6"
       >
-        {siteConfig.name}
-      </a>
-      <a
-        href={siteConfig.links.github}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="30"
-          height="30"
-          viewBox="0 0 432 416"
-          ><path
-            fill="currentColor"
-            d="M213.5 0q88.5 0 151 62.5T427 213q0 70-41 125.5T281 416q-14 2-14-11v-58q0-27-15-40q44-5 70.5-27t26.5-77q0-34-22-58q11-26-2-57q-18-5-58 22q-26-7-54-7t-53 7q-18-12-32.5-17.5T107 88h-6q-12 31-2 57q-22 24-22 58q0 55 27 77t70 27q-11 10-13 29q-42 18-62-18q-12-20-33-22q-2 0-4.5.5t-5 3.5t8.5 9q14 7 23 31q1 2 2 4.5t6.5 9.5t13 10.5T130 371t30-2v36q0 13-14 11q-64-22-105-77.5T0 213q0-88 62.5-150.5T213.5 0z"
-          ></path></svg
-        >
-      </a>
-      <div class="flex-1 flex justify-end">
-        <div class="flex items-center gap-4 text-gray-700 font-extrabold">
-          <Hamburger />
-          <Navigation />
-        </div>
-      </div>
-    </div>
-  </nav>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div
+    id="mobileMenu"
+    class="hidden md:hidden bg-white border-b border-neutral-200 fixed w-full"
+  >
+    <nav class="container mx-auto px-4 py-4 text-center">
+      <ul class="space-y-4">
+        {
+          navItems.map((item) => (
+            <li>
+              <a
+                href={item.url}
+                class={`block py-2 font-medium transition-colors hover:text-primary-500 ${
+                  currentPath === item.url
+                    ? "text-primary-500"
+                    : "text-neutral-700"
+                }`}
+                aria-current={currentPath === item.url ? "page" : undefined}
+              >
+                {item.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
 </header>
+
+<script>
+  const menuToggle = document.getElementById("menuToggle")
+  const mobileMenu = document.getElementById("mobileMenu")
+
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener("click", () => {
+      const expanded =
+        menuToggle.getAttribute("aria-expanded") === "true" || false
+      menuToggle.setAttribute("aria-expanded", (!expanded).toString())
+      mobileMenu.classList.toggle("hidden")
+
+      // Change the icon when menu is open
+      const svg = menuToggle.querySelector("svg")
+      if (svg) {
+        if (expanded) {
+          svg.innerHTML =
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>'
+        } else {
+          svg.innerHTML =
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>'
+        }
+      }
+    })
+  }
+</script>

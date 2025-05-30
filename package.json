@@ -16,8 +16,12 @@
     "fix:prettier": "prettier --cache --write ."
   },
   "dependencies": {
+    "@astrojs/tailwind": "^6.0.2",
+    "@iconify-json/mdi": "^1.2.3",
+    "@iconify-json/simple-icons": "^1.2.36",
     "astro": "^5.7.13",
     "astro-google-fonts-optimizer": "^0.2.2",
+    "astro-icon": "^1.1.5",
     "rss-parser": "^3.13.0"
   },
   "devDependencies": {
@@ -28,7 +32,6 @@
     "prettier": "3.5.3",
     "prettier-plugin-astro": "0.14.1",
     "prettier-plugin-organize-imports": "^4.1.0",
-    "tailwindcss": "3.4.17",
-    "wrangler": "^4.16.1"
+    "tailwindcss": "3.4.17"
   }
 }

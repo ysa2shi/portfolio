@@ -1,11 +1,24 @@
 ---
-import "../../styles/global.css"
 import BaseLayout from "../../layouts/BaseLayout.astro"
-import { marketingConfig } from "../../../config/marketing"
+import PageHeader from "../../components/PageHeader.astro"
 ---
 
-<BaseLayout pageTitle={marketingConfig.pageInfo.projects.title}>
-  <section>
-    <h2>coming soon.</h2>
+<BaseLayout
+  title="Portfolio - Projects"
+  description="Explore my portfolio of web development and design projects"
+>
+  <PageHeader
+    title="Projects"
+    description="I would like to introduce some projects I’ve recently completed."
+  />
+
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div
+        class="text-3xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        comming soon.
+      </div>
+    </div>
   </section>
 </BaseLayout>

@@ -1,0 +1,49 @@
+---
+const experiences = [
+  {
+    yyyymm: "2025.04",
+    title: "Currently learning frontend development",
+    description:
+      "Created this portfolio site as a project to apply what I've learned.",
+  },
+  {
+    yyyymm: "2024.04",
+    title: "Engaged in backend development for payment systems",
+    description:
+      "Working on Java + Spring Boot web applications in AWS environment.",
+  },
+  {
+    yyyymm: "2023.04",
+    title: "Joined current company as a new graduate engineer",
+    description: "Mainly working as a web developer.",
+  },
+  {
+    yyyymm: "2023.03",
+    title: "M.Eng in Compute Science",
+    description: "Researched speech synthesis with deep learning.",
+  },
+]
+---
+
+<section class="py-20">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold mb-12 text-center">Timeline</h2>
+    <div class="max-w-3xl mx-auto">
+      {
+        experiences.map((experience) => (
+          <div class="flex gap-6 mb-12 last:mb-0">
+            <div class="w-24 flex-shrink-0 text-right">
+              <span class="text-primary-500 font-semibold">
+                {experience.yyyymm}
+              </span>
+            </div>
+            <div class="flex-grow before:absolute before:left-[-24px] before:top-3 before:w-3 before:h-3 before:bg-primary-500 before:rounded-full before:shadow-lg">
+              <h3 class="text-xl font-semibold mb-2">{experience.title}</h3>
+              <p class="text-neutral-600">{experience.description}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
