@@ -3,12 +3,22 @@ import { marketingConfig } from "../../config/marketing"
 import { siteConfig } from "../../config/site"
 
 const navItems = [
-  { name: "Home", url: marketingConfig.pageInfo.home.href },
-  { name: "Projects", url: marketingConfig.pageInfo.projects.href },
-  { name: "Articles", url: marketingConfig.pageInfo.articles.href },
+  {
+    name: marketingConfig.pageInfo.home.title,
+    url: marketingConfig.pageInfo.home.href,
+  },
+  {
+    name: marketingConfig.pageInfo.projects.title,
+    url: marketingConfig.pageInfo.projects.href,
+  },
+  {
+    name: marketingConfig.pageInfo.articles.title,
+    url: marketingConfig.pageInfo.articles.href,
+  },
 ]
 
-const currentPath = Astro.url.pathname
+const currentPath =
+  Astro.url.pathname === "/" ? "/" : Astro.url.pathname.replace(/\/$/, "")
 ---
 
 <header
