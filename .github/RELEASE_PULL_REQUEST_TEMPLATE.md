@@ -1,6 +1,6 @@
 <%= ENV['PR_TITLE'] %>
 
-## 変更内容
+## Change Summary
 
 <% pull_requests.each do |pr| -%>
 <%= pr.to_checklist_item %>
