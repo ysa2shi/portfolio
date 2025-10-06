@@ -1,11 +1,11 @@
-export type pageItem = {
+export interface pageItem {
   title: string
   href: string
   description: string
   disabled?: boolean
 }
 
-export type SiteConfig = {
+export interface SiteConfig {
   name: string
   description: string
   url: string
@@ -16,13 +16,13 @@ export type SiteConfig = {
   }
 }
 
-export type MarketingConfig = {
+export interface MarketingConfig {
   pageInfo: {
     [key: string]: pageItem
   }
 }
 
-export type SimpleIcon = {
+export interface SimpleIcon {
   title: string
   slug: string
   hex: string
@@ -33,5 +33,20 @@ export type SimpleIcon = {
   license?: {
     type: string
     url: string
+  }
+}
+
+export interface Project {
+  id: string
+  data: {
+    title: string
+    emoji: string
+    image: {
+      url: string
+      alt: string
+    }
+    tags: string[]
+    publishDate: Date
+    published: boolean
   }
 }

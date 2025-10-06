@@ -1,7 +1,7 @@
 import Parser from "rss-parser"
 import { siteConfig } from "../config/site"
 
-export type ZennArticle = {
+export interface ZennArticle {
   title: string
   description: string
   link: string

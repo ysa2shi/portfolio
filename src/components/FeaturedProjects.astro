@@ -1,6 +1,11 @@
 ---
+import { getProjects, sortProjects } from "../utils/getCollectionProjects"
+import type { Project } from "../../types"
 import { marketingConfig } from "../config/marketing"
 import ProjectCard from "./ProjectCard.astro"
+
+const featuredProjects: Project[] = await getProjects()
+const sortedProjects: Project[] = sortProjects(featuredProjects)
 ---
 
 <section class="py-16 bg-neutral-50">
@@ -17,34 +22,22 @@ import ProjectCard from "./ProjectCard.astro"
         class="text-primary-500 hover:text-primary-600 hidden md:flex items-center font-medium"
       >
         View All Projects
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5 ml-1"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-        </svg>
       </a>
     </div>
-
-    <h3>coming soon.</h3>
-    <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {featuredProjects.map(project => (
-        <ProjectCard 
-          id={project.id}
-          title={project.title}
-          description={project.description}
-          thumbnail={project.thumbnail}
-          tags={project.tags}
-        />
-      ))}
-    </div> -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {
+        sortedProjects.map((project: Project) => (
+          <ProjectCard
+            id={project.id}
+            title={project.data.title}
+            emoji={project.data.emoji}
+            publishDate={project.data.publishDate}
+            image={project.data.image.url}
+            tags={project.data.tags}
+          />
+        ))
+      }
+    </div>
 
     <div class="mt-12 text-center md:hidden">
       <a

@@ -2,12 +2,14 @@
 export interface Props {
   id: string
   title: string
-  description: string
-  thumbnail: string
+  emoji: string
+  image: string
+  publishDate: Date
   tags: string[]
 }
 
-const { id, title, description, thumbnail, tags } = Astro.props
+const id = Astro.props.id.replace(/\.md$/, "") // Remove .md extension if present
+const { title, emoji, publishDate, image, tags } = Astro.props
 ---
 
 <article
@@ -16,7 +18,7 @@ const { id, title, description, thumbnail, tags } = Astro.props
   <a href={`/projects/${id}`} class="block">
     <div class="aspect-video overflow-hidden">
       <img
-        src={thumbnail}
+        src={image}
         alt={`Thumbnail for ${title}`}
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
@@ -31,7 +33,7 @@ const { id, title, description, thumbnail, tags } = Astro.props
         {title}
       </h3>
     </a>
-    <p class="text-neutral-600 mb-4 line-clamp-2">{description}</p>
+    <p class="text-neutral-600 mb-4 line-clamp-2">{emoji}</p>
 
     <div class="flex flex-wrap gap-2">
       {

@@ -1,6 +1,12 @@
 ---
+import type { Project } from "../../../types"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import PageHeader from "../../components/PageHeader.astro"
+import ProjectCard from "../../components/ProjectCard.astro"
+import { getProjects, sortProjects } from "../../utils/getCollectionProjects"
+
+const featuredProjects: Project[] = await getProjects()
+const sortedProjects: Project[] = sortProjects(featuredProjects)
 ---
 
 <BaseLayout
@@ -17,7 +23,18 @@ import PageHeader from "../../components/PageHeader.astro"
       <div
         class="text-3xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
-        coming soon.
+        {
+          sortedProjects.map((project: Project) => (
+            <ProjectCard
+              id={project.id}
+              title={project.data.title}
+              emoji={project.data.emoji}
+              publishDate={project.data.publishDate}
+              image={project.data.image.url}
+              tags={project.data.tags}
+            />
+          ))
+        }
       </div>
     </div>
   </section>
