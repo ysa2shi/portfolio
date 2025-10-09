@@ -1,0 +1,38 @@
+---
+import type { Post } from "../../../types"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import PageHeader from "../../components/PageHeader.astro"
+import PostCard from "../../components/PostCard.astro"
+import { marketingConfig } from "../../config/marketing"
+import { getPosts, sortPosts } from "../../utils/getCollectionPosts"
+
+const posts: Post[] = await getPosts()
+const sortedPosts: Post[] = sortPosts(posts)
+---
+
+<BaseLayout pageTitle={marketingConfig.pageInfo.blog.title}>
+  <PageHeader
+    title={marketingConfig.pageInfo.blog.title}
+    description={marketingConfig.pageInfo.blog.description}
+  />
+
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div
+        class="text-3xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        {
+          sortedPosts.map((post: Post) => (
+            <PostCard
+              id={post.id}
+              title={post.data.title}
+              publishDate={post.data.publishDate}
+              image={post.data.image}
+              tags={post.data.tags}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

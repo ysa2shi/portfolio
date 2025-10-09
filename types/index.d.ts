@@ -36,11 +36,11 @@ export interface SimpleIcon {
   }
 }
 
-export interface Project {
+export interface Post {
   id: string
   data: {
     title: string
-    emoji: string
+    description?: string
     image: {
       url: string
       alt: string

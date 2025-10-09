@@ -6,12 +6,9 @@ import Opening from "../components/Opening.astro"
 import ProfileSection from "../components/ProfileSection.astro"
 import TimelineSection from "../components/TimelineSection.astro"
 import SkillsSection from "../components/SkillsSection.astro"
-import FeaturedProjects from "../components/FeaturedProjects.astro"
+import LatestPosts from "../components/LatestPosts.astro"
 import LatestArticles from "../components/LatestArticles.astro"
 import ContactSection from "../components/ContactSection.astro"
-const articles = await fetchZennArticles()
-// 最新3件だけ表示
-const latestArticles = articles.slice(0, 3)
 ---
 
 <BaseLayout pageTitle={marketingConfig.pageInfo.home.title}>
@@ -19,7 +16,7 @@ const latestArticles = articles.slice(0, 3)
   <ProfileSection />
   <TimelineSection />
   <SkillsSection />
-  <FeaturedProjects />
+  <LatestPosts />
   <LatestArticles />
   <ContactSection />
 </BaseLayout>

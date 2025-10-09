@@ -1,27 +1,27 @@
 ---
-import ArticleCard from "./ArticleCard.astro"
-import { fetchZennArticles } from "../utils/fetchZennFeed"
-const articles = await fetchZennArticles()
+import { getPosts, sortPosts } from "../utils/getCollectionPosts"
+import type { Post } from "../../types"
+import { marketingConfig } from "../config/marketing"
+import PostCard from "./PostCard.astro"
 
-// 最新3件だけ表示
-const latestArticles = articles.slice(0, 3)
+const posts: Post[] = await getPosts()
+const latestPosts: Post[] = sortPosts(posts)
 ---
 
-<section class="py-16">
+<section class="py-16 bg-neutral-50">
   <div class="container mx-auto px-4">
     <div class="flex justify-between items-end mb-12">
       <div>
-        <h2 class="text-3xl font-bold mb-4">Latest Articles</h2>
+        <h2 class="text-3xl font-bold mb-4">Personal Blog</h2>
         <p class="text-neutral-600 max-w-2xl">
-          An overview of my recent thoughts and developments within the
-          technology field.
+          {marketingConfig.pageInfo.blog.description}
         </p>
       </div>
       <a
-        href="/articles"
+        href={marketingConfig.pageInfo.blog.href}
         class="text-primary-500 hover:text-primary-600 hidden md:flex items-center font-medium"
       >
-        View All Articles
+        View All Posts
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5 ml-1"
@@ -37,15 +37,15 @@ const latestArticles = articles.slice(0, 3)
         </svg>
       </a>
     </div>
-
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {
-        latestArticles.map((article) => (
-          <ArticleCard
-            title={article.title}
-            description={article.description}
-            publishDate={article.pubDate}
-            link={article.link}
+        latestPosts.map((post: Post) => (
+          <PostCard
+            id={post.id}
+            title={post.data.title}
+            publishDate={post.data.publishDate}
+            image={post.data.image}
+            tags={post.data.tags ?? []}
           />
         ))
       }
@@ -53,10 +53,10 @@ const latestArticles = articles.slice(0, 3)
 
     <div class="mt-12 text-center md:hidden">
       <a
-        href="/articles"
+        href={marketingConfig.pageInfo.blog.href}
         class="inline-flex items-center text-primary-500 hover:text-primary-600 font-medium"
       >
-        View All Articles
+        View All Posts
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5 ml-1"

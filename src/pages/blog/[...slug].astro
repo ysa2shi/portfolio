@@ -1,0 +1,25 @@
+---
+import type { Post } from "../../../types"
+import MarkdownPostLayout from "../../layouts/MarkdownPostLayout.astro"
+import { type CollectionEntry } from "astro:content"
+import { getPosts } from "../../utils/getCollectionPosts"
+
+interface Props {
+  post: CollectionEntry<"posts">
+}
+
+export async function getStaticPaths() {
+  const posts: Post[] = await getPosts()
+
+  return posts.map((post: Post) => ({
+    params: { slug: post.id.replace(/\.md$/, "") },
+    props: { post },
+  }))
+}
+const { post } = Astro.props as Props
+const { Content } = await post.render()
+---
+
+<MarkdownPostLayout frontmatter={post.data} pageTitle={post.data.title}>
+  <Content />
+</MarkdownPostLayout>
