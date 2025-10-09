@@ -6,10 +6,6 @@ import remarkLinkCard from "remark-link-card-plus"
 
 // https://astro.build/config
 export default defineConfig({
-  site:
-    process.env.CF_PAGES_URL ||
-    process.env.PUBLIC_SITE_URL ||
-    "https://localhost:4321",
   integrations: [tailwind(), icon()],
   markdown: {
     remarkPlugins: [
