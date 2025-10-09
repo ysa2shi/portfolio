@@ -15,12 +15,12 @@ interface RSSContext {
   site: string
 }
 
-export async function GET(context: RSSContext) {
+export async function GET() {
   const posts: Post[] = await getCollection("posts")
   return rss({
     title: siteConfig.name,
     description: siteConfig.description,
-    site: context.site,
+    site: siteConfig.url,
     items: posts.map((post) => ({
       ...post.data,
       link: `/blog/${post.slug}/`,
