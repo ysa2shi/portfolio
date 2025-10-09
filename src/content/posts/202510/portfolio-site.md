@@ -132,11 +132,11 @@ buildにはcloudflareのwebhookを使っています。
 
     pages
     - Home
-    - Projects
+    - Blog
     - Articles
 
-    projectsにはmdで動的ページを作るようにしてほしい。
-    articlesには外部記事サービスのzennの記事がカード形式で反映されるようにしてほしい。
+    Blogにはmdで動的ページを作るようにしてほしい。
+    Articlesには外部記事サービスのzennの記事がカード形式で反映されるようにしてほしい。
 
     デザインは白黒をベースに差し色を水色でモダンな感じでお願いします。
 ```
