@@ -1,22 +1,27 @@
 ---
+import { getPosts, sortPosts } from "../utils/getCollectionPosts"
+import type { Post } from "../../types"
 import { marketingConfig } from "../config/marketing"
-import ProjectCard from "./ProjectCard.astro"
+import PostCard from "./PostCard.astro"
+
+const posts: Post[] = await getPosts()
+const latestPosts: Post[] = sortPosts(posts)
 ---
 
 <section class="py-16 bg-neutral-50">
   <div class="container mx-auto px-4">
     <div class="flex justify-between items-end mb-12">
       <div>
-        <h2 class="text-3xl font-bold mb-4">Featured Projects</h2>
+        <h2 class="text-3xl font-bold mb-4">Personal Blog</h2>
         <p class="text-neutral-600 max-w-2xl">
-          {marketingConfig.pageInfo.projects.description}
+          {marketingConfig.pageInfo.blog.description}
         </p>
       </div>
       <a
-        href={marketingConfig.pageInfo.projects.href}
+        href={marketingConfig.pageInfo.blog.href}
         class="text-primary-500 hover:text-primary-600 hidden md:flex items-center font-medium"
       >
-        View All Projects
+        View All Posts
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5 ml-1"
@@ -32,26 +37,26 @@ import ProjectCard from "./ProjectCard.astro"
         </svg>
       </a>
     </div>
-
-    <h3>coming soon.</h3>
-    <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {featuredProjects.map(project => (
-        <ProjectCard 
-          id={project.id}
-          title={project.title}
-          description={project.description}
-          thumbnail={project.thumbnail}
-          tags={project.tags}
-        />
-      ))}
-    </div> -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {
+        latestPosts.map((post: Post) => (
+          <PostCard
+            id={post.id}
+            title={post.data.title}
+            publishDate={post.data.publishDate}
+            image={post.data.image}
+            tags={post.data.tags ?? []}
+          />
+        ))
+      }
+    </div>
 
     <div class="mt-12 text-center md:hidden">
       <a
-        href={marketingConfig.pageInfo.projects.href}
+        href={marketingConfig.pageInfo.blog.href}
         class="inline-flex items-center text-primary-500 hover:text-primary-600 font-medium"
       >
-        View All Projects
+        View All Posts
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-5 w-5 ml-1"

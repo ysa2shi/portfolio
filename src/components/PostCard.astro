@@ -2,21 +2,25 @@
 export interface Props {
   id: string
   title: string
-  description: string
-  thumbnail: string
+  image: {
+    url: string
+    alt: string
+  }
+  publishDate: Date
   tags: string[]
 }
 
-const { id, title, description, thumbnail, tags } = Astro.props
+const id = Astro.props.id.replace(/\.md$/, "") // Remove .md extension if present
+const { title, publishDate, image, tags } = Astro.props
 ---
 
 <article
   class="group bg-white rounded-lg overflow-hidden border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-300"
 >
-  <a href={`/projects/${id}`} class="block">
+  <a href={`/blog/${id}`} class="block">
     <div class="aspect-video overflow-hidden">
       <img
-        src={thumbnail}
+        src={image.url}
         alt={`Thumbnail for ${title}`}
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
@@ -24,14 +28,13 @@ const { id, title, description, thumbnail, tags } = Astro.props
   </a>
 
   <div class="p-6">
-    <a href={`/projects/${id}`} class="block">
+    <a href={`/blog/${id}`} class="block">
       <h3
         class="text-xl font-semibold mb-2 text-neutral-900 group-hover:text-primary-500 transition-colors"
       >
         {title}
       </h3>
     </a>
-    <p class="text-neutral-600 mb-4 line-clamp-2">{description}</p>
 
     <div class="flex flex-wrap gap-2">
       {
