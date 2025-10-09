@@ -3,11 +3,13 @@ import tailwind from "@astrojs/tailwind"
 import icon from "astro-icon"
 import { defineConfig } from "astro/config"
 import remarkLinkCard from "remark-link-card-plus"
-import { siteConfig } from "./src/config/site"
 
 // https://astro.build/config
 export default defineConfig({
-  site: siteConfig.url,
+  site:
+    process.env.PUBLIC_SITE_URL ||
+    process.env.CF_PAGES_URL ||
+    "https://localhost:4321",
   integrations: [tailwind(), icon()],
   markdown: {
     remarkPlugins: [
