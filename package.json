@@ -16,13 +16,17 @@
     "fix:prettier": "prettier --cache --write ."
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.12",
     "@astrojs/tailwind": "^6.0.2",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/simple-icons": "^1.2.36",
     "astro": "^5.7.13",
     "astro-google-fonts-optimizer": "^0.2.2",
     "astro-icon": "^1.1.5",
-    "rss-parser": "^3.13.0"
+    "open-graph-scraper": "^6.10.0",
+    "remark-link-card-plus": "^0.7.1",
+    "rss-parser": "^3.13.0",
+    "sharp": "^0.34.4"
   },
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.4",

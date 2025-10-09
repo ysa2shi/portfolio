@@ -1,0 +1,228 @@
+---
+import BaseLayout from "./BaseLayout.astro"
+import { formatDateJST } from "../utils/formatDate"
+import "../styles/link-card.css"
+
+const { frontmatter } = Astro.props
+const formattedDate = formatDateJST(frontmatter.publishDate)
+
+interface Tag {
+  [key: string]: string
+}
+---
+
+<BaseLayout pageTitle={frontmatter.title}>
+  <article class="max-w-3xl mx-auto px-4 pt-4 pb-16">
+    {
+      frontmatter.image && (
+        <img
+          src={frontmatter.image.url}
+          alt={frontmatter.image.alt}
+          class="w-full h-[400px] object-cover rounded-xl shadow-lg mb-8"
+          loading="eager"
+        />
+      )
+    }
+    <header class="mb-12">
+      <h1
+        class="text-2xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-gray-100"
+      >
+        {frontmatter.title}
+      </h1>
+      <div
+        class="flex flex-wrap items-center gap-4 mb-6 text-gray-600 dark:text-gray-400"
+      >
+        <time datetime={frontmatter.publishDate} class="flex items-center">
+          {formattedDate.slice(0, 4)}年{formattedDate.slice(5, 7)}月{
+            formattedDate.slice(8, 10)
+          }
+        </time>
+      </div>
+      {
+        frontmatter.tags && (
+          <div class="flex flex-wrap gap-2">
+            {frontmatter.tags.map((tag: string) => (
+              <span class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )
+      }
+    </header>
+    <div
+      class="prose prose-lg dark:prose-invert max-w-none
+      prose-p:text-gray-700 prose-p:leading-relaxed dark:prose-p:text-gray-300
+      prose-a:text-primary-600 prose-a:no-underline hover:prose-a:underline dark:prose-a:text-primary-400
+      prose-strong:text-gray-900 dark:prose-strong:text-gray-100
+      prose-img:rounded-lg prose-img:shadow-md"
+    >
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  /* Markdownコンテンツのスタイル */
+  /* インラインコードのスタイル */
+  .prose :global(code:not(pre code)) {
+    padding: 0.2em 0.4em;
+    background-color: rgb(var(--gray-100));
+    border-radius: 0.25em;
+    font-size: 0.875em;
+  }
+
+  .dark .prose :global(code:not(pre code)) {
+    background-color: rgb(var(--gray-800));
+  }
+
+  /* 見出しの階層ごとのスタイル */
+  .prose :global(h1) {
+    font-size: 2.5em;
+    margin-top: 0;
+    margin-bottom: 0.8em;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .prose :global(h2) {
+    font-size: 1.875em;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    font-weight: 600;
+    line-height: 1.3;
+    border-bottom: 2px solid rgb(var(--gray-200));
+    padding-bottom: 0.5em;
+  }
+
+  .dark .prose :global(h2) {
+    border-color: rgb(var(--gray-700));
+  }
+
+  .prose :global(h3) {
+    font-size: 1.5em;
+    margin-top: 1.6em;
+    margin-bottom: 0.6em;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .prose :global(h4) {
+    font-size: 1.25em;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  /* リストのスタイル */
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    padding-left: 1.625em;
+  }
+
+  /* 箇条書き（ul）のスタイル */
+  .prose :global(ul) {
+    list-style-type: disc; /* 黒丸 */
+  }
+
+  /* 箇条書きの2階層目 */
+  .prose :global(ul ul) {
+    list-style-type: circle; /* 白丸 */
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  /* 箇条書きの3階層目 */
+  .prose :global(ul ul ul) {
+    list-style-type: square; /* 四角 */
+  }
+
+  /* 番号付きリスト（ol）のスタイル */
+  .prose :global(ol) {
+    list-style-type: decimal; /* 数字 */
+  }
+
+  /* 番号付きリストの2階層目 */
+  .prose :global(ol ol) {
+    list-style-type: lower-alpha; /* アルファベット */
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  /* リストアイテムのスタイル */
+  .prose :global(li) {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    line-height: 1.625;
+    color: rgb(var(--gray-700));
+  }
+
+  .dark .prose :global(li) {
+    color: rgb(var(--gray-300));
+  }
+
+  /* リストアイテム内のpタグのマージン調整 */
+  .prose :global(li p) {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  /* リストアイテム内のリストのマージン調整 */
+  .prose :global(li > ul),
+  .prose :global(li > ol) {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  /* ブロッククォートのスタイル */
+  .prose :global(blockquote) {
+    font-style: italic;
+    border-left: 4px solid rgb(var(--gray-300));
+    padding-left: 1.25em;
+    margin: 1.6em 0;
+    color: rgb(var(--gray-600));
+  }
+
+  /* ブロッククォート内の段落のマージンを追加 */
+  .prose :global(blockquote p) {
+    margin: 1em 0;
+  }
+
+  .dark .prose :global(blockquote) {
+    border-color: rgb(var(--gray-600));
+    color: rgb(var(--gray-400));
+  }
+
+  /* テーブルのスタイル */
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2em 0;
+  }
+
+  .prose :global(th) {
+    background-color: rgb(var(--gray-100));
+    font-weight: 600;
+    text-align: left;
+    padding: 0.75em 1em;
+    border-bottom: 2px solid rgb(var(--gray-300));
+  }
+
+  .dark .prose :global(th) {
+    background-color: rgb(var(--gray-800));
+    border-color: rgb(var(--gray-600));
+  }
+
+  .prose :global(td) {
+    padding: 0.75em 1em;
+    border-bottom: 1px solid rgb(var(--gray-200));
+  }
+
+  .dark .prose :global(td) {
+    border-color: rgb(var(--gray-700));
+  }
+</style>
