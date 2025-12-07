@@ -1,6 +1,6 @@
 ---
-import { marketingConfig } from "../config/marketing"
-import { siteConfig } from "../config/site"
+import { marketingConfig } from "../config/marketing";
+import { siteConfig } from "../config/site";
 
 const navItems = [
   {
@@ -15,10 +15,10 @@ const navItems = [
     name: marketingConfig.pageInfo.articles.title,
     url: marketingConfig.pageInfo.articles.href,
   },
-]
+];
 
 const currentPath =
-  Astro.url.pathname === "/" ? "/" : Astro.url.pathname.replace(/\/$/, "")
+  Astro.url.pathname === "/" ? "/" : Astro.url.pathname.replace(/\/$/, "");
 ---
 
 <header
@@ -104,27 +104,27 @@ const currentPath =
 </header>
 
 <script>
-  const menuToggle = document.getElementById("menuToggle")
-  const mobileMenu = document.getElementById("mobileMenu")
+  const menuToggle = document.getElementById("menuToggle");
+  const mobileMenu = document.getElementById("mobileMenu");
 
   if (menuToggle && mobileMenu) {
     menuToggle.addEventListener("click", () => {
       const expanded =
-        menuToggle.getAttribute("aria-expanded") === "true" || false
-      menuToggle.setAttribute("aria-expanded", (!expanded).toString())
-      mobileMenu.classList.toggle("hidden")
+        menuToggle.getAttribute("aria-expanded") === "true" || false;
+      menuToggle.setAttribute("aria-expanded", (!expanded).toString());
+      mobileMenu.classList.toggle("hidden");
 
       // Change the icon when menu is open
-      const svg = menuToggle.querySelector("svg")
+      const svg = menuToggle.querySelector("svg");
       if (svg) {
         if (expanded) {
           svg.innerHTML =
-            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>'
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>';
         } else {
           svg.innerHTML =
-            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>'
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
         }
       }
-    })
+    });
   }
 </script>

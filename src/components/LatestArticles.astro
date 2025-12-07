@@ -1,10 +1,10 @@
 ---
-import ArticleCard from "./ArticleCard.astro"
-import { fetchZennArticles } from "../utils/fetchZennFeed"
-const articles = await fetchZennArticles()
+import ArticleCard from "./ArticleCard.astro";
+import { fetchZennArticles } from "../utils/fetchZennFeed";
+const articles = await fetchZennArticles();
 
 // 最新3件だけ表示
-const latestArticles = articles.slice(0, 3)
+const latestArticles = articles.slice(0, 3);
 ---
 
 <section class="py-16">

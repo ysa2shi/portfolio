@@ -1,14 +1,10 @@
 ---
-import BaseLayout from "./BaseLayout.astro"
-import { formatDateJST } from "../utils/formatDate"
-import "../styles/link-card.css"
+import BaseLayout from "./BaseLayout.astro";
+import { formatDateJST } from "../utils/formatDate";
+import "../styles/link-card.css";
 
-const { frontmatter } = Astro.props
-const formattedDate = formatDateJST(frontmatter.publishDate)
-
-interface Tag {
-  [key: string]: string
-}
+const { frontmatter } = Astro.props;
+const formattedDate = formatDateJST(frontmatter.publishDate);
 ---
 
 <BaseLayout pageTitle={frontmatter.title}>

@@ -1,17 +1,17 @@
 ---
 export interface Props {
-  id: string
-  title: string
+  id: string;
+  title: string;
   image: {
-    url: string
-    alt: string
-  }
-  publishDate: Date
-  tags: string[]
+    url: string;
+    alt: string;
+  };
+  publishDate: Date;
+  tags: string[];
 }
 
-const id = Astro.props.id.replace(/\.md$/, "") // Remove .md extension if present
-const { title, publishDate, image, tags } = Astro.props
+const id = Astro.props.id.replace(/\.md$/, ""); // Remove .md extension if present
+const { title, image, tags } = Astro.props;
 ---
 
 <article
