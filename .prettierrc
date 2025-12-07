@@ -2,13 +2,13 @@
   "trailingComma": "all",
   "tabWidth": 2,
   "useTabs": false,
-  "semi": false,
+  "semi": true,
   "singleQuote": false,
   "jsxSingleQuote": false,
   "arrowParens": "always",
   "printWidth": 80,
   "bracketSpacing": true,
-  "plugins": ["prettier-plugin-astro", "prettier-plugin-organize-imports"],
+  "plugins": ["prettier-plugin-astro"],
   "overrides": [
     {
       "files": "*.html",

@@ -1,4 +1,4 @@
-import type { MarketingConfig } from "../../types"
+import type { MarketingConfig } from "../../types";
 
 export const marketingConfig: MarketingConfig = {
   pageInfo: {
@@ -19,4 +19,4 @@ export const marketingConfig: MarketingConfig = {
         "An overview of my recent thoughts and developments within the technology field.",
     },
   },
-}
+};
