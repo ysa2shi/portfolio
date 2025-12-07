@@ -1,8 +1,8 @@
 // @ts-check
-import tailwind from "@astrojs/tailwind"
-import icon from "astro-icon"
-import { defineConfig } from "astro/config"
-import remarkLinkCard from "remark-link-card-plus"
+import tailwind from "@astrojs/tailwind";
+import icon from "astro-icon";
+import { defineConfig } from "astro/config";
+import remarkLinkCard from "remark-link-card-plus";
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,4 +22,4 @@ export default defineConfig({
       ],
     ],
   },
-})
+});

@@ -1,8 +1,8 @@
-import { getCollection } from "astro:content"
-import type { Post } from "../../types"
+import { getCollection } from "astro:content";
+import type { Post } from "../../types";
 
 export async function getPosts(): Promise<Post[]> {
-  return await getCollection("posts")
+  return await getCollection("posts");
 }
 
 export function sortPosts(posts: Post[]): Post[] {
@@ -16,7 +16,7 @@ export function sortPosts(posts: Post[]): Post[] {
         return (
           latestPost.data.publishDate.valueOf() -
           oldPost.data.publishDate.valueOf()
-        )
+        );
       },
-    )
+    );
 }
