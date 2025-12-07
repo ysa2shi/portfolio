@@ -4,7 +4,7 @@ run-name: 🚀 本番リリース用のPRを作成
 on:
   push:
     branches:
-      - master
+      - main
 
 permissions:
   id-token: write
@@ -23,13 +23,13 @@ jobs:
 
       - name: Set up environment variables
         env:
-          TZ: 'Asia/Tokyo'
+          TZ: "Asia/Tokyo"
         run: |
           echo "PR_TITLE=【🚨Production PR】 $(date '+%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'
+          ruby-version: "3.2"
           bundler-cache: true
 
       - name: Install git-pr-release
