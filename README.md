@@ -1,4 +1,4 @@
-[日本語READMEはこちら](./README-ja.md)
+[日本語READMEはこちら](./README.ja.md)
 
 # 🧑‍💻 Portfolio
 
