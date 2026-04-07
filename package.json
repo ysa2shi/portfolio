@@ -12,21 +12,24 @@
     "fix:eslint": "eslint . --ext .js,.jsx,.ts,.tsx,.astro --fix",
     "fix:prettier": "prettier --cache --write ."
   },
-  "engines": { 
+  "engines": {
     "node": "24.14.1",
-    "pnpm": "10.33.0", 
-    "npm": "please_use_pnpm_instead" 
-  }, 
-  "packageManager": "pnpm@10.33.0" ,
+    "pnpm": "10.33.0",
+    "npm": "please_use_pnpm_instead"
+  },
+  "packageManager": "pnpm@10.33.0",
   "pnpm": {
-    "onlyBuiltDependencies": ["sharp", "esbuild"]
+    "onlyBuiltDependencies": [
+      "sharp",
+      "esbuild"
+    ]
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
     "@astrojs/tailwind": "^6.0.2",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/simple-icons": "^1.2.36",
-    "astro": "^6.1.4",
+    "astro": "^6.1.2",
     "astro-google-fonts-optimizer": "^0.2.2",
     "astro-icon": "^1.1.5",
     "open-graph-scraper": "^6.10.0",
