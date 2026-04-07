@@ -4,9 +4,9 @@ import { Icon } from "astro-icon/components";
 const skills = [
   // frontend
   { name: "TypeScript", icon: "simple-icons:typescript", category: "Frontend" },
-  { name: "React", icon: "simple-icons:react", category: "Frontend" },
-  { name: "Next.js", icon: "simple-icons:nextdotjs", category: "Frontend" },
   { name: "Astro", icon: "simple-icons:astro", category: "Frontend" },
+  { name: "React", icon: "simple-icons:react", category: "Frontend" },
+  { name: "Vue.js", icon: "simple-icons:vuedotjs", category: "Frontend" },
   {
     name: "Tailwind CSS",
     icon: "simple-icons:tailwindcss",
@@ -14,10 +14,10 @@ const skills = [
   },
 
   // backend
-  { name: "java", icon: "mdi:language-java", category: "Backend" },
+  { name: "Java", icon: "mdi:language-java", category: "Backend" },
   { name: "Spring Boot", icon: "simple-icons:springboot", category: "Backend" },
-  { name: "python", icon: "simple-icons:python", category: "Backend" },
-  { name: "FastAPI", icon: "simple-icons:fastapi", category: "Backend" },
+  { name: "Kotlin", icon: "simple-icons:kotlin", category: "Backend" },
+  { name: "Ktor", icon: "simple-icons:ktor", category: "Backend" },
 
   // Database
   { name: "MySQL", icon: "simple-icons:mysql", category: "Database" },
@@ -30,17 +30,13 @@ const skills = [
   // infra
   { name: "Docker", icon: "simple-icons:docker", category: "Infra" },
   { name: "AWS", icon: "simple-icons:amazonwebservices", category: "Infra" },
-  { name: "cloudflare", icon: "simple-icons:cloudflare", category: "Infra" },
+  { name: "Cloudflare", icon: "simple-icons:cloudflare", category: "Infra" },
 
   // tools
+  { name: "GitHub", icon: "simple-icons:github", category: "Tools" },
   {
     name: "GitHub Actions",
     icon: "simple-icons:githubactions",
-    category: "Tools",
-  },
-  {
-    name: "Postman",
-    icon: "simple-icons:postman",
     category: "Tools",
   },
 ];
@@ -53,6 +49,10 @@ const categories = ["Frontend", "Backend", "Database", "Infra", "Tools"];
     <h2 class="text-3xl font-bold mb-12 text-center text-neutral-900">
       Skills
     </h2>
+    <div class="text-lg mb-12 text-center text-neutral-600">
+      This section includes both my core skills and technologies I’m currently
+      exploring through personal projects.
+    </div>
     <div class="space-y-12 max-w-5xl mx-auto">
       {
         categories.map((category) => (
