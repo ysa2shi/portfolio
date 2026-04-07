@@ -1,8 +1,8 @@
 ---
-import { getPosts, sortPosts } from "../utils/getCollectionPosts";
-import type { Post } from "../../types";
-import { marketingConfig } from "../config/marketing";
-import PostCard from "./PostCard.astro";
+import { getPosts, sortPosts } from "@/utils/getCollectionPosts";
+import type { Post } from "@/types";
+import { marketingConfig } from "@/config/marketing";
+import PostCard from "@/components/PostCard.astro";
 
 const posts: Post[] = await getPosts();
 const latestPosts: Post[] = sortPosts(posts);
