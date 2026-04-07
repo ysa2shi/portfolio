@@ -41,7 +41,7 @@ export interface Post {
   data: {
     title: string;
     description?: string;
-    image: {
+    image?: {
       url: string;
       alt: string;
     };

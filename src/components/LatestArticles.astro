@@ -1,6 +1,6 @@
 ---
-import ArticleCard from "./ArticleCard.astro";
-import { fetchZennArticles } from "../utils/fetchZennFeed";
+import ArticleCard from "@/components/ArticleCard.astro";
+import { fetchZennArticles } from "@/utils/fetchZennFeed";
 const articles = await fetchZennArticles();
 
 // 最新3件だけ表示

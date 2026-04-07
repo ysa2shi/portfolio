@@ -1,9 +1,9 @@
 ---
-import { fetchZennArticles } from "../../utils/fetchZennFeed";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { marketingConfig } from "../../config/marketing";
-import PageHeader from "../../components/PageHeader.astro";
-import ArticleCard from "../../components/ArticleCard.astro";
+import { fetchZennArticles } from "@/utils/fetchZennFeed";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { marketingConfig } from "@/config/marketing";
+import PageHeader from "@/components/PageHeader.astro";
+import ArticleCard from "@/components/ArticleCard.astro";
 const articles = await fetchZennArticles();
 ---
 
