@@ -10,7 +10,7 @@ export interface Props {
   tags?: string[];
 }
 
-const id = Astro.props.id.replace(/\.md$/, ""); // Remove .md extension if present
+const id = Astro.props.id.replace(/\.(md|mdx)$/, ""); // Remove .md extension if present
 const { title, image, tags = [] } = Astro.props;
 ---
 
