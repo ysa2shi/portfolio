@@ -7,6 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "preinstall": "npx only-allow pnpm",
     "lint:eslint": "eslint . --ext .js,.jsx,.ts,.tsx,.astro",
     "lint:prettier": "prettier --cache --check .",
     "fix:eslint": "eslint . --ext .js,.jsx,.ts,.tsx,.astro --fix",
@@ -14,8 +15,7 @@
   },
   "engines": {
     "node": "24.14.1",
-    "pnpm": "10.33.0",
-    "npm": "please_use_pnpm_instead"
+    "pnpm": "10.33.0"
   },
   "packageManager": "pnpm@10.33.0",
   "pnpm": {
