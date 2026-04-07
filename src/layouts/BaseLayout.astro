@@ -39,6 +39,15 @@ const { pageTitle } = Astro.props;
     />
 
     <title>{pageTitle} | {siteConfig.name}</title>
+
+    <script>
+      // Service Workerの登録
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js");
+        });
+      }
+    </script>
   </head>
   <body class="bg-white text-neutral-900 min-h-screen flex flex-col">
     <Header />
