@@ -1,5 +1,5 @@
 import Parser from "rss-parser";
-import { siteConfig } from "../config/site";
+import { siteConfig } from "@/config/site";
 
 export interface ZennArticle {
   title: string;

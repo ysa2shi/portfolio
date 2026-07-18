@@ -1,8 +1,12 @@
 import { getCollection } from "astro:content";
-import type { Post } from "../../types";
+import type { Post } from "@/types";
 
 export async function getPosts(): Promise<Post[]> {
   return await getCollection("posts");
+}
+
+export function normalizeSlug(id: string): string {
+  return id.replace(/\.(md|mdx)$/, "");
 }
 
 export function sortPosts(posts: Post[]): Post[] {

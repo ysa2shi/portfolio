@@ -1,8 +1,8 @@
 ---
-import type { Post } from "../../../types";
-import MarkdownPostLayout from "../../layouts/MarkdownPostLayout.astro";
+import type { Post } from "@/types";
+import MarkdownPostLayout from "@/layouts/MarkdownPostLayout.astro";
 import { type CollectionEntry, render } from "astro:content";
-import { getPosts } from "../../utils/getCollectionPosts";
+import { getPosts, normalizeSlug } from "@/utils/getCollectionPosts";
 
 interface Props {
   post: CollectionEntry<"posts">;
@@ -12,7 +12,7 @@ export async function getStaticPaths() {
   const posts: Post[] = await getPosts();
 
   return posts.map((post: Post) => ({
-    params: { slug: post.id.replace(/\.(md|mdx)$/, "") },
+    params: { slug: normalizeSlug(post.id) },
     props: { post },
   }));
 }
