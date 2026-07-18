@@ -11,10 +11,12 @@ interface Props {
 export async function getStaticPaths() {
   const posts: Post[] = await getPosts();
 
-  return posts.map((post: Post) => ({
-    params: { slug: normalizeSlug(post.id) },
-    props: { post },
-  }));
+  return posts
+    .filter((post: Post) => post.data.published === true)
+    .map((post: Post) => ({
+      params: { slug: normalizeSlug(post.id) },
+      props: { post },
+    }));
 }
 const { post } = Astro.props as Props;
 const { Content } = await render(post);
