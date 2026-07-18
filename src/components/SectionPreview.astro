@@ -1,0 +1,45 @@
+---
+import { Icon } from "astro-icon/components";
+
+export interface Props {
+  title: string;
+  description: string;
+  href: string;
+  linkLabel: string;
+  class?: string;
+}
+
+const { title, description, href, linkLabel, class: className } = Astro.props;
+---
+
+<section class={`py-16 ${className ?? ""}`}>
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-end mb-12">
+      <div>
+        <h2 class="text-3xl font-bold mb-4">{title}</h2>
+        <p class="text-neutral-600 max-w-2xl">{description}</p>
+      </div>
+      <a
+        href={href}
+        class="text-primary-500 hover:text-primary-600 hidden md:flex items-center font-medium"
+      >
+        {linkLabel}
+        <Icon name="mdi:arrow-right" class="h-5 w-5 ml-1" />
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <slot />
+    </div>
+
+    <div class="mt-12 text-center md:hidden">
+      <a
+        href={href}
+        class="inline-flex items-center text-primary-500 hover:text-primary-600 font-medium"
+      >
+        {linkLabel}
+        <Icon name="mdi:arrow-right" class="h-5 w-5 ml-1" />
+      </a>
+    </div>
+  </div>
+</section>

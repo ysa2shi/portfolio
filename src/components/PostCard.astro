@@ -1,4 +1,6 @@
 ---
+import { normalizeSlug } from "@/utils/getCollectionPosts";
+
 export interface Props {
   id: string;
   title: string;
@@ -10,7 +12,7 @@ export interface Props {
   tags?: string[];
 }
 
-const id = Astro.props.id.replace(/\.(md|mdx)$/, ""); // Remove .md extension if present
+const id = normalizeSlug(Astro.props.id);
 const { title, image, tags = [] } = Astro.props;
 ---
 
