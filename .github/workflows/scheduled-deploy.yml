@@ -1,4 +1,4 @@
-name: Scheduled Build and Deploy to Cloudflare Pages
+name: Scheduled Deploy to Cloudflare Workers
 run-name: 🕒 本番環境へ定期デプロイ
 
 on:
@@ -6,18 +6,14 @@ on:
   schedule:
     - cron: '0 1 * * 1'  # 月曜日 1:00 UTC (10:00 JST)
     - cron: '0 1 * * 4'  # 木曜日 1:00 UTC (10:00 JST)
-  
+
   # 手動実行も可能にする
   workflow_dispatch:
-    inputs:
-      confirm:
-        description: "Run on master branch?"
-        required: true
-        default: "yes"
 
 jobs:
-  build-and-deploy-to-production:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to Cloudflare Pages
-        run: curl -X POST ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_URL }}
+      # Workers Builds の Deploy Hook を叩いて main をビルド・デプロイする
+      - name: Trigger Workers Builds deploy hook
+        run: curl -fsS -X POST "${{ secrets.CLOUDFLARE_DEPLOY_HOOK_URL }}"
