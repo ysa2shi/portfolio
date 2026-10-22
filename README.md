@@ -12,7 +12,7 @@ The site also features my latest articles from Zenn, and is automatically update
 - TypeScript
 - Tailwind CSS – Utility-first CSS framework
 - GitHub Actions – Automates daily build & deploy
-- Cloudflare Pages – Deployment platform
+- Cloudflare Workers – Deployment platform
 
 ## Setup
 
@@ -92,23 +92,24 @@ All commands are run from the root of the project, from a terminal:
 
 ## 🚢 Deployment
 
-This project is recommended to be deployed on Cloudflare Pages.
+This project is deployed to Cloudflare Workers (static assets). The `main` branch is the production branch.
 
-1. Create a new project in Cloudflare Pages dashboard
-2. Connect your GitHub repository
+1. Create a Worker in the Cloudflare dashboard and connect this GitHub repository (Workers Builds)
+2. Set the production branch to `main`
 3. Build command:
 
    ```sh
-   pnpm install && pnpm build
+   pnpm build
    ```
 
-4. Output directory:
+4. Deploy command:
 
-   ```
-   dist
+   ```sh
+   npx wrangler deploy
    ```
 
 5. Set environment variables as needed (see .env)
+6. Create a Deploy Hook and register its URL as the `CLOUDFLARE_DEPLOY_HOOK_URL` GitHub secret (used by the scheduled workflow)
 
 ## 📬 Contact
 

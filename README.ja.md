@@ -12,7 +12,7 @@
 - TypeScript
 - Tailwind CSS – ユーティリティファースト CSS フレームワーク
 - GitHub Actions – 毎日のビルドとデプロイを自動化
-- Cloudflare Pages – デプロイメントプラットフォーム
+- Cloudflare Workers – デプロイメントプラットフォーム
 
 ## セットアップ
 
@@ -92,23 +92,24 @@ Astro は `src/pages/` ディレクトリ内の `.astro` または `.md` ファ�
 
 ## 🚢 デプロイ方法
 
-このプロジェクトは Cloudflare Pages でのデプロイを推奨しています。
+このプロジェクトは Cloudflare Workers（静的アセット）にデプロイします。本番ブランチは `main` です。
 
-1. Cloudflare Pages の管理画面で新規プロジェクトを作成
-2. GitHub リポジトリと連携
+1. Cloudflare の管理画面で Worker を作成し、GitHub リポジトリと連携（Workers Builds）
+2. 本番ブランチを `main` に設定
 3. ビルドコマンド：
 
    ```sh
-   pnpm install && pnpm build
+   pnpm build
    ```
 
-4. 出力ディレクトリ：
+4. デプロイコマンド：
 
-   ```
-   dist
+   ```sh
+   npx wrangler deploy
    ```
 
 5. 環境変数（必要に応じて .env の内容を設定）
+6. Deploy Hook を作成し、その URL を GitHub シークレット `CLOUDFLARE_DEPLOY_HOOK_URL` に登録（定期デプロイ用ワークフローで使用）
 
 ## 📬 お問い合わせ
 
