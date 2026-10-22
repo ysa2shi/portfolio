@@ -13,16 +13,9 @@
     "fix:eslint": "eslint . --ext .js,.jsx,.ts,.tsx,.astro --fix",
     "fix:prettier": "prettier --cache --write ."
   },
+  "packageManager": "pnpm@11.22.0",
   "engines": {
-    "node": "24.14.1",
-    "pnpm": "10.33.0"
-  },
-  "packageManager": "pnpm@10.33.0",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "sharp",
-      "esbuild"
-    ]
+    "node": ">=24.22.1"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
