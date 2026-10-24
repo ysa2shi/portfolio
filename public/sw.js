@@ -4,10 +4,11 @@
 // - 画像などその他の同一オリジンの資産: キャッシュを先に返し、裏で更新する
 // 中身を変えたら VERSION を上げる(古いキャッシュは activate で消える)
 
-const VERSION = "v1";
+const VERSION = "v2";
 const PAGES = `pages-${VERSION}`;
 const ASSETS = `assets-${VERSION}`;
 const OFFLINE_URL = "/offline/";
+const OFFLINE_URL_EN = "/en/offline/";
 // キャッシュが増え続けないよう、1つのキャッシュに残す件数の上限(古いものから消す)
 const MAX_ENTRIES = 60;
 
@@ -15,7 +16,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(PAGES)
-      .then((cache) => cache.add(OFFLINE_URL))
+      .then((cache) => cache.addAll([OFFLINE_URL, OFFLINE_URL_EN]))
       .then(() => self.skipWaiting()),
   );
 });
@@ -59,7 +60,11 @@ function store(event, cache, request, response) {
         Promise.all(
           keys
             .slice(0, Math.max(0, keys.length - MAX_ENTRIES))
-            .filter((key) => !key.url.endsWith(OFFLINE_URL))
+            .filter(
+              (key) =>
+                !key.url.endsWith(OFFLINE_URL) &&
+                !key.url.endsWith(OFFLINE_URL_EN),
+            )
             .map((key) => cache.delete(key)),
         ),
       )
@@ -75,9 +80,10 @@ async function networkFirst(event) {
     if (response.ok) store(event, cache, request, response.clone());
     return response;
   } catch {
+    const isEnglish = new URL(request.url).pathname.startsWith("/en/");
     return (
       (await cache.match(request)) ??
-      (await cache.match(OFFLINE_URL)) ??
+      (await cache.match(isEnglish ? OFFLINE_URL_EN : OFFLINE_URL)) ??
       Response.error()
     );
   }
@@ -103,5 +109,10 @@ async function staleWhileRevalidate(event) {
       return response;
     })
     .catch(() => cached ?? Response.error());
-  return cached ?? update;
+  if (cached) {
+    // 返したあとも更新を続けられるよう、ワーカーを止めない
+    event.waitUntil(update);
+    return cached;
+  }
+  return update;
 }

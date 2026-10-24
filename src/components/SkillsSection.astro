@@ -508,6 +508,13 @@ const byCategory = (category: string): Skill[] =>
     stroke-width: 1.5;
     opacity: 1;
   }
+  .node:focus-visible .t2s,
+  .node:focus-visible .t3s,
+  .node:focus-visible .t4s {
+    stroke: rgb(var(--c-violet));
+    stroke-width: 2.5;
+    stroke-dasharray: none;
+  }
   .t1s {
     fill: rgb(var(--c-gold));
     filter: drop-shadow(0 0 6px rgb(var(--c-gold) / 0.7));
