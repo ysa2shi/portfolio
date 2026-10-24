@@ -4,7 +4,7 @@
  * - tier: 1=主戦力 / 2=実務で使用 / 3=個人開発でよく使う / 4=試している(表示名は SkillsSection.astro の tiers)
  * - x, y: 星図(1000 x 560)上の座標
  * - links: つながり。同じ組を両側に書かず、片方の星にだけ1本書く
- * - 星座に載せるのは約20個まで(見やすさのため)
+ * - 星座に載せるのは約20個まで(見やすさのため。上限は MAX_SKILLS)
  *
  * 内容が不正なときはビルド時に例外を投げる。
  */
@@ -14,12 +14,13 @@ export const CATEGORIES = [
   "Database",
   "Infra",
   "AI",
+  "Tools",
 ] as const;
 export type Category = (typeof CATEGORIES)[number];
 export type Tier = 1 | 2 | 3 | 4;
 
 export const MAP_SIZE = { width: 1000, height: 560 } as const;
-const MAX_SKILLS = 20;
+const MAX_SKILLS = 22;
 
 interface SkillInput {
   id: string;
@@ -97,7 +98,7 @@ const skillInputs: SkillInput[] = [
     id: "docker",
     name: "Docker",
     category: "Infra",
-    tier: 1,
+    tier: 2,
     x: 430,
     y: 390,
     links: ["aws", "gcp"],
@@ -187,6 +188,25 @@ const skillInputs: SkillInput[] = [
     tier: 2,
     x: 110,
     y: 500,
+  },
+  // Tools
+  {
+    id: "github",
+    name: "GitHub",
+    category: "Tools",
+    tier: 1,
+    x: 520,
+    y: 50,
+    links: ["github-actions"],
+  },
+  {
+    id: "github-actions",
+    name: "GitHub Actions",
+    category: "Tools",
+    tier: 2,
+    x: 360,
+    y: 300,
+    links: ["cloudflare"],
   },
 ];
 
