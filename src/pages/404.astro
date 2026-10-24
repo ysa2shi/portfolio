@@ -7,7 +7,7 @@ const lang = toLang(Astro.currentLocale);
 const t = useTranslations(lang);
 ---
 
-<BaseLayout pageTitle={t("error.404.title")}>
+<BaseLayout pageTitle={t("error.404.title")} noindex>
   <div class="min-h-[calc(100vh-430px)] flex items-center justify-center px-4">
     <div class="text-center">
       <h1 class="gradient-text mb-4 text-6xl font-bold md:text-8xl">404</h1>

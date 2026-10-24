@@ -13,7 +13,10 @@ const posts: Post[] = await getPosts();
 const sortedPosts: Post[] = sortPosts(posts);
 ---
 
-<BaseLayout pageTitle={t(page.title)}>
+<BaseLayout
+  pageTitle={t(page.title)}
+  description={page.description && t(page.description)}
+>
   <PageHeader
     title={t(page.title)}
     description={page.description && t(page.description)}

@@ -6,9 +6,18 @@ import "@/styles/link-card.css";
 
 const { frontmatter } = Astro.props;
 const lang = toLang(Astro.currentLocale);
+// WebP を OGP 画像として表示できない SNS があるので、WebP のときは共通の OGP 画像(PNG)を使う
+const ogImage: string | undefined = frontmatter.image?.url;
+const shareImage = ogImage?.endsWith(".webp") ? undefined : ogImage;
 ---
 
-<BaseLayout pageTitle={frontmatter.title}>
+<BaseLayout
+  pageTitle={frontmatter.title}
+  description={frontmatter.description}
+  image={shareImage}
+  type="article"
+  publishedTime={frontmatter.publishDate}
+>
   <article class="mx-auto max-w-3xl px-4 pb-16 pt-8">
     {
       frontmatter.image && (

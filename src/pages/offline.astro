@@ -1,0 +1,20 @@
+---
+import Button from "@/components/Button.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { localizePath, toLang, useTranslations } from "@/i18n/utils";
+
+// Service Worker が、オフラインで未取得のページを開いたときに返すページ
+const lang = toLang(Astro.currentLocale);
+const t = useTranslations(lang);
+---
+
+<BaseLayout pageTitle={t("error.offline.title")} noindex>
+  <div class="min-h-[calc(100vh-430px)] flex items-center justify-center px-4">
+    <div class="text-center">
+      <h1 class="section-title mb-8 text-3xl font-bold text-ink md:text-4xl">
+        {t("error.offline.title")}
+      </h1>
+      <Button href={localizePath("/", lang)}>{t("error.backHome")}</Button>
+    </div>
+  </div>
+</BaseLayout>

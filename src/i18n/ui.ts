@@ -15,7 +15,7 @@ export type Lang = keyof typeof languages;
 export const defaultLang: Lang = "ja";
 
 const ja = {
-  "site.description": "つくったものと、学んだことの記録。",
+  "site.description": "作ったものと、学んだことの記録。",
 
   "nav.home": "Home",
   "nav.blog": "Blog",
@@ -81,6 +81,7 @@ const ja = {
   "error.backHome": "Back to Home",
   "error.404.title": "Not Found",
   "error.500.title": "Server Error",
+  "error.offline.title": "Offline",
 
   "rss.title": "RSSフィード",
 } as const;

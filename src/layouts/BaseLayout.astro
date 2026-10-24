@@ -1,13 +1,22 @@
 ---
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import HeadMeta, {
+  type Props as HeadMetaProps,
+} from "@/components/HeadMeta.astro";
 import { siteConfig } from "@/config/site";
 import { toLang, useTranslations } from "@/i18n/utils";
 import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
 import "@/styles/theme.css";
-const { pageTitle } = Astro.props;
+
+interface Props extends Omit<HeadMetaProps, "title"> {
+  pageTitle: string;
+}
+
+const { pageTitle, ...meta } = Astro.props;
 const lang = toLang(Astro.currentLocale);
 const t = useTranslations(lang);
+const fullTitle = `${pageTitle} | ${siteConfig.name}`;
 ---
 
 <!doctype html>
@@ -38,9 +47,10 @@ const t = useTranslations(lang);
 
     <!-- Android & PWA Icons -->
     <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#f9fbfd" />
 
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={t("site.description")} />
+    <HeadMeta title={fullTitle} {...meta} />
     <GoogleFontsOptimizer
       url="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;700&display=swap"
     />
@@ -52,7 +62,7 @@ const t = useTranslations(lang);
       href="/rss.xml"
     />
 
-    <title>{pageTitle} | {siteConfig.name}</title>
+    <title>{fullTitle}</title>
 
     <script>
       // Service Workerの登録

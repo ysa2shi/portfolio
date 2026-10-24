@@ -11,7 +11,10 @@ const page = marketingConfig.pageInfo.articles;
 const articles = await fetchZennArticles();
 ---
 
-<BaseLayout pageTitle={t(page.title)}>
+<BaseLayout
+  pageTitle={t(page.title)}
+  description={page.description && t(page.description)}
+>
   <PageHeader
     title={t(page.title)}
     description={page.description && t(page.description)}

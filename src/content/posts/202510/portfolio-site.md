@@ -1,7 +1,7 @@
 ---
 title: "エンジニアポートフォリオサイトの作成"
 image:
-    url: 'https://sa2shidev.com/favicon.png'
+    url: '/og.webp'
     alt: 'ポートフォリオサイト'
 tags: ["個人開発", "astro", "github","cloudflare", "ポートフォリオ"]
 publishDate: 2025-10-10
