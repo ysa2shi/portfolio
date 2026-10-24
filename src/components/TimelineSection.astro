@@ -27,19 +27,25 @@ const experiences = [
 
 <section class="py-20">
   <div class="container mx-auto px-4">
-    <h2 class="text-3xl font-bold mb-12 text-center">Timeline</h2>
-    <div class="max-w-3xl mx-auto">
+    <h2 class="section-title mb-12 text-center text-3xl font-bold">Timeline</h2>
+    <div class="mx-auto max-w-3xl">
       {
-        experiences.map((experience) => (
-          <div class="flex gap-6 mb-12 last:mb-0">
-            <div class="w-24 flex-shrink-0 text-right">
-              <span class="text-primary-500 font-semibold">
-                {experience.yyyymm}
-              </span>
+        experiences.map((experience, i) => (
+          <div class="mb-10 flex gap-6 last:mb-0">
+            <div class="w-24 flex-shrink-0 pt-0.5 text-right">
+              <span class="font-semibold text-accent">{experience.yyyymm}</span>
             </div>
-            <div class="flex-grow before:absolute before:left-[-24px] before:top-3 before:w-3 before:h-3 before:bg-primary-500 before:rounded-full before:shadow-lg">
-              <h3 class="text-xl font-semibold mb-2">{experience.title}</h3>
-              <p class="text-neutral-600">{experience.description}</p>
+            <div class="relative flex-grow border-l border-line pb-2 pl-6">
+              <span
+                class:list={[
+                  "absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full",
+                  i === 0
+                    ? "bg-gold shadow-[0_0_8px_rgb(var(--c-gold))]"
+                    : "bg-accent",
+                ]}
+              />
+              <h3 class="mb-2 text-xl font-semibold">{experience.title}</h3>
+              <p class="text-sub">{experience.description}</p>
             </div>
           </div>
         ))

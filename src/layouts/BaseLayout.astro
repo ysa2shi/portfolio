@@ -3,13 +3,24 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { siteConfig } from "@/config/site";
 import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
+import "@/styles/theme.css";
 const { pageTitle } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="ja" class="scroll-smooth" data-theme="light">
   <head>
     <meta charset="UTF-8" />
+    <!-- 初回描画のちらつきを避けるため、保存済みのテーマを先に反映する(既定はライト) -->
+    <script is:inline>
+      try {
+        if (localStorage.getItem("theme") === "dark") {
+          document.documentElement.dataset.theme = "dark";
+        }
+      } catch {
+        // 読めない環境ではライトのまま
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Favicon -->
@@ -49,7 +60,7 @@ const { pageTitle } = Astro.props;
       }
     </script>
   </head>
-  <body class="bg-white text-neutral-900 min-h-screen flex flex-col">
+  <body class="bg-canvas text-ink min-h-screen flex flex-col">
     <Header />
     <main class="flex-grow">
       <slot />
@@ -61,7 +72,7 @@ const { pageTitle } = Astro.props;
 <style is:global>
   html {
     font-family: system-ui, sans-serif;
-    background-color: white;
+    background-color: rgb(var(--c-canvas));
     scroll-behavior: smooth;
   }
 

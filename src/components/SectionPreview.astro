@@ -16,12 +16,12 @@ const { title, description, href, linkLabel, class: className } = Astro.props;
   <div class="container mx-auto px-4">
     <div class="flex justify-between items-end mb-12">
       <div>
-        <h2 class="text-3xl font-bold mb-4">{title}</h2>
-        <p class="text-neutral-600 max-w-2xl">{description}</p>
+        <h2 class="section-title text-3xl font-bold mb-4">{title}</h2>
+        <p class="text-sub max-w-2xl">{description}</p>
       </div>
       <a
         href={href}
-        class="text-primary-500 hover:text-primary-600 hidden md:flex items-center font-medium"
+        class="text-accent hover:text-accent-2 hidden md:flex items-center transition-colors"
       >
         {linkLabel}
         <Icon name="mdi:arrow-right" class="h-5 w-5 ml-1" />
@@ -35,7 +35,7 @@ const { title, description, href, linkLabel, class: className } = Astro.props;
     <div class="mt-12 text-center md:hidden">
       <a
         href={href}
-        class="inline-flex items-center text-primary-500 hover:text-primary-600 font-medium"
+        class="inline-flex items-center text-accent hover:text-accent-2 transition-colors"
       >
         {linkLabel}
         <Icon name="mdi:arrow-right" class="h-5 w-5 ml-1" />
