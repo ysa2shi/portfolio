@@ -3,9 +3,13 @@ import ArticleCard from "@/components/ArticleCard.astro";
 import SectionPreview from "@/components/SectionPreview.astro";
 import { fetchZennArticles } from "@/utils/fetchZennFeed";
 import { marketingConfig } from "@/config/marketing";
-import { getI18n, localizePath } from "@/i18n/utils";
+import { getI18n, localizePath, localized } from "@/i18n/utils";
 
 const { lang, t } = getI18n(Astro.currentLocale);
+const text = localized(lang, {
+  ja: { title: "Latest Articles", viewAll: "View All Articles" },
+  en: {},
+});
 const page = marketingConfig.pageInfo.articles;
 const articles = await fetchZennArticles();
 
@@ -14,10 +18,10 @@ const latestArticles = articles.slice(0, 3);
 ---
 
 <SectionPreview
-  title={t("articles.title")}
+  title={text.title}
   description={page.description ? t(page.description) : ""}
   href={localizePath(page.href, lang)}
-  linkLabel={t("articles.viewAll")}
+  linkLabel={text.viewAll}
 >
   {
     latestArticles.map((article) => (

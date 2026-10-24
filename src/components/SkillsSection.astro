@@ -6,13 +6,38 @@ import {
   type Skill,
   type Tier,
 } from "@/config/skills";
-import { getI18n } from "@/i18n/utils";
+import { getI18n, localized } from "@/i18n/utils";
 import { bgStars, edgePaths, sparks } from "@/utils/skillMap";
 import { sparkPath } from "@/utils/sparkle";
 import { Icon } from "astro-icon/components";
 
-const { t } = getI18n(Astro.currentLocale);
-const tierLabel = (tier: Tier) => t(`skills.tier${tier}`);
+const { lang, t } = getI18n(Astro.currentLocale);
+const text = localized(lang, {
+  ja: {
+    title: "Skills",
+    viewToggle: "表示の切り替え",
+    viewMap: "Map",
+    viewList: "List",
+    mapLabel: "スキルの関係図",
+    replay: "アニメーションをもう一度再生",
+    related: "関連",
+    // 区分の表示名(区分の意味は src/config/skills.ts)
+    tiers: {
+      1: "主戦力",
+      2: "実務で使用",
+      3: "個人開発でよく使う",
+      4: "試している",
+    },
+  },
+  en: {
+    viewToggle: "Switch view",
+    mapLabel: "Skill map",
+    replay: "Replay animation",
+    related: "Related",
+    tiers: { 1: "Core", 2: "Used at work", 3: "Side projects", 4: "Exploring" },
+  },
+});
+const tierLabel = (tier: Tier) => text.tiers[tier];
 const sep = t("common.sep");
 
 const RADIUS = { 1: 14, 2: 8, 3: 7, 4: 6 } as const;
@@ -31,31 +56,27 @@ const byCategory = (category: string): Skill[] =>
       class="panel"
       data-skills
       data-view="map"
-      data-related={t("skills.related")}
+      data-related={text.related}
       data-sep={sep}
     >
       <div class="head">
         <h2 class="section-title text-3xl font-bold md:text-4xl">
-          {t("skills.title")}
+          {text.title}
         </h2>
-        <div
-          class="view-toggle"
-          role="group"
-          aria-label={t("skills.viewToggle")}
-        >
+        <div class="view-toggle" role="group" aria-label={text.viewToggle}>
           <button type="button" data-v="map" aria-pressed="true"
-            >{t("skills.viewMap")}</button
+            >{text.viewMap}</button
           >
           <button type="button" data-v="list" aria-pressed="false"
-            >{t("skills.viewList")}</button
+            >{text.viewList}</button
           >
         </div>
         <button
           type="button"
           class="replay"
           data-map-only
-          aria-label={t("skills.replay")}
-          title={t("skills.replay")}
+          aria-label={text.replay}
+          title={text.replay}
         >
           <Icon name="mdi:replay" />
         </button>
@@ -85,7 +106,7 @@ const byCategory = (category: string): Skill[] =>
         <svg
           viewBox={`0 0 ${MAP_SIZE.width} ${MAP_SIZE.height}`}
           role="group"
-          aria-label={t("skills.mapLabel")}
+          aria-label={text.mapLabel}
         >
           <g>
             {

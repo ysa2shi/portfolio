@@ -1,9 +1,16 @@
 ---
 import { Icon } from "astro-icon/components";
 import { siteConfig } from "@/config/site";
-import { getI18n } from "@/i18n/utils";
+import { getI18n, localized } from "@/i18n/utils";
 
-const { t } = getI18n(Astro.currentLocale);
+const { lang, t } = getI18n(Astro.currentLocale);
+const text = localized(lang, {
+  ja: {
+    title: "Let's Work Together",
+    lead: "お仕事のご相談など、Xでお気軽にご連絡ください。",
+  },
+  en: { lead: "Got a project in mind? Feel free to reach out on X." },
+});
 const currentYear = new Date().getFullYear();
 const links = [
   { name: "GitHub", icon: "simple-icons:github", url: siteConfig.links.github },
@@ -20,10 +27,10 @@ const links = [
       class="col-span-2 text-center md:col-span-1 md:col-start-2 md:row-start-1"
     >
       <h2 class="section-title mb-4 text-3xl font-bold text-ink">
-        {t("footer.title")}
+        {text.title}
       </h2>
       <p class="mx-auto max-w-xl text-base !mb-0">
-        {t("footer.lead")}
+        {text.lead}
       </p>
     </div>
     <div class="md:col-start-1 md:row-start-1">

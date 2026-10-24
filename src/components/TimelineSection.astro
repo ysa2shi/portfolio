@@ -1,37 +1,78 @@
 ---
-import type { UIKey } from "@/i18n/ui";
-import { getI18n } from "@/i18n/utils";
+import { getI18n, localized } from "@/i18n/utils";
 
-const { t } = getI18n(Astro.currentLocale);
+const { lang } = getI18n(Astro.currentLocale);
+const text = localized(lang, { ja: { title: "Timeline" }, en: {} });
 
 interface Experience {
   date: string;
-  title: UIKey;
-  description?: UIKey;
+  title: string;
+  description?: string;
 }
 
-// 新しい順。文言は辞書(src/i18n/ui.ts)のキーで持つ
+// 新しい順
 const experiences: Experience[] = [
-  { date: "2026.04", title: "timeline.202604.title" },
+  {
+    date: "2026.04",
+    ...localized(lang, {
+      ja: { title: "AI 開発を勉強中" },
+      en: { title: "Currently learning AI development" },
+    }),
+  },
   {
     date: "2025.04",
-    title: "timeline.202504.title",
-    description: "timeline.202504.description",
+    ...localized(lang, {
+      ja: {
+        title: "フロントエンドの勉強を始める",
+        description: "学んだことを試す場として、このサイトを作りました。",
+      },
+      en: {
+        title: "Currently learning frontend development",
+        description:
+          "Created this portfolio site as a project to apply what I've learned.",
+      },
+    }),
   },
   {
     date: "2024.04",
-    title: "timeline.202404.title",
-    description: "timeline.202404.description",
+    ...localized(lang, {
+      ja: {
+        title: "決済機能の開発・運用を担当",
+        description:
+          "AWS 上で動く Java × Spring Boot のアプリケーションを開発しています。",
+      },
+      en: {
+        title: "Developing and operating payment features",
+        description:
+          "Working on Java × Spring Boot applications running on AWS.",
+      },
+    }),
   },
   {
     date: "2023.04",
-    title: "timeline.202304.title",
-    description: "timeline.202304.description",
+    ...localized(lang, {
+      ja: {
+        title: "新卒で現職に入社",
+        description: "Web アプリケーションの開発に配属。",
+      },
+      en: {
+        title: "Joined current company as a new graduate engineer",
+        description: "Mainly working as a web developer.",
+      },
+    }),
   },
   {
     date: "2023.03",
-    title: "timeline.202303.title",
-    description: "timeline.202303.description",
+    ...localized(lang, {
+      ja: {
+        title: "大学院 修士課程修了(工学専攻)",
+        description: "深層学習を使った音声合成を研究していました。",
+      },
+      en: {
+        title: "Master of Engineering (M.Eng.)",
+        description: "Researched speech synthesis with deep learning.",
+      },
+    }),
   },
 ];
 ---
@@ -39,7 +80,7 @@ const experiences: Experience[] = [
 <section class="py-20">
   <div class="container mx-auto px-4">
     <h2 class="section-title mb-12 text-center text-3xl font-bold">
-      {t("timeline.title")}
+      {text.title}
     </h2>
     <div class="mx-auto max-w-3xl">
       {
@@ -57,9 +98,9 @@ const experiences: Experience[] = [
                     : "bg-accent",
                 ]}
               />
-              <h3 class="mb-2 text-xl font-semibold">{t(experience.title)}</h3>
+              <h3 class="mb-2 text-xl font-semibold">{experience.title}</h3>
               {experience.description && (
-                <p class="text-sub">{t(experience.description)}</p>
+                <p class="text-sub">{experience.description}</p>
               )}
             </div>
           </div>

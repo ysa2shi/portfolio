@@ -4,9 +4,13 @@ import type { Post } from "@/types";
 import { marketingConfig } from "@/config/marketing";
 import PostCard from "@/components/PostCard.astro";
 import SectionPreview from "@/components/SectionPreview.astro";
-import { getI18n, localizePath } from "@/i18n/utils";
+import { getI18n, localizePath, localized } from "@/i18n/utils";
 
 const { lang, t } = getI18n(Astro.currentLocale);
+const text = localized(lang, {
+  ja: { title: "Personal Blog", viewAll: "View All Posts" },
+  en: {},
+});
 const page = marketingConfig.pageInfo.blog;
 const posts: Post[] = await getPosts();
 // 最新3件だけ表示
@@ -14,10 +18,10 @@ const latestPosts: Post[] = sortPosts(posts).slice(0, 3);
 ---
 
 <SectionPreview
-  title={t("posts.title")}
+  title={text.title}
   description={page.description ? t(page.description) : ""}
   href={localizePath(page.href, lang)}
-  linkLabel={t("posts.viewAll")}
+  linkLabel={text.viewAll}
 >
   {
     latestPosts.map((post: Post) => (

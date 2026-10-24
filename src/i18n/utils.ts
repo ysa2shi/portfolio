@@ -14,16 +14,21 @@ export function toLang(locale: string | undefined): Lang {
     : defaultLang;
 }
 
-/**
- * 辞書を引く関数を返す。訳がなければ日本語を使う。
- * `{name}` の形の差し込みは params で埋める。
- */
+/** 辞書を引く関数を返す。訳がなければ日本語を使う */
 export function useTranslations(lang: Lang) {
-  return (key: UIKey, params?: Record<string, string>): string => {
-    const text = ui[lang][key] ?? baseUI[key];
-    if (!params) return text;
-    return text.replace(/\{(\w+)\}/g, (m, name: string) => params[name] ?? m);
-  };
+  return (key: UIKey): string => ui[lang][key] ?? baseUI[key];
+}
+
+/**
+ * コンポーネント専用の文言を、そのファイルのフロントマターに書くためのヘルパー。
+ * ja が基準で、en は足りないキーがあれば ja で補う(キーは ja にあるものだけ書ける)。
+ * 複数の場所で使う文言は src/i18n/ui.ts に置く
+ */
+export function localized<T extends Record<string, unknown>>(
+  lang: Lang,
+  texts: { ja: T; en: Partial<NoInfer<T>> },
+): T {
+  return { ...texts.ja, ...texts[lang] };
 }
 
 /** ページ・コンポーネントの先頭で `getI18n(Astro.currentLocale)` と呼び、言語と辞書を引く関数をまとめて受け取る */

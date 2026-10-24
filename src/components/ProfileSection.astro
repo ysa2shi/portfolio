@@ -1,9 +1,24 @@
 ---
 import { siteConfig } from "@/config/site";
 import Button from "@/components/Button.astro";
-import { getI18n } from "@/i18n/utils";
+import { getI18n, localized } from "@/i18n/utils";
 
-const { t } = getI18n(Astro.currentLocale);
+const { lang } = getI18n(Astro.currentLocale);
+const text = localized(lang, {
+  ja: {
+    title: "About Me",
+    avatarAlt: "プロフィール写真",
+    body: "Web アプリケーション開発を主に担当しているバックエンドエンジニアです。Java × Spring Boot と AWS を使った決済機能の開発・運用に携わってきました。最近は個人開発で Web サービスづくりにも取り組んでいます。読みやすく、きちんと動くコードを書くことを大切にしながら、学んだことは個人開発や技術ブログで発信しています。",
+    github: "GitHub",
+    contact: "Contact",
+  },
+  en: {
+    avatarAlt: "Profile",
+    body: "Hi, I am a backend engineer specializing in web application development. I have experience developing and operating payment features using Java × Spring Boot and AWS. Recently, I have been working on personal projects and building web services. I strive to write clear and functional code and continuously improve my skills. Additionally, I share what I learn through personal projects and technical blogs.",
+    github: "GitHub Profile",
+    contact: "Get in Touch",
+  },
+});
 ---
 
 <section class="py-20">
@@ -37,22 +52,22 @@ const { t } = getI18n(Astro.currentLocale);
           </svg>
           <img
             src="/img/profile.webp"
-            alt={t("about.avatarAlt")}
+            alt={text.avatarAlt}
             class="h-64 w-64 rounded-full object-cover"
           />
         </div>
       </div>
       <div class="w-full md:w-2/3">
         <h2 class="section-title text-3xl font-bold mb-6">
-          {t("about.title")}
+          {text.title}
         </h2>
-        <p class="text-lg text-sub mb-6">{t("about.body")}</p>
+        <p class="text-lg text-sub mb-6">{text.body}</p>
         <div class="flex flex-wrap gap-4">
           <Button href={siteConfig.links.github} external>
-            {t("about.github")}
+            {text.github}
           </Button>
           <Button href={siteConfig.links.x} variant="secondary" external>
-            {t("about.contact")}
+            {text.contact}
           </Button>
         </div>
       </div>

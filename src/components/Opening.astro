@@ -2,9 +2,17 @@
 import { marketingConfig } from "@/config/marketing";
 import Button from "@/components/Button.astro";
 import { sparkPath } from "@/utils/sparkle";
-import { getI18n, localizePath } from "@/i18n/utils";
+import { getI18n, localizePath, localized } from "@/i18n/utils";
 
-const { lang, t } = getI18n(Astro.currentLocale);
+const { lang } = getI18n(Astro.currentLocale);
+const text = localized(lang, {
+  ja: {
+    lead: "シンプルで信頼できる Web サービスをつくっています。",
+    blog: "View Blog",
+    articles: "Read Articles",
+  },
+  en: { lead: "Building simple and reliable web services." },
+});
 const { blog, articles } = marketingConfig.pageInfo;
 
 // 右側の星座。tone: hg=金 / ha=空色 / hw=銀白
@@ -45,12 +53,12 @@ const stars = [
         Software <em class="gradient-text">Engineer</em>
       </h1>
       <p class="mb-8 text-xl text-sub md:text-2xl">
-        {t("hero.lead")}
+        {text.lead}
       </p>
       <div class="flex flex-wrap gap-4">
-        <Button href={localizePath(blog.href, lang)}>{t("hero.blog")}</Button>
+        <Button href={localizePath(blog.href, lang)}>{text.blog}</Button>
         <Button href={localizePath(articles.href, lang)} variant="secondary">
-          {t("hero.articles")}
+          {text.articles}
         </Button>
       </div>
     </div>

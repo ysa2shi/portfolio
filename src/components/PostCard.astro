@@ -1,7 +1,7 @@
 ---
 import { normalizeSlug } from "@/utils/getCollectionPosts";
 import Tag from "@/components/Tag.astro";
-import { getI18n } from "@/i18n/utils";
+import { getI18n, localized } from "@/i18n/utils";
 
 export interface Props {
   id: string;
@@ -13,7 +13,11 @@ export interface Props {
   tags?: string[];
 }
 
-const { t } = getI18n(Astro.currentLocale);
+const { lang } = getI18n(Astro.currentLocale);
+const text = localized(lang, {
+  ja: { thumbnailAlt: (title: string) => `${title} のサムネイル` },
+  en: { thumbnailAlt: (title: string) => `Thumbnail for ${title}` },
+});
 // 記事は日本語だけなので、英語ページからも日本語の記事へリンクする
 const href = `/blog/${normalizeSlug(Astro.props.id)}`;
 const { title, image, tags = [] } = Astro.props;
@@ -28,7 +32,7 @@ const { title, image, tags = [] } = Astro.props;
         <div class="aspect-video overflow-hidden">
           <img
             src={image.url}
-            alt={image.alt || t("posts.thumbnailAlt", { title })}
+            alt={image.alt || text.thumbnailAlt(title)}
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
