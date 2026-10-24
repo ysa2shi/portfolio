@@ -1,7 +1,9 @@
 ---
 import { Icon } from "astro-icon/components";
 import { siteConfig } from "@/config/site";
+import { toLang, useTranslations } from "@/i18n/utils";
 
+const t = useTranslations(toLang(Astro.currentLocale));
 const currentYear = new Date().getFullYear();
 const links = [
   { name: "GitHub", icon: "simple-icons:github", url: siteConfig.links.github },
@@ -18,15 +20,15 @@ const links = [
       class="col-span-2 text-center md:col-span-1 md:col-start-2 md:row-start-1"
     >
       <h2 class="section-title mb-4 text-3xl font-bold text-ink">
-        Let's Work Together
+        {t("footer.title")}
       </h2>
       <p class="mx-auto max-w-xl text-base !mb-0">
-        Got a project in mind? Feel free to get in touch!
+        {t("footer.lead")}
       </p>
     </div>
     <div class="md:col-start-1 md:row-start-1">
       <p class="!mb-1 text-xl font-bold text-ink">{siteConfig.name}</p>
-      <p class="!mb-0 max-w-xs">{siteConfig.description}</p>
+      <p class="!mb-0 max-w-xs">{t("site.description")}</p>
     </div>
     <div
       class="flex flex-col items-end gap-3 justify-self-end md:col-start-3 md:row-start-1"

@@ -1,6 +1,7 @@
 ---
 import { normalizeSlug } from "@/utils/getCollectionPosts";
 import Tag from "@/components/Tag.astro";
+import { localizePath, toLang, useTranslations } from "@/i18n/utils";
 
 export interface Props {
   id: string;
@@ -13,7 +14,9 @@ export interface Props {
   tags?: string[];
 }
 
-const id = normalizeSlug(Astro.props.id);
+const lang = toLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const href = localizePath(`/blog/${normalizeSlug(Astro.props.id)}`, lang);
 const { title, image, tags = [] } = Astro.props;
 ---
 
@@ -22,11 +25,11 @@ const { title, image, tags = [] } = Astro.props;
 >
   {
     image && (
-      <a href={`/blog/${id}`} class="block">
+      <a href={href} class="block">
         <div class="aspect-video overflow-hidden">
           <img
             src={image.url}
-            alt={image.alt || `Thumbnail for ${title}`}
+            alt={image.alt || t("posts.thumbnailAlt", { title })}
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
@@ -35,7 +38,7 @@ const { title, image, tags = [] } = Astro.props;
   }
 
   <div class="p-6">
-    <a href={`/blog/${id}`} class="block">
+    <a href={href} class="block">
       <h3 class="text-xl font-semibold mb-2 text-ink">
         {title}
       </h3>

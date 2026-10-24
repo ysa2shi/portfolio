@@ -1,6 +1,9 @@
 ---
 import { siteConfig } from "@/config/site";
 import Button from "@/components/Button.astro";
+import { toLang, useTranslations } from "@/i18n/utils";
+
+const t = useTranslations(toLang(Astro.currentLocale));
 ---
 
 <section class="py-20">
@@ -34,27 +37,22 @@ import Button from "@/components/Button.astro";
           </svg>
           <img
             src="/img/profile.webp"
-            alt="Profile"
+            alt={t("about.avatarAlt")}
             class="h-64 w-64 rounded-full object-cover"
           />
         </div>
       </div>
       <div class="w-full md:w-2/3">
-        <h2 class="section-title text-3xl font-bold mb-6">About Me</h2>
-        <p class="text-lg text-sub mb-6">
-          Hi, I am a backend engineer specializing in web application
-          development. I have experience developing and operating business
-          systems using Java (Spring Boot) and AWS. Recently, I have been
-          working on personal projects and building web services. I strive to
-          write clear and functional code and continuously improve my skills.
-          Additionally, I share what I learn through personal projects and
-          technical blogs.
-        </p>
+        <h2 class="section-title text-3xl font-bold mb-6">
+          {t("about.title")}
+        </h2>
+        <p class="text-lg text-sub mb-6">{t("about.body")}</p>
         <div class="flex flex-wrap gap-4">
-          <Button href={siteConfig.links.github} external>GitHub Profile</Button
-          >
+          <Button href={siteConfig.links.github} external>
+            {t("about.github")}
+          </Button>
           <Button href={siteConfig.links.x} variant="secondary" external>
-            Get in Touch
+            {t("about.contact")}
           </Button>
         </div>
       </div>

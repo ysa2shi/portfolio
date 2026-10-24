@@ -2,13 +2,16 @@
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { siteConfig } from "@/config/site";
+import { toLang, useTranslations } from "@/i18n/utils";
 import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
 import "@/styles/theme.css";
 const { pageTitle } = Astro.props;
+const lang = toLang(Astro.currentLocale);
+const t = useTranslations(lang);
 ---
 
 <!doctype html>
-<html lang="ja" class="scroll-smooth" data-theme="light">
+<html lang={lang} class="scroll-smooth" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <!-- 初回描画のちらつきを避けるため、保存済みのテーマを先に反映する(既定はライト) -->
@@ -37,7 +40,7 @@ const { pageTitle } = Astro.props;
     <link rel="manifest" href="/site.webmanifest" />
 
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={siteConfig.description} />
+    <meta name="description" content={t("site.description")} />
     <GoogleFontsOptimizer
       url="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;700&display=swap"
     />
@@ -45,7 +48,7 @@ const { pageTitle } = Astro.props;
     <link
       rel="alternate"
       type="application/rss+xml"
-      title="RSSフィード"
+      title={t("rss.title")}
       href="/rss.xml"
     />
 

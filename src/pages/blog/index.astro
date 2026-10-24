@@ -5,15 +5,18 @@ import PageHeader from "@/components/PageHeader.astro";
 import PostCard from "@/components/PostCard.astro";
 import { marketingConfig } from "@/config/marketing";
 import { getPosts, sortPosts } from "@/utils/getCollectionPosts";
+import { toLang, useTranslations } from "@/i18n/utils";
 
+const t = useTranslations(toLang(Astro.currentLocale));
+const page = marketingConfig.pageInfo.blog;
 const posts: Post[] = await getPosts();
 const sortedPosts: Post[] = sortPosts(posts);
 ---
 
-<BaseLayout pageTitle={marketingConfig.pageInfo.blog.title}>
+<BaseLayout pageTitle={t(page.title)}>
   <PageHeader
-    title={marketingConfig.pageInfo.blog.title}
-    description={marketingConfig.pageInfo.blog.description}
+    title={t(page.title)}
+    description={page.description && t(page.description)}
   />
 
   <section class="py-16">

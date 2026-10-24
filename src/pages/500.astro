@@ -1,20 +1,20 @@
 ---
 import Button from "@/components/Button.astro";
 import ErrorLayout from "@/layouts/ErrorLayout.astro";
+import { localizePath, toLang, useTranslations } from "@/i18n/utils";
+
+const lang = toLang(Astro.currentLocale);
+const t = useTranslations(lang);
 ---
 
-<ErrorLayout pageTitle="Internal Server Error">
+<ErrorLayout pageTitle={t("error.500.title")}>
   <div class="min-h-[calc(100vh-430px)] flex items-center justify-center px-4">
     <div class="text-center">
       <h1 class="gradient-text mb-4 text-6xl font-bold md:text-8xl">500</h1>
-      <h2 class="section-title mb-6 text-2xl font-medium text-ink md:text-3xl">
-        Internal Server Error
+      <h2 class="section-title mb-8 text-2xl font-medium text-ink md:text-3xl">
+        {t("error.500.title")}
       </h2>
-      <p class="mx-auto mb-8 max-w-md text-sub">
-        An unexpected error occurred on the server. <br />
-        Please try again later or contact support if the issue persists.
-      </p>
-      <Button href="/">Back to Home</Button>
+      <Button href={localizePath("/", lang)}>{t("error.backHome")}</Button>
     </div>
   </div>
 </ErrorLayout>

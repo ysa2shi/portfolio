@@ -7,7 +7,6 @@ const zennUrl = import.meta.env.PUBLIC_ZENN_USER__URL || "https://zenn.dev";
 
 export const siteConfig = {
   name: siteName,
-  description: "Sharing what I've built and learned along the way.",
   url: siteUrl,
   links: {
     github: githubUrl,

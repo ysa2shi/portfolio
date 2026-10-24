@@ -2,21 +2,15 @@
 import { marketingConfig } from "@/config/marketing";
 import { siteConfig } from "@/config/site";
 import ThemeToggle from "@/components/ThemeToggle.astro";
+import { localizePath, toLang, useTranslations } from "@/i18n/utils";
 
-const navItems = [
-  {
-    name: marketingConfig.pageInfo.home.title,
-    url: marketingConfig.pageInfo.home.href,
-  },
-  {
-    name: marketingConfig.pageInfo.blog.title,
-    url: marketingConfig.pageInfo.blog.href,
-  },
-  {
-    name: marketingConfig.pageInfo.articles.title,
-    url: marketingConfig.pageInfo.articles.href,
-  },
-];
+const lang = toLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const { home, blog, articles } = marketingConfig.pageInfo;
+const navItems = [home, blog, articles].map((page) => ({
+  name: t(page.title),
+  url: localizePath(page.href, lang),
+}));
 
 const currentPath =
   Astro.url.pathname === "/" ? "/" : Astro.url.pathname.replace(/\/$/, "");
@@ -27,7 +21,7 @@ const currentPath =
 >
   <div class="container mx-auto px-4 flex justify-between items-center">
     <a
-      href="/"
+      href={localizePath("/", lang)}
       class="py-4 text-xl font-bold text-ink transition-colors hover:text-accent"
     >
       {siteConfig.name}
@@ -60,9 +54,11 @@ const currentPath =
       <button
         id="menuToggle"
         class="md:hidden p-2 text-ink"
-        aria-label="メニューを開く"
+        aria-label={t("nav.openMenu")}
         aria-controls="mobileMenu"
         aria-expanded="false"
+        data-label-open={t("nav.openMenu")}
+        data-label-close={t("nav.closeMenu")}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -116,6 +112,12 @@ const currentPath =
       const expanded =
         menuToggle.getAttribute("aria-expanded") === "true" || false;
       menuToggle.setAttribute("aria-expanded", (!expanded).toString());
+      menuToggle.setAttribute(
+        "aria-label",
+        (expanded
+          ? menuToggle.dataset.labelOpen
+          : menuToggle.dataset.labelClose) ?? "",
+      );
       mobileMenu.classList.toggle("hidden");
 
       // Change the icon when menu is open

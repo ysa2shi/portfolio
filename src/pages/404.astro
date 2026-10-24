@@ -1,19 +1,20 @@
 ---
 import Button from "@/components/Button.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { localizePath, toLang, useTranslations } from "@/i18n/utils";
+
+const lang = toLang(Astro.currentLocale);
+const t = useTranslations(lang);
 ---
 
-<BaseLayout pageTitle="Page Not Found">
+<BaseLayout pageTitle={t("error.404.title")}>
   <div class="min-h-[calc(100vh-430px)] flex items-center justify-center px-4">
     <div class="text-center">
       <h1 class="gradient-text mb-4 text-6xl font-bold md:text-8xl">404</h1>
-      <h2 class="section-title mb-6 text-2xl font-medium text-ink md:text-3xl">
-        Page Not Found
+      <h2 class="section-title mb-8 text-2xl font-medium text-ink md:text-3xl">
+        {t("error.404.title")}
       </h2>
-      <p class="mx-auto mb-8 max-w-md text-sub">
-        The page you're looking for doesn't exist or has been moved.
-      </p>
-      <Button href="/">Back to Home</Button>
+      <Button href={localizePath("/", lang)}>{t("error.backHome")}</Button>
     </div>
   </div>
 </BaseLayout>

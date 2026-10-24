@@ -1,7 +1,9 @@
+import type { UIKey } from "@/i18n/ui";
+
 export interface pageItem {
-  title: string;
+  title: UIKey;
   href: string;
-  description: string;
+  description?: UIKey;
   disabled?: boolean;
 }
 

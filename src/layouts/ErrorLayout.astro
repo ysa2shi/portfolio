@@ -2,13 +2,15 @@
 import ErrorHeader from "@/components/ErrorHeader.astro";
 import Footer from "@/components/Footer.astro";
 import { siteConfig } from "@/config/site";
+import { toLang } from "@/i18n/utils";
 import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
 import "@/styles/theme.css";
 const { pageTitle } = Astro.props;
+const lang = toLang(Astro.currentLocale);
 ---
 
 <!doctype html>
-<html lang="ja" class="scroll-smooth" data-theme="light">
+<html lang={lang} class="scroll-smooth" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <!-- 保存済みのテーマを先に反映する(既定はライト) -->
@@ -52,4 +54,3 @@ const { pageTitle } = Astro.props;
     <Footer />
   </body>
 </html>
-d

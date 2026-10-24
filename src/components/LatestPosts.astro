@@ -4,16 +4,20 @@ import type { Post } from "@/types";
 import { marketingConfig } from "@/config/marketing";
 import PostCard from "@/components/PostCard.astro";
 import SectionPreview from "@/components/SectionPreview.astro";
+import { localizePath, toLang, useTranslations } from "@/i18n/utils";
 
+const lang = toLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const page = marketingConfig.pageInfo.blog;
 const posts: Post[] = await getPosts();
 const latestPosts: Post[] = sortPosts(posts);
 ---
 
 <SectionPreview
-  title="Personal Blog"
-  description={marketingConfig.pageInfo.blog.description}
-  href={marketingConfig.pageInfo.blog.href}
-  linkLabel="View All Posts"
+  title={t("posts.title")}
+  description={page.description ? t(page.description) : ""}
+  href={localizePath(page.href, lang)}
+  linkLabel={t("posts.viewAll")}
 >
   {
     latestPosts.map((post: Post) => (

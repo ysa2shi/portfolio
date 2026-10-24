@@ -1,7 +1,7 @@
 /**
  * スキルの星図のデータ。追加・変更はこのファイルだけで行う。
  *
- * - tier: 1=主戦力 / 2=実務で使用 / 3=試している
+ * - tier: 1=主戦力 / 2=実務で使用 / 3=個人開発でよく使う / 4=試している(表示名は src/i18n/ui.ts の skills.tier*)
  * - x, y: 星図(1000 x 560)上の座標
  * - links: つながり。同じ組を両側に書かず、片方の星にだけ1本書く
  * - 星座に載せるのは約20個まで(見やすさのため)
@@ -13,16 +13,10 @@ export const CATEGORIES = [
   "Backend",
   "Database",
   "Infra",
-  "Tools",
+  "AI",
 ] as const;
 export type Category = (typeof CATEGORIES)[number];
-export type Tier = 1 | 2 | 3;
-
-export const TIER_LABELS: Record<Tier, string> = {
-  1: "主戦力",
-  2: "実務で使用",
-  3: "試している",
-};
+export type Tier = 1 | 2 | 3 | 4;
 
 export const MAP_SIZE = { width: 1000, height: 560 } as const;
 const MAX_SKILLS = 20;
@@ -38,147 +32,162 @@ interface SkillInput {
 }
 
 const skillInputs: SkillInput[] = [
+  // Frontend
   {
     id: "typescript",
     name: "TypeScript",
     category: "Frontend",
-    tier: 1,
-    x: 220,
+    tier: 2,
+    x: 200,
     y: 140,
-    links: ["astro", "react", "vue"],
+    links: ["nuxt", "astro"],
   },
   {
-    id: "react",
-    name: "React",
+    id: "nuxt",
+    name: "Nuxt",
     category: "Frontend",
     tier: 2,
-    x: 110,
-    y: 235,
-    links: ["tailwind"],
-  },
-  {
-    id: "vue",
-    name: "Vue.js",
-    category: "Frontend",
-    tier: 2,
-    x: 300,
-    y: 255,
-    links: ["tailwind"],
+    x: 100,
+    y: 250,
   },
   {
     id: "astro",
     name: "Astro",
     category: "Frontend",
     tier: 3,
-    x: 410,
-    y: 115,
+    x: 340,
+    y: 90,
     links: ["tailwind", "cloudflare"],
   },
   {
     id: "tailwind",
     name: "Tailwind CSS",
     category: "Frontend",
-    tier: 2,
-    x: 195,
-    y: 345,
+    tier: 3,
+    x: 250,
+    y: 290,
   },
+  // Infra
   {
     id: "cloudflare",
     name: "Cloudflare",
     category: "Infra",
     tier: 3,
-    x: 545,
-    y: 205,
-    links: ["github-actions"],
-  },
-  {
-    id: "github",
-    name: "GitHub",
-    category: "Tools",
-    tier: 2,
-    x: 705,
-    y: 120,
-    links: ["github-actions"],
-  },
-  {
-    id: "github-actions",
-    name: "GitHub Actions",
-    category: "Tools",
-    tier: 1,
-    x: 695,
-    y: 255,
-    links: ["docker"],
-  },
-  {
-    id: "docker",
-    name: "Docker",
-    category: "Infra",
-    tier: 2,
     x: 480,
-    y: 355,
-    links: ["aws", "spring-boot"],
+    y: 190,
+  },
+  {
+    id: "gcp",
+    name: "Google Cloud",
+    category: "Infra",
+    tier: 4,
+    x: 650,
+    y: 130,
   },
   {
     id: "aws",
     name: "AWS",
     category: "Infra",
     tier: 1,
-    x: 330,
-    y: 450,
+    x: 570,
+    y: 320,
     links: ["dynamodb"],
   },
   {
-    id: "dynamodb",
-    name: "DynamoDB",
-    category: "Database",
-    tier: 2,
-    x: 470,
-    y: 500,
+    id: "docker",
+    name: "Docker",
+    category: "Infra",
+    tier: 1,
+    x: 430,
+    y: 390,
+    links: ["aws", "gcp"],
   },
+  // Backend
   {
-    id: "mysql",
-    name: "MySQL",
-    category: "Database",
-    tier: 2,
-    x: 610,
-    y: 470,
-    links: ["dynamodb"],
+    id: "java",
+    name: "Java",
+    category: "Backend",
+    tier: 1,
+    x: 830,
+    y: 190,
+    links: ["spring-boot"],
   },
   {
     id: "spring-boot",
     name: "Spring Boot",
     category: "Backend",
     tier: 1,
-    x: 745,
-    y: 400,
-    links: ["mysql"],
-  },
-  {
-    id: "java",
-    name: "Java",
-    category: "Backend",
-    tier: 2,
-    x: 880,
+    x: 760,
     y: 320,
-    links: ["spring-boot", "kotlin"],
+    links: ["mysql", "kafka", "docker"],
   },
   {
     id: "kotlin",
     name: "Kotlin",
     category: "Backend",
-    tier: 1,
-    x: 890,
-    y: 450,
+    tier: 4,
+    x: 910,
+    y: 330,
     links: ["ktor", "spring-boot"],
   },
   {
     id: "ktor",
     name: "Ktor",
     category: "Backend",
+    tier: 4,
+    x: 880,
+    y: 470,
+  },
+  {
+    id: "kafka",
+    name: "Kafka",
+    category: "Backend",
     tier: 2,
-    x: 790,
-    y: 515,
-    links: ["dynamodb"],
+    x: 700,
+    y: 460,
+  },
+  // Database
+  {
+    id: "mysql",
+    name: "MySQL",
+    category: "Database",
+    tier: 1,
+    x: 540,
+    y: 500,
+  },
+  {
+    id: "dynamodb",
+    name: "DynamoDB",
+    category: "Database",
+    tier: 2,
+    x: 380,
+    y: 500,
+  },
+  {
+    id: "supabase",
+    name: "Supabase",
+    category: "Database",
+    tier: 4,
+    x: 240,
+    y: 430,
+    links: ["typescript"],
+  },
+  // AI
+  {
+    id: "claude-code",
+    name: "Claude Code",
+    category: "AI",
+    tier: 2,
+    x: 90,
+    y: 390,
+  },
+  {
+    id: "codex",
+    name: "Codex",
+    category: "AI",
+    tier: 2,
+    x: 110,
+    y: 500,
   },
 ];
 

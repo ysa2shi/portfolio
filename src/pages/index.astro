@@ -7,9 +7,12 @@ import TimelineSection from "@/components/TimelineSection.astro";
 import SkillsSection from "@/components/SkillsSection.astro";
 import LatestPosts from "@/components/LatestPosts.astro";
 import LatestArticles from "@/components/LatestArticles.astro";
+import { toLang, useTranslations } from "@/i18n/utils";
+
+const t = useTranslations(toLang(Astro.currentLocale));
 ---
 
-<BaseLayout pageTitle={marketingConfig.pageInfo.home.title}>
+<BaseLayout pageTitle={t(marketingConfig.pageInfo.home.title)}>
   <Opening />
   <ProfileSection />
   <TimelineSection />

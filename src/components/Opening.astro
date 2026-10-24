@@ -1,6 +1,11 @@
 ---
 import { marketingConfig } from "@/config/marketing";
 import Button from "@/components/Button.astro";
+import { localizePath, toLang, useTranslations } from "@/i18n/utils";
+
+const lang = toLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const { blog, articles } = marketingConfig.pageInfo;
 ---
 
 <section class="relative overflow-hidden py-20 md:py-32">
@@ -48,15 +53,12 @@ import Button from "@/components/Button.astro";
         Software <em class="gradient-text">Engineer</em>
       </h1>
       <p class="mb-8 text-xl text-sub md:text-2xl">
-        Building simple and reliable web services.
+        {t("hero.lead")}
       </p>
       <div class="flex flex-wrap gap-4">
-        <Button href={marketingConfig.pageInfo.blog.href}>View Blog</Button>
-        <Button
-          href={marketingConfig.pageInfo.articles.href}
-          variant="secondary"
-        >
-          Read Articles
+        <Button href={localizePath(blog.href, lang)}>{t("hero.blog")}</Button>
+        <Button href={localizePath(articles.href, lang)} variant="secondary">
+          {t("hero.articles")}
         </Button>
       </div>
     </div>

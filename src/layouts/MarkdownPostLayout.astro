@@ -1,11 +1,11 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { formatDateJST } from "@/utils/formatDate";
+import { formatDate, toLang } from "@/i18n/utils";
 import Tag from "@/components/Tag.astro";
 import "@/styles/link-card.css";
 
 const { frontmatter } = Astro.props;
-const formattedDate = formatDateJST(frontmatter.publishDate);
+const lang = toLang(Astro.currentLocale);
 ---
 
 <BaseLayout pageTitle={frontmatter.title}>
@@ -25,10 +25,11 @@ const formattedDate = formatDateJST(frontmatter.publishDate);
         {frontmatter.title}
       </h1>
       <div class="mb-6 flex flex-wrap items-center gap-4 text-sub">
-        <time datetime={frontmatter.publishDate} class="flex items-center">
-          {formattedDate.slice(0, 4)}年{formattedDate.slice(5, 7)}月{
-            formattedDate.slice(8, 10)
-          }
+        <time
+          datetime={frontmatter.publishDate.toISOString()}
+          class="flex items-center"
+        >
+          {formatDate(frontmatter.publishDate, lang)}
         </time>
       </div>
       {

@@ -1,5 +1,5 @@
 ---
-import { formatDateJST } from "@/utils/formatDate";
+import { formatDate, toLang } from "@/i18n/utils";
 
 export interface Props {
   title: string;
@@ -9,6 +9,7 @@ export interface Props {
 }
 
 const { title, description, publishDate, link } = Astro.props;
+const lang = toLang(Astro.currentLocale);
 ---
 
 <article
@@ -28,7 +29,7 @@ const { title, description, publishDate, link } = Astro.props;
     </a>
 
     <div class="flex items-center mt-4">
-      <p class="text-sm text-sub">{formatDateJST(publishDate)}</p>
+      <p class="text-sm text-sub">{formatDate(publishDate, lang)}</p>
     </div>
   </div>
 </article>
