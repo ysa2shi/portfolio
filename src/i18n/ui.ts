@@ -23,6 +23,9 @@ const ja = {
   "nav.openMenu": "メニューを開く",
   "nav.closeMenu": "メニューを閉じる",
 
+  "lang.switch": "言語の切り替え",
+  "common.sep": "、",
+
   "theme.toDark": "ダークモードに切り替える",
   "theme.toLight": "ライトモードに切り替える",
 
@@ -94,6 +97,9 @@ const en: Partial<Record<UIKey, string>> = {
   "nav.openMenu": "Open menu",
   "nav.closeMenu": "Close menu",
 
+  "lang.switch": "Language",
+  "common.sep": ", ",
+
   "theme.toDark": "Switch to dark mode",
   "theme.toLight": "Switch to light mode",
 
@@ -107,7 +113,7 @@ const en: Partial<Record<UIKey, string>> = {
 
   "about.avatarAlt": "Profile",
   "about.body":
-    "Hi, I am a backend engineer specializing in web application development. I have experience developing and operating business systems using Java (Spring Boot) and AWS. Recently, I have been working on personal projects and building web services. I strive to write clear and functional code and continuously improve my skills. Additionally, I share what I learn through personal projects and technical blogs.",
+    "Hi, I am a backend engineer specializing in web application development. I have experience developing and operating payment features using Java × Spring Boot and AWS. Recently, I have been working on personal projects and building web services. I strive to write clear and functional code and continuously improve my skills. Additionally, I share what I learn through personal projects and technical blogs.",
   "about.github": "GitHub Profile",
   "about.contact": "Get in Touch",
 
@@ -115,9 +121,9 @@ const en: Partial<Record<UIKey, string>> = {
   "timeline.202504.title": "Currently learning frontend development",
   "timeline.202504.description":
     "Created this portfolio site as a project to apply what I've learned.",
-  "timeline.202404.title": "Engaged in backend development for payment systems",
+  "timeline.202404.title": "Developing and operating payment features",
   "timeline.202404.description":
-    "Working on Java + Spring Boot web applications in AWS environment.",
+    "Working on Java × Spring Boot applications running on AWS.",
   "timeline.202304.title": "Joined current company as a new graduate engineer",
   "timeline.202304.description": "Mainly working as a web developer.",
   "timeline.202303.title": "Master of Engineering (M.Eng.)",
@@ -140,7 +146,7 @@ const en: Partial<Record<UIKey, string>> = {
 
   "articles.viewAll": "View All Articles",
 
-  "footer.lead": "Got a project in mind? Feel free to get in touch!",
+  "footer.lead": "Got a project in mind? Feel free to reach out on X.",
 
   "rss.title": "RSS Feed",
 };

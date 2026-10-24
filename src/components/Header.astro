@@ -2,6 +2,7 @@
 import { marketingConfig } from "@/config/marketing";
 import { siteConfig } from "@/config/site";
 import ThemeToggle from "@/components/ThemeToggle.astro";
+import LangSwitch from "@/components/LangSwitch.astro";
 import { localizePath, toLang, useTranslations } from "@/i18n/utils";
 
 const lang = toLang(Astro.currentLocale);
@@ -50,6 +51,7 @@ const currentPath =
         </ul>
       </nav>
 
+      <LangSwitch />
       <ThemeToggle />
       <button
         id="menuToggle"

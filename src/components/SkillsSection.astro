@@ -12,6 +12,7 @@ import { Icon } from "astro-icon/components";
 
 const t = useTranslations(toLang(Astro.currentLocale));
 const tierLabel = (tier: Tier) => t(`skills.tier${tier}`);
+const sep = t("common.sep");
 
 const RADIUS = { 1: 14, 2: 8, 3: 7, 4: 6 } as const;
 // 凡例には、使っている区分だけを出す
@@ -69,6 +70,7 @@ const byCategory = (category: string): Skill[] =>
       data-skills
       data-view="map"
       data-related={t("skills.related")}
+      data-sep={sep}
     >
       <div class="head">
         <h2 class="section-title text-3xl font-bold md:text-4xl">
@@ -178,7 +180,7 @@ const byCategory = (category: string): Skill[] =>
                   class="node"
                   tabindex="0"
                   role="button"
-                  aria-label={`${s.name}(${s.category}、${tierLabel(s.tier)})`}
+                  aria-label={`${s.name}(${s.category}${sep}${tierLabel(s.tier)})`}
                   transform={`translate(${s.x} ${s.y})`}
                   style={`--i:${i}`}
                   data-id={s.id}
@@ -266,6 +268,7 @@ const byCategory = (category: string): Skill[] =>
     );
     const names = (ids: string[]) => ids.map((i) => info.get(i)!.name);
     const related = root.dataset.related ?? "";
+    const sep = root.dataset.sep ?? "、";
 
     let pinned: string | null = null;
     let hovered: string | null = null;
@@ -308,7 +311,7 @@ const byCategory = (category: string): Skill[] =>
         const show = !!p && p.cat === box.dataset.cat;
         rel.classList.toggle("show", show);
         if (show && p) {
-          write(rel, p.name, `${related}: ${names(p.nb).join("、") || "—"}`);
+          write(rel, p.name, `${related}: ${names(p.nb).join(sep) || "—"}`);
         }
       }
 
@@ -319,13 +322,13 @@ const byCategory = (category: string): Skill[] =>
           write(
             detail,
             v.name,
-            `${v.cat} / ${v.tier} ／ ${related}: ${names(v.nb).join("、") || "—"}`,
+            `${v.cat} / ${v.tier} / ${related}: ${names(v.nb).join(sep) || "—"}`,
           );
         } else if (catSel) {
           const list = [...info.values()]
             .filter((v) => v.cat === catSel)
             .map((v) => v.name);
-          write(detail, catSel, list.join("、"));
+          write(detail, catSel, list.join(sep));
         } else {
           detail.textContent = "";
         }

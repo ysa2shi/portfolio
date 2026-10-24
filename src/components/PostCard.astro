@@ -1,7 +1,7 @@
 ---
 import { normalizeSlug } from "@/utils/getCollectionPosts";
 import Tag from "@/components/Tag.astro";
-import { localizePath, toLang, useTranslations } from "@/i18n/utils";
+import { toLang, useTranslations } from "@/i18n/utils";
 
 export interface Props {
   id: string;
@@ -16,7 +16,8 @@ export interface Props {
 
 const lang = toLang(Astro.currentLocale);
 const t = useTranslations(lang);
-const href = localizePath(`/blog/${normalizeSlug(Astro.props.id)}`, lang);
+// 記事は日本語だけなので、英語ページからも日本語の記事へリンクする
+const href = `/blog/${normalizeSlug(Astro.props.id)}`;
 const { title, image, tags = [] } = Astro.props;
 ---
 

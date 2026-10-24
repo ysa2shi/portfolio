@@ -30,6 +30,34 @@ export function localizePath(path: string, lang: Lang): string {
   return path === "/" ? `/${lang}` : `/${lang}${path}`;
 }
 
+/**
+ * 英語版があるページ(既定言語側のパス)。src/pages/en/ にページを足したらここにも足す。
+ * ブログ記事は日本語だけなので含めない
+ */
+const translatedPaths = ["/", "/blog", "/articles"];
+
+/** `/en/blog/` → `/blog` のように、言語の接頭辞と末尾のスラッシュを外す */
+export function stripLang(pathname: string): string {
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments[0] !== defaultLang && segments[0] in languages) {
+    segments.shift();
+  }
+  return `/${segments.join("/")}`;
+}
+
+export function hasTranslation(pathname: string): boolean {
+  return translatedPaths.includes(stripLang(pathname));
+}
+
+/** 表示中のページを別の言語で開くときのパス。訳がなければその言語のトップへ */
+export function switchLangPath(pathname: string, target: Lang): string {
+  const path = stripLang(pathname);
+  if (target === defaultLang || translatedPaths.includes(path)) {
+    return localizePath(path, target);
+  }
+  return localizePath("/", target);
+}
+
 /** 日付を言語に合わせて表示する(日本時間) */
 export function formatDate(date: Date | string, lang: Lang): string {
   return new Intl.DateTimeFormat(lang === "ja" ? "ja-JP" : "en-US", {

@@ -1,0 +1,60 @@
+---
+import { languages, type Lang } from "@/i18n/ui";
+import { switchLangPath, toLang, useTranslations } from "@/i18n/utils";
+
+const lang = toLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const labels: Record<Lang, string> = { ja: "JA", en: "EN" };
+const items = (Object.keys(languages) as Lang[]).map((l) => ({
+  lang: l,
+  label: labels[l],
+  name: languages[l],
+  href: switchLangPath(Astro.url.pathname, l),
+  current: l === lang,
+}));
+---
+
+<nav class="lang" aria-label={t("lang.switch")}>
+  {
+    items.map((item) => (
+      <a
+        href={item.href}
+        hreflang={item.lang}
+        lang={item.lang}
+        title={item.name}
+        aria-current={item.current ? "true" : undefined}
+      >
+        {item.label}
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .lang {
+    display: inline-flex;
+    height: 2.25rem;
+    align-items: center;
+    padding: 3px;
+    border: 1px solid rgb(var(--c-line));
+    border-radius: 999px;
+  }
+  .lang a {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    padding: 0 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: rgb(var(--c-sub));
+    transition: color 0.2s;
+  }
+  .lang a:hover {
+    color: rgb(var(--c-ink));
+  }
+  .lang a[aria-current="true"] {
+    background: rgb(var(--c-accent) / 0.14);
+    color: rgb(var(--c-ink));
+  }
+</style>

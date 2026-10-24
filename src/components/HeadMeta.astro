@@ -1,7 +1,13 @@
 ---
 import { siteConfig } from "@/config/site";
 import { languages } from "@/i18n/ui";
-import { toLang, useTranslations } from "@/i18n/utils";
+import {
+  hasTranslation,
+  localizePath,
+  stripLang,
+  toLang,
+  useTranslations,
+} from "@/i18n/utils";
 
 // 検索エンジンと SNS 向けのメタ情報(description・canonical・OGP・X のカード)
 export interface Props {
@@ -36,6 +42,15 @@ const ogLocale = { ja: "ja_JP", en: "en_US" } satisfies Record<
   keyof typeof languages,
   string
 >;
+// 英語版があるページは、言語ごとの URL を検索エンジンに伝える
+const path = stripLang(Astro.url.pathname);
+const alternates = hasTranslation(Astro.url.pathname)
+  ? (Object.keys(languages) as (keyof typeof languages)[]).map((l) => ({
+      lang: l,
+      // canonical と同じく末尾にスラッシュを付ける
+      href: new URL(localizePath(path, l).replace(/\/?$/, "/"), base).href,
+    }))
+  : [];
 ---
 
 <meta name="description" content={desc} />
@@ -44,6 +59,17 @@ const ogLocale = { ja: "ja_JP", en: "en_US" } satisfies Record<
     <meta name="robots" content="noindex" />
   ) : (
     <link rel="canonical" href={canonical} />
+  )
+}
+{
+  !noindex &&
+    alternates.map((a) => (
+      <link rel="alternate" hreflang={a.lang} href={a.href} />
+    ))
+}
+{
+  !noindex && alternates.length > 0 && (
+    <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
   )
 }
 
