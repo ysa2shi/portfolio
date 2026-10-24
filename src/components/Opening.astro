@@ -1,52 +1,44 @@
 ---
 import { marketingConfig } from "@/config/marketing";
 import Button from "@/components/Button.astro";
-import { localizePath, toLang, useTranslations } from "@/i18n/utils";
+import { sparkPath } from "@/utils/sparkle";
+import { getI18n, localizePath } from "@/i18n/utils";
 
-const lang = toLang(Astro.currentLocale);
-const t = useTranslations(lang);
+const { lang, t } = getI18n(Astro.currentLocale);
 const { blog, articles } = marketingConfig.pageInfo;
+
+// 右側の星座。tone: hg=金 / ha=空色 / hw=銀白
+const lines = [
+  [80, 150, 250, 70],
+  [250, 70, 330, 230],
+  [330, 230, 420, 300],
+  [250, 70, 470, 120],
+  [80, 150, 150, 320],
+  [150, 320, 330, 230],
+] as const;
+const stars = [
+  { x: 80, y: 150, r: 17, tone: "hg" },
+  { x: 250, y: 70, r: 9, tone: "ha" },
+  { x: 330, y: 230, r: 11, tone: "ha" },
+  { x: 470, y: 120, r: 7, tone: "hw" },
+  { x: 420, y: 300, r: 8, tone: "hw" },
+  { x: 150, y: 320, r: 6, tone: "hw" },
+] as const;
 ---
 
 <section class="relative overflow-hidden py-20 md:py-32">
   <div class="container relative z-10 mx-auto px-4">
     <svg class="hero-sky" viewBox="0 0 540 380" aria-hidden="true">
-      <line class="hl" x1="80" y1="150" x2="250" y2="70"></line>
-      <line class="hl" x1="250" y1="70" x2="330" y2="230"></line>
-      <line class="hl" x1="330" y1="230" x2="420" y2="300"></line>
-      <line class="hl" x1="250" y1="70" x2="470" y2="120"></line>
-      <line class="hl" x1="80" y1="150" x2="150" y2="320"></line>
-      <line class="hl" x1="150" y1="320" x2="330" y2="230"></line>
-      <path
-        class="hs hg"
-        style="animation-delay:0.0s"
-        d="M80,133 Q80,150 97,150 Q80,150 80,167 Q80,150 63,150 Q80,150 80,133Z"
-      ></path>
-      <path
-        class="hs ha"
-        style="animation-delay:0.9s"
-        d="M250,61 Q250,70 259,70 Q250,70 250,79 Q250,70 241,70 Q250,70 250,61Z"
-      ></path>
-      <path
-        class="hs ha"
-        style="animation-delay:1.8s"
-        d="M330,219 Q330,230 341,230 Q330,230 330,241 Q330,230 319,230 Q330,230 330,219Z"
-      ></path>
-      <path
-        class="hs hw"
-        style="animation-delay:2.7s"
-        d="M470,113 Q470,120 477,120 Q470,120 470,127 Q470,120 463,120 Q470,120 470,113Z"
-      ></path>
-      <path
-        class="hs hw"
-        style="animation-delay:3.6s"
-        d="M420,292 Q420,300 428,300 Q420,300 420,308 Q420,300 412,300 Q420,300 420,292Z"
-      ></path>
-      <path
-        class="hs hw"
-        style="animation-delay:4.5s"
-        d="M150,314 Q150,320 156,320 Q150,320 150,326 Q150,320 144,320 Q150,320 150,314Z"
-      ></path>
+      {lines.map(([x1, y1, x2, y2]) => <line class="hl" {x1} {y1} {x2} {y2} />)}
+      {
+        stars.map(({ x, y, r, tone }, i) => (
+          <path
+            class={`hs ${tone}`}
+            style={`animation-delay:${i * 0.9}s`}
+            d={sparkPath(x, y, r)}
+          />
+        ))
+      }
     </svg>
     <div class="relative max-w-3xl">
       <h1 class="mb-6 text-4xl font-bold md:text-5xl lg:text-6xl">

@@ -1,9 +1,8 @@
 ---
 import { languages, type Lang } from "@/i18n/ui";
-import { switchLangPath, toLang, useTranslations } from "@/i18n/utils";
+import { getI18n, switchLangPath } from "@/i18n/utils";
 
-const lang = toLang(Astro.currentLocale);
-const t = useTranslations(lang);
+const { lang, t } = getI18n(Astro.currentLocale);
 const labels: Record<Lang, string> = { ja: "JA", en: "EN" };
 const items = (Object.keys(languages) as Lang[]).map((l) => ({
   lang: l,

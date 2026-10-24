@@ -9,7 +9,9 @@ import {
 
 /** Astro.currentLocale(未設定なら既定言語)を Lang に丸める */
 export function toLang(locale: string | undefined): Lang {
-  return locale && locale in languages ? (locale as Lang) : defaultLang;
+  return locale && Object.hasOwn(languages, locale)
+    ? (locale as Lang)
+    : defaultLang;
 }
 
 /**
@@ -24,6 +26,12 @@ export function useTranslations(lang: Lang) {
   };
 }
 
+/** ページ・コンポーネントの先頭で `getI18n(Astro.currentLocale)` と呼び、言語と辞書を引く関数をまとめて受け取る */
+export function getI18n(locale: string | undefined) {
+  const lang = toLang(locale);
+  return { lang, t: useTranslations(lang) };
+}
+
 /** 既定言語はそのまま、それ以外は `/en/blog` のように言語の接頭辞を付ける */
 export function localizePath(path: string, lang: Lang): string {
   if (lang === defaultLang) return path;
@@ -31,15 +39,20 @@ export function localizePath(path: string, lang: Lang): string {
 }
 
 /**
- * 英語版があるページ(既定言語側のパス)。src/pages/en/ にページを足したらここにも足す。
- * ブログ記事は日本語だけなので含めない
+ * 英語版があるページ(既定言語側のパス)。src/pages/en/ のページから自動で集める。
+ * ブログ記事は日本語だけで en/ に置かないので、含まれない
  */
-const translatedPaths = ["/", "/blog", "/articles"];
+const translatedPaths = Object.keys(
+  import.meta.glob("/src/pages/en/**/index.astro"),
+).map(
+  (file) =>
+    file.replace("/src/pages/en", "").replace(/\/?index\.astro$/, "") || "/",
+);
 
 /** `/en/blog/` → `/blog` のように、言語の接頭辞と末尾のスラッシュを外す */
 export function stripLang(pathname: string): string {
   const segments = pathname.split("/").filter(Boolean);
-  if (segments[0] !== defaultLang && segments[0] in languages) {
+  if (segments[0] !== defaultLang && Object.hasOwn(languages, segments[0])) {
     segments.shift();
   }
   return `/${segments.join("/")}`;

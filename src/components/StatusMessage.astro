@@ -1,0 +1,38 @@
+---
+import Button from "@/components/Button.astro";
+import { getI18n, localizePath } from "@/i18n/utils";
+
+// 404 / 500 / オフラインで共通の中身。code があれば大きな数字を出す
+// min-h は 100vh からヘッダーとフッターのおおよその高さを引いた値(縦の中央に置くため)
+export interface Props {
+  title: string;
+  code?: string;
+}
+
+const { title, code } = Astro.props;
+const { lang, t } = getI18n(Astro.currentLocale);
+---
+
+<div class="min-h-[calc(100vh-430px)] flex items-center justify-center px-4">
+  <div class="text-center">
+    {
+      code && (
+        <h1 class="gradient-text mb-4 text-6xl font-bold md:text-8xl">
+          {code}
+        </h1>
+      )
+    }
+    {
+      code ? (
+        <h2 class="section-title mb-8 text-2xl font-medium text-ink md:text-3xl">
+          {title}
+        </h2>
+      ) : (
+        <h1 class="section-title mb-8 text-3xl font-bold text-ink md:text-4xl">
+          {title}
+        </h1>
+      )
+    }
+    <Button href={localizePath("/", lang)}>{t("error.backHome")}</Button>
+  </div>
+</div>

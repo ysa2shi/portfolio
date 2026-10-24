@@ -1,9 +1,9 @@
 ---
 import { Icon } from "astro-icon/components";
 import { siteConfig } from "@/config/site";
-import { toLang, useTranslations } from "@/i18n/utils";
+import { getI18n } from "@/i18n/utils";
 
-const t = useTranslations(toLang(Astro.currentLocale));
+const { t } = getI18n(Astro.currentLocale);
 const currentYear = new Date().getFullYear();
 const links = [
   { name: "GitHub", icon: "simple-icons:github", url: siteConfig.links.github },

@@ -1,8 +1,8 @@
 ---
 import { Icon } from "astro-icon/components";
-import { toLang, useTranslations } from "@/i18n/utils";
+import { getI18n } from "@/i18n/utils";
 
-const t = useTranslations(toLang(Astro.currentLocale));
+const { t } = getI18n(Astro.currentLocale);
 ---
 
 <button

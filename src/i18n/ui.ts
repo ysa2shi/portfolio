@@ -3,7 +3,7 @@
  *
  * - 見出し・ナビ・ボタンなど、英語のほうが見た目として自然なものは ja でも英語のままにしている
  * - en は未対応のキーがあってもよい(足りない分は ja で表示される)
- * - 英語ページを足すときは src/pages/en/ 以下にページを作るだけでよい。
+ * - 英語ページを足すときは src/pages/en/ 以下にページを作るだけでよい(言語切替・hreflang も自動で対応する)。
  *   各コンポーネントは Astro.currentLocale から言語を判定する(astro.config.mjs の i18n)
  */
 export const languages = {
@@ -17,9 +17,6 @@ export const defaultLang: Lang = "ja";
 const ja = {
   "site.description": "作ったものと、学んだことの記録。",
 
-  "nav.home": "Home",
-  "nav.blog": "Blog",
-  "nav.articles": "Articles",
   "nav.openMenu": "メニューを開く",
   "nav.closeMenu": "メニューを閉じる",
 

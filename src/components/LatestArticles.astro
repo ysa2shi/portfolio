@@ -3,10 +3,9 @@ import ArticleCard from "@/components/ArticleCard.astro";
 import SectionPreview from "@/components/SectionPreview.astro";
 import { fetchZennArticles } from "@/utils/fetchZennFeed";
 import { marketingConfig } from "@/config/marketing";
-import { localizePath, toLang, useTranslations } from "@/i18n/utils";
+import { getI18n, localizePath } from "@/i18n/utils";
 
-const lang = toLang(Astro.currentLocale);
-const t = useTranslations(lang);
+const { lang, t } = getI18n(Astro.currentLocale);
 const page = marketingConfig.pageInfo.articles;
 const articles = await fetchZennArticles();
 

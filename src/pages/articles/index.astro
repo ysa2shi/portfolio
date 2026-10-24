@@ -4,9 +4,9 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { marketingConfig } from "@/config/marketing";
 import PageHeader from "@/components/PageHeader.astro";
 import ArticleCard from "@/components/ArticleCard.astro";
-import { toLang, useTranslations } from "@/i18n/utils";
+import { getI18n } from "@/i18n/utils";
 
-const t = useTranslations(toLang(Astro.currentLocale));
+const { t } = getI18n(Astro.currentLocale);
 const page = marketingConfig.pageInfo.articles;
 const articles = await fetchZennArticles();
 ---

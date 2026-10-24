@@ -1,26 +1,39 @@
 ---
-import { baseUI, type UIKey } from "@/i18n/ui";
-import { toLang, useTranslations } from "@/i18n/utils";
+import type { UIKey } from "@/i18n/ui";
+import { getI18n } from "@/i18n/utils";
 
-const t = useTranslations(toLang(Astro.currentLocale));
+const { t } = getI18n(Astro.currentLocale);
 
-// 文言は辞書の timeline.<年月>.title / description(description は省略可)
-const experiences = (
-  [
-    ["2026.04", "timeline.202604"],
-    ["2025.04", "timeline.202504"],
-    ["2024.04", "timeline.202404"],
-    ["2023.04", "timeline.202304"],
-    ["2023.03", "timeline.202303"],
-  ] as const
-).map(([yyyymm, key]) => {
-  const descKey = `${key}.description`;
-  return {
-    yyyymm,
-    title: t(`${key}.title`),
-    description: descKey in baseUI ? t(descKey as UIKey) : undefined,
-  };
-});
+interface Experience {
+  date: string;
+  title: UIKey;
+  description?: UIKey;
+}
+
+// 新しい順。文言は辞書(src/i18n/ui.ts)のキーで持つ
+const experiences: Experience[] = [
+  { date: "2026.04", title: "timeline.202604.title" },
+  {
+    date: "2025.04",
+    title: "timeline.202504.title",
+    description: "timeline.202504.description",
+  },
+  {
+    date: "2024.04",
+    title: "timeline.202404.title",
+    description: "timeline.202404.description",
+  },
+  {
+    date: "2023.04",
+    title: "timeline.202304.title",
+    description: "timeline.202304.description",
+  },
+  {
+    date: "2023.03",
+    title: "timeline.202303.title",
+    description: "timeline.202303.description",
+  },
+];
 ---
 
 <section class="py-20">
@@ -33,7 +46,7 @@ const experiences = (
         experiences.map((experience, i) => (
           <div class="mb-10 flex gap-6 last:mb-0">
             <div class="w-24 flex-shrink-0 pt-0.5 text-right">
-              <span class="font-semibold text-accent">{experience.yyyymm}</span>
+              <span class="font-semibold text-accent">{experience.date}</span>
             </div>
             <div class="relative flex-grow border-l border-line pb-2 pl-6">
               <span
@@ -44,9 +57,9 @@ const experiences = (
                     : "bg-accent",
                 ]}
               />
-              <h3 class="mb-2 text-xl font-semibold">{experience.title}</h3>
+              <h3 class="mb-2 text-xl font-semibold">{t(experience.title)}</h3>
               {experience.description && (
-                <p class="text-sub">{experience.description}</p>
+                <p class="text-sub">{t(experience.description)}</p>
               )}
             </div>
           </div>

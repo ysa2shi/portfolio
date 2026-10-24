@@ -1,20 +1,11 @@
 ---
-import Button from "@/components/Button.astro";
+import StatusMessage from "@/components/StatusMessage.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { localizePath, toLang, useTranslations } from "@/i18n/utils";
+import { getI18n } from "@/i18n/utils";
 
-const lang = toLang(Astro.currentLocale);
-const t = useTranslations(lang);
+const { t } = getI18n(Astro.currentLocale);
 ---
 
 <BaseLayout pageTitle={t("error.404.title")} noindex>
-  <div class="min-h-[calc(100vh-430px)] flex items-center justify-center px-4">
-    <div class="text-center">
-      <h1 class="gradient-text mb-4 text-6xl font-bold md:text-8xl">404</h1>
-      <h2 class="section-title mb-8 text-2xl font-medium text-ink md:text-3xl">
-        {t("error.404.title")}
-      </h2>
-      <Button href={localizePath("/", lang)}>{t("error.backHome")}</Button>
-    </div>
-  </div>
+  <StatusMessage code="404" title={t("error.404.title")} />
 </BaseLayout>

@@ -3,10 +3,9 @@ import { marketingConfig } from "@/config/marketing";
 import { siteConfig } from "@/config/site";
 import ThemeToggle from "@/components/ThemeToggle.astro";
 import LangSwitch from "@/components/LangSwitch.astro";
-import { localizePath, toLang, useTranslations } from "@/i18n/utils";
+import { getI18n, localizePath } from "@/i18n/utils";
 
-const lang = toLang(Astro.currentLocale);
-const t = useTranslations(lang);
+const { lang, t } = getI18n(Astro.currentLocale);
 const { home, blog, articles } = marketingConfig.pageInfo;
 const navItems = [home, blog, articles].map((page) => ({
   name: t(page.title),

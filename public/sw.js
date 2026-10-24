@@ -8,6 +8,8 @@ const VERSION = "v1";
 const PAGES = `pages-${VERSION}`;
 const ASSETS = `assets-${VERSION}`;
 const OFFLINE_URL = "/offline/";
+// キャッシュが増え続けないよう、1つのキャッシュに残す件数の上限(古いものから消す)
+const MAX_ENTRIES = 60;
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -39,19 +41,38 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
 
   if (request.mode === "navigate") {
-    event.respondWith(networkFirst(request));
+    event.respondWith(networkFirst(event));
   } else if (url.pathname.startsWith("/_astro/")) {
-    event.respondWith(cacheFirst(request));
+    event.respondWith(cacheFirst(event));
   } else {
-    event.respondWith(staleWhileRevalidate(request));
+    event.respondWith(staleWhileRevalidate(event));
   }
 });
 
-async function networkFirst(request) {
+// 書き込みはレスポンスを返したあとも続くので、waitUntil でワーカーが止まらないようにする
+function store(event, cache, request, response) {
+  event.waitUntil(
+    cache
+      .put(request, response)
+      .then(() => cache.keys())
+      .then((keys) =>
+        Promise.all(
+          keys
+            .slice(0, Math.max(0, keys.length - MAX_ENTRIES))
+            .filter((key) => !key.url.endsWith(OFFLINE_URL))
+            .map((key) => cache.delete(key)),
+        ),
+      )
+      .catch(() => {}),
+  );
+}
+
+async function networkFirst(event) {
+  const { request } = event;
   const cache = await caches.open(PAGES);
   try {
     const response = await fetch(request);
-    if (response.ok) cache.put(request, response.clone());
+    if (response.ok) store(event, cache, request, response.clone());
     return response;
   } catch {
     return (
@@ -62,21 +83,23 @@ async function networkFirst(request) {
   }
 }
 
-async function cacheFirst(request) {
+async function cacheFirst(event) {
+  const { request } = event;
   const cache = await caches.open(ASSETS);
   const cached = await cache.match(request);
   if (cached) return cached;
   const response = await fetch(request);
-  if (response.ok) cache.put(request, response.clone());
+  if (response.ok) store(event, cache, request, response.clone());
   return response;
 }
 
-async function staleWhileRevalidate(request) {
+async function staleWhileRevalidate(event) {
+  const { request } = event;
   const cache = await caches.open(ASSETS);
   const cached = await cache.match(request);
   const update = fetch(request)
     .then((response) => {
-      if (response.ok) cache.put(request, response.clone());
+      if (response.ok) store(event, cache, request, response.clone());
       return response;
     })
     .catch(() => cached ?? Response.error());
