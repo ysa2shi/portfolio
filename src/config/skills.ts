@@ -170,7 +170,6 @@ const skillInputs: SkillInput[] = [
     tier: 4,
     x: 240,
     y: 430,
-    links: ["typescript"],
   },
   // AI
   {
