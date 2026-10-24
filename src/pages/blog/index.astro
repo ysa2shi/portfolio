@@ -13,14 +13,8 @@ const posts: Post[] = await getPosts();
 const sortedPosts: Post[] = sortPosts(posts);
 ---
 
-<BaseLayout
-  pageTitle={t(page.title)}
-  description={page.description && t(page.description)}
->
-  <PageHeader
-    title={t(page.title)}
-    description={page.description && t(page.description)}
-  />
+<BaseLayout pageTitle={t(page.title)} description={t(page.description)}>
+  <PageHeader title={t(page.title)} description={t(page.description)} />
 
   <section class="py-16">
     <div class="container mx-auto px-4">

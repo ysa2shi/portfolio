@@ -104,7 +104,7 @@ if (root) {
   const bindPreview = (el: HTMLElement | SVGElement) => {
     const id = el.dataset.id!;
     el.addEventListener("pointerenter", (e) => {
-      if (e.pointerType === "mouse") preview(id);
+      if ((e as PointerEvent).pointerType === "mouse") preview(id);
     });
     el.addEventListener("pointerleave", () => preview(null));
     el.addEventListener("click", () => pin(id));

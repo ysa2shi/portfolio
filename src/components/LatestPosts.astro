@@ -19,7 +19,7 @@ const latestPosts: Post[] = sortPosts(posts).slice(0, 3);
 
 <SectionPreview
   title={text.title}
-  description={page.description ? t(page.description) : ""}
+  description={t(page.description)}
   href={localizePath(page.href, lang)}
   linkLabel={text.viewAll}
 >

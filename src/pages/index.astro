@@ -9,10 +9,11 @@ import LatestPosts from "@/components/LatestPosts.astro";
 import LatestArticles from "@/components/LatestArticles.astro";
 import { getI18n } from "@/i18n/utils";
 
+const { home } = marketingConfig.pageInfo;
 const { t } = getI18n(Astro.currentLocale);
 ---
 
-<BaseLayout pageTitle={t(marketingConfig.pageInfo.home.title)}>
+<BaseLayout pageTitle={t(home.title)} description={t(home.description)}>
   <Opening />
   <ProfileSection />
   <TimelineSection />
