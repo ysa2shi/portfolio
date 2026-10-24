@@ -1,44 +1,36 @@
 ---
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import HeadCommon from "@/components/HeadCommon.astro";
+import HeadMeta, {
+  type Props as HeadMetaProps,
+} from "@/components/HeadMeta.astro";
 import { siteConfig } from "@/config/site";
-import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
-const { pageTitle } = Astro.props;
+import { getI18n } from "@/i18n/utils";
+
+interface Props extends Omit<HeadMetaProps, "title"> {
+  pageTitle: string;
+}
+
+const { pageTitle, ...meta } = Astro.props;
+const { lang, t } = getI18n(Astro.currentLocale);
+const fullTitle = `${pageTitle} | ${siteConfig.name}`;
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang={lang} class="scroll-smooth" data-theme="light">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/webp" href="/favicon.webp" />
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-
-    <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="sa2shi.dev" />
-
-    <!-- Android & PWA Icons -->
-    <link rel="manifest" href="/site.webmanifest" />
-
-    <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={siteConfig.description} />
-    <GoogleFontsOptimizer
-      url="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;700&display=swap"
-    />
+    <HeadCommon />
+    <HeadMeta title={fullTitle} {...meta} />
 
     <link
       rel="alternate"
       type="application/rss+xml"
-      title="RSSフィード"
+      title={t("rss.title")}
       href="/rss.xml"
     />
 
-    <title>{pageTitle} | {siteConfig.name}</title>
+    <title>{fullTitle}</title>
 
     <script>
       // Service Workerの登録
@@ -49,7 +41,7 @@ const { pageTitle } = Astro.props;
       }
     </script>
   </head>
-  <body class="bg-white text-neutral-900 min-h-screen flex flex-col">
+  <body class="bg-canvas text-ink min-h-screen flex flex-col">
     <Header />
     <main class="flex-grow">
       <slot />
@@ -61,7 +53,7 @@ const { pageTitle } = Astro.props;
 <style is:global>
   html {
     font-family: system-ui, sans-serif;
-    background-color: white;
+    background-color: rgb(var(--c-canvas));
     scroll-behavior: smooth;
   }
 

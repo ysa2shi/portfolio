@@ -1,0 +1,87 @@
+import {
+  baseUI,
+  defaultLang,
+  languages,
+  ui,
+  type Lang,
+  type UIKey,
+} from "./ui";
+
+/** Astro.currentLocale(未設定なら既定言語)を Lang に丸める */
+export function toLang(locale: string | undefined): Lang {
+  return locale && Object.hasOwn(languages, locale)
+    ? (locale as Lang)
+    : defaultLang;
+}
+
+/** 辞書を引く関数を返す。訳がなければ日本語を使う */
+export function useTranslations(lang: Lang) {
+  return (key: UIKey): string => ui[lang][key] ?? baseUI[key];
+}
+
+/**
+ * コンポーネント専用の文言を、そのファイルのフロントマターに書くためのヘルパー。
+ * ja が基準で、en は足りないキーがあれば ja で補う(キーは ja にあるものだけ書ける)。
+ * 複数の場所で使う文言は src/i18n/ui.ts に置く
+ */
+export function localized<T extends Record<string, unknown>>(
+  lang: Lang,
+  texts: { ja: T; en: Partial<NoInfer<T>> },
+): T {
+  return { ...texts.ja, ...texts[lang] };
+}
+
+/** ページ・コンポーネントの先頭で `getI18n(Astro.currentLocale)` と呼び、言語と辞書を引く関数をまとめて受け取る */
+export function getI18n(locale: string | undefined) {
+  const lang = toLang(locale);
+  return { lang, t: useTranslations(lang) };
+}
+
+/** 既定言語はそのまま、それ以外は `/en/blog` のように言語の接頭辞を付ける */
+export function localizePath(path: string, lang: Lang): string {
+  if (lang === defaultLang) return path;
+  return path === "/" ? `/${lang}` : `/${lang}${path}`;
+}
+
+/**
+ * 英語版があるページ(既定言語側のパス)。src/pages/en/ のページから自動で集める。
+ * ブログ記事は日本語だけで en/ に置かないので、含まれない
+ */
+const translatedPaths = Object.keys(
+  import.meta.glob("/src/pages/en/**/index.astro"),
+).map(
+  (file) =>
+    file.replace("/src/pages/en", "").replace(/\/?index\.astro$/, "") || "/",
+);
+
+/** `/en/blog/` → `/blog` のように、言語の接頭辞と末尾のスラッシュを外す */
+export function stripLang(pathname: string): string {
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments[0] !== defaultLang && Object.hasOwn(languages, segments[0])) {
+    segments.shift();
+  }
+  return `/${segments.join("/")}`;
+}
+
+export function hasTranslation(pathname: string): boolean {
+  return translatedPaths.includes(stripLang(pathname));
+}
+
+/** 表示中のページを別の言語で開くときのパス。訳がなければその言語のトップへ */
+export function switchLangPath(pathname: string, target: Lang): string {
+  const path = stripLang(pathname);
+  if (target === defaultLang || translatedPaths.includes(path)) {
+    return localizePath(path, target);
+  }
+  return localizePath("/", target);
+}
+
+/** 日付を言語に合わせて表示する(日本時間) */
+export function formatDate(date: Date | string, lang: Lang): string {
+  return new Intl.DateTimeFormat(lang === "ja" ? "ja-JP" : "en-US", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: lang === "ja" ? "long" : "short",
+    day: "numeric",
+  }).format(new Date(date));
+}

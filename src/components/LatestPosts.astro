@@ -4,24 +4,30 @@ import type { Post } from "@/types";
 import { marketingConfig } from "@/config/marketing";
 import PostCard from "@/components/PostCard.astro";
 import SectionPreview from "@/components/SectionPreview.astro";
+import { getI18n, localizePath, localized } from "@/i18n/utils";
 
+const { lang, t } = getI18n(Astro.currentLocale);
+const text = localized(lang, {
+  ja: { title: "Personal Blog", viewAll: "View All Posts" },
+  en: {},
+});
+const page = marketingConfig.pageInfo.blog;
 const posts: Post[] = await getPosts();
-const latestPosts: Post[] = sortPosts(posts);
+// 最新3件だけ表示
+const latestPosts: Post[] = sortPosts(posts).slice(0, 3);
 ---
 
 <SectionPreview
-  title="Personal Blog"
-  description={marketingConfig.pageInfo.blog.description}
-  href={marketingConfig.pageInfo.blog.href}
-  linkLabel="View All Posts"
-  class="bg-neutral-50"
+  title={text.title}
+  description={t(page.description)}
+  href={localizePath(page.href, lang)}
+  linkLabel={text.viewAll}
 >
   {
     latestPosts.map((post: Post) => (
       <PostCard
         id={post.id}
         title={post.data.title}
-        publishDate={post.data.publishDate}
         image={post.data.image}
         tags={post.data.tags ?? []}
       />

@@ -1,45 +1,107 @@
 ---
-const experiences = [
+import { getI18n, localized } from "@/i18n/utils";
+
+const { lang } = getI18n(Astro.currentLocale);
+const text = localized(lang, { ja: { title: "Timeline" }, en: {} });
+
+interface Experience {
+  date: string;
+  title: string;
+  description?: string;
+}
+
+// 新しい順
+const experiences: Experience[] = [
   {
-    yyyymm: "2025.04",
-    title: "Currently learning frontend development",
-    description:
-      "Created this portfolio site as a project to apply what I've learned.",
+    date: "2026.04",
+    ...localized(lang, {
+      ja: { title: "AI 開発を勉強中" },
+      en: { title: "Currently learning AI development" },
+    }),
   },
   {
-    yyyymm: "2024.04",
-    title: "Engaged in backend development for payment systems",
-    description:
-      "Working on Java + Spring Boot web applications in AWS environment.",
+    date: "2025.04",
+    ...localized(lang, {
+      ja: {
+        title: "フロントエンドの勉強を始める",
+        description: "学んだことを試す場として、このサイトを作りました。",
+      },
+      en: {
+        title: "Started learning frontend development",
+        description:
+          "Created this portfolio site as a project to apply what I've learned.",
+      },
+    }),
   },
   {
-    yyyymm: "2023.04",
-    title: "Joined current company as a new graduate engineer",
-    description: "Mainly working as a web developer.",
+    date: "2024.04",
+    ...localized(lang, {
+      ja: {
+        title: "決済機能の開発・運用を担当",
+        description:
+          "AWS 上で動く Java × Spring Boot のアプリケーションを開発しています。",
+      },
+      en: {
+        title: "Developing and operating payment features",
+        description:
+          "Working on Java × Spring Boot applications running on AWS.",
+      },
+    }),
   },
   {
-    yyyymm: "2023.03",
-    title: "M.Eng in Compute Science",
-    description: "Researched speech synthesis with deep learning.",
+    date: "2023.04",
+    ...localized(lang, {
+      ja: {
+        title: "新卒で現職に入社",
+        description: "Web アプリケーションの開発に配属。",
+      },
+      en: {
+        title: "Joined current company as a new graduate engineer",
+        description: "Mainly working as a web developer.",
+      },
+    }),
+  },
+  {
+    date: "2023.03",
+    ...localized(lang, {
+      ja: {
+        title: "大学院 修士課程修了(工学専攻)",
+        description: "深層学習を使った音声合成を研究していました。",
+      },
+      en: {
+        title: "Master of Engineering (M.Eng.)",
+        description: "Researched speech synthesis with deep learning.",
+      },
+    }),
   },
 ];
 ---
 
 <section class="py-20">
   <div class="container mx-auto px-4">
-    <h2 class="text-3xl font-bold mb-12 text-center">Timeline</h2>
-    <div class="max-w-3xl mx-auto">
+    <h2 class="section-title mb-12 text-center text-3xl font-bold">
+      {text.title}
+    </h2>
+    <div class="mx-auto max-w-3xl">
       {
-        experiences.map((experience) => (
-          <div class="flex gap-6 mb-12 last:mb-0">
-            <div class="w-24 flex-shrink-0 text-right">
-              <span class="text-primary-500 font-semibold">
-                {experience.yyyymm}
-              </span>
+        experiences.map((experience, i) => (
+          <div class="mb-10 flex gap-6 last:mb-0">
+            <div class="w-24 flex-shrink-0 pt-0.5 text-right">
+              <span class="font-semibold text-accent">{experience.date}</span>
             </div>
-            <div class="flex-grow before:absolute before:left-[-24px] before:top-3 before:w-3 before:h-3 before:bg-primary-500 before:rounded-full before:shadow-lg">
-              <h3 class="text-xl font-semibold mb-2">{experience.title}</h3>
-              <p class="text-neutral-600">{experience.description}</p>
+            <div class="relative flex-grow border-l border-line pb-2 pl-6">
+              <span
+                class:list={[
+                  "absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full",
+                  i === 0
+                    ? "bg-gold shadow-[0_0_8px_rgb(var(--c-gold))]"
+                    : "bg-accent",
+                ]}
+              />
+              <h3 class="mb-2 text-xl font-semibold">{experience.title}</h3>
+              {experience.description && (
+                <p class="text-sub">{experience.description}</p>
+              )}
             </div>
           </div>
         ))

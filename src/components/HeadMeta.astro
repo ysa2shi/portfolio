@@ -1,0 +1,88 @@
+---
+import { siteConfig } from "@/config/site";
+import { languages } from "@/i18n/ui";
+import { getI18n, hasTranslation, localizePath, stripLang } from "@/i18n/utils";
+
+// 検索エンジンと SNS 向けのメタ情報(description・canonical・OGP・X のカード)
+export interface Props {
+  title: string;
+  description?: string;
+  /** サイト内のパスか絶対 URL。なければ共通の OGP 画像 */
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: Date;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  image = "/og.png",
+  type = "website",
+  publishedTime,
+  noindex = false,
+} = Astro.props;
+
+const { lang, t } = getI18n(Astro.currentLocale);
+const desc = description ?? t("site.description");
+// PUBLIC_SITE_URL が未設定・不正(http(s):// がないなど)のときは、表示中のオリジンを使う
+const base = /^https?:\/\//.test(siteConfig.url)
+  ? siteConfig.url
+  : Astro.url.origin;
+const canonical = new URL(Astro.url.pathname, base).href;
+const imageUrl = new URL(image, base).href;
+const ogLocale = { ja: "ja_JP", en: "en_US" } satisfies Record<
+  keyof typeof languages,
+  string
+>;
+// 英語版があるページは、言語ごとの URL を検索エンジンに伝える
+const path = stripLang(Astro.url.pathname);
+const alternates = hasTranslation(Astro.url.pathname)
+  ? (Object.keys(languages) as (keyof typeof languages)[]).map((l) => ({
+      lang: l,
+      // canonical と同じく末尾にスラッシュを付ける
+      href: new URL(localizePath(path, l).replace(/\/?$/, "/"), base).href,
+    }))
+  : [];
+---
+
+<meta name="description" content={desc} />
+{
+  noindex ? (
+    <meta name="robots" content="noindex" />
+  ) : (
+    <link rel="canonical" href={canonical} />
+  )
+}
+{
+  !noindex &&
+    alternates.map((a) => (
+      <link rel="alternate" hreflang={a.lang} href={a.href} />
+    ))
+}
+{
+  !noindex && alternates.length > 0 && (
+    <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
+  )
+}
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={siteConfig.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={desc} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:locale" content={ogLocale[lang]} />
+{
+  publishedTime && (
+    <meta
+      property="article:published_time"
+      content={publishedTime.toISOString()}
+    />
+  )
+}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={desc} />
+<meta name="twitter:image" content={imageUrl} />

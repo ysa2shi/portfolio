@@ -1,5 +1,5 @@
 ---
-import { formatDateJST } from "@/utils/formatDate";
+import { formatDate, toLang } from "@/i18n/utils";
 
 export interface Props {
   title: string;
@@ -9,10 +9,11 @@ export interface Props {
 }
 
 const { title, description, publishDate, link } = Astro.props;
+const lang = toLang(Astro.currentLocale);
 ---
 
 <article
-  class="group bg-white rounded-lg overflow-hidden border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full"
+  class="group overflow-hidden rounded-2xl border border-line bg-surface transition duration-300 hover:-translate-y-0.5 hover:border-accent-2 hover:shadow-[0_10px_30px_-18px_rgb(var(--c-accent-2))] flex flex-col h-full"
 >
   <div class="p-6 flex-grow flex flex-col">
     <a
@@ -21,16 +22,14 @@ const { title, description, publishDate, link } = Astro.props;
       rel="noopener noreferrer"
       class="block mb-auto"
     >
-      <h3
-        class="text-xl font-semibold mb-2 text-neutral-900 group-hover:text-primary-500 transition-colors"
-      >
+      <h3 class="text-xl font-semibold mb-2 text-ink">
         {title}
       </h3>
-      <p class="text-neutral-600 mb-4 line-clamp-3">{description}</p>
+      <p class="text-sub mb-4 line-clamp-3">{description}</p>
     </a>
 
     <div class="flex items-center mt-4">
-      <p class="text-sm text-neutral-500">{formatDateJST(publishDate)}</p>
+      <p class="text-sm text-sub">{formatDate(publishDate, lang)}</p>
     </div>
   </div>
 </article>

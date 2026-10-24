@@ -1,5 +1,7 @@
 ---
 import { normalizeSlug } from "@/utils/getCollectionPosts";
+import Tag from "@/components/Tag.astro";
+import { getI18n, localized } from "@/i18n/utils";
 
 export interface Props {
   id: string;
@@ -8,24 +10,29 @@ export interface Props {
     url: string;
     alt: string;
   };
-  publishDate: Date;
   tags?: string[];
 }
 
-const id = normalizeSlug(Astro.props.id);
+const { lang } = getI18n(Astro.currentLocale);
+const text = localized(lang, {
+  ja: { thumbnailAlt: (title: string) => `${title} のサムネイル` },
+  en: { thumbnailAlt: (title: string) => `Thumbnail for ${title}` },
+});
+// 記事は日本語だけなので、英語ページからも日本語の記事へリンクする
+const href = `/blog/${normalizeSlug(Astro.props.id)}`;
 const { title, image, tags = [] } = Astro.props;
 ---
 
 <article
-  class="group bg-white rounded-lg overflow-hidden border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-300"
+  class="group overflow-hidden rounded-2xl border border-line bg-surface transition duration-300 hover:-translate-y-0.5 hover:border-accent-2 hover:shadow-[0_10px_30px_-18px_rgb(var(--c-accent-2))]"
 >
   {
     image && (
-      <a href={`/blog/${id}`} class="block">
+      <a href={href} class="block">
         <div class="aspect-video overflow-hidden">
           <img
             src={image.url}
-            alt={image.alt || `Thumbnail for ${title}`}
+            alt={image.alt || text.thumbnailAlt(title)}
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
@@ -34,22 +41,14 @@ const { title, image, tags = [] } = Astro.props;
   }
 
   <div class="p-6">
-    <a href={`/blog/${id}`} class="block">
-      <h3
-        class="text-xl font-semibold mb-2 text-neutral-900 group-hover:text-primary-500 transition-colors"
-      >
+    <a href={href} class="block">
+      <h3 class="text-xl font-semibold mb-2 text-ink">
         {title}
       </h3>
     </a>
 
     <div class="flex flex-wrap gap-2">
-      {
-        tags.map((tag) => (
-          <span class="inline-block px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-800 rounded">
-            {tag}
-          </span>
-        ))
-      }
+      {tags.map((tag) => <Tag>{tag}</Tag>)}
     </div>
   </div>
 </article>

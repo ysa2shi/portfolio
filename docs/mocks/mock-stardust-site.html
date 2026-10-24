@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ja" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mock — Stardust サイト全体</title>
+<style>
+  :root {
+    --bg:#f9fbfd; --surface:#f1f6fa; --wash:#edf5fa;
+    --ink:#1d2a3a; --sub:#5b6676; --line:#dfe7ee;
+    --accent:#3a9fcb; --accent-2:#3aa86f; --gold:#d99a00; --violet:#7a4fb0;
+    --star-bg:#b7c6d4; --on-accent:#fff;
+  }
+  :root[data-theme="dark"] {
+    --bg:#070d1f; --surface:#0f1a36; --wash:#0d2540;
+    --ink:#eaf2ff; --sub:#9fb2d0; --line:#1a2748;
+    --accent:#6cc6ec; --accent-2:#86cfb4; --gold:#f5cf55; --violet:#a98be0;
+    --star-bg:#dbeaff; --on-accent:#06101f;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif; transition:background .4s,color .4s; }
+  a { color:var(--accent); }
+  :focus-visible { outline:2px solid var(--violet); outline-offset:3px; border-radius:6px; }
+  :root[data-theme="dark"] .panel { border:1px solid rgba(160,200,255,.16); }
+  .wrap { max-width:1040px; margin:0 auto; padding:0 20px; }
+  .note { font-size:11px; color:var(--sub); padding:14px 0 0; }
+  h1,h2,h3 { font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif; font-weight:600; margin:0; }
+  section { padding:56px 0 8px; }
+  .sec-title { display:flex; align-items:baseline; gap:14px; margin-bottom:22px; }
+  .sec-title h2 { font-size:clamp(26px,4vw,38px); }
+  .sec-title h2::before { content:"✦"; color:var(--gold); font-size:.5em; margin-right:.5em; vertical-align:.5em; }
+  .sec-title a { font-size:13px; text-decoration:none; margin-left:auto; }
+  .sec-title a:hover { text-decoration:underline; }
+
+  /* header */
+  header { display:flex; align-items:center; justify-content:space-between; padding:22px 0; }
+  .brand { font-family:"Shippori Mincho","Hiragino Mincho ProN",serif; font-weight:600; letter-spacing:.08em; }
+  nav { display:flex; gap:22px; align-items:center; font-size:13px; color:var(--sub); }
+  nav a { color:inherit; text-decoration:none; padding-bottom:2px; border-bottom:1px solid transparent; transition:.2s; }
+  nav a:hover,nav a.cur { color:var(--ink); border-color:var(--accent-2); }
+  .toggle { font:inherit; font-size:12px; color:var(--sub); background:none; border:1px solid var(--line); border-radius:999px; padding:5px 12px; cursor:pointer; }
+  .toggle:hover { color:var(--ink); border-color:var(--accent); }
+
+  /* hero */
+  .hero { position:relative; padding:64px 0 72px; }
+  .hero-sky { position:absolute; right:0; top:20px; width:min(46%,500px); height:auto; pointer-events:none; }
+  .hl { stroke:var(--accent); stroke-width:1; opacity:.35; }
+  .hs { transform-box:fill-box; transform-origin:center; animation:hsp 6s ease-in-out infinite; }
+  .hg { fill:var(--gold); filter:drop-shadow(0 0 8px color-mix(in srgb,var(--gold) 60%,transparent)); }
+  .ha { fill:var(--accent); }
+  .hw { fill:var(--star-bg); }
+  :root[data-theme="dark"] .hw { fill:#dbeaff; }
+  @keyframes hsp { 0%,100% { opacity:.65; transform:scale(.92) } 50% { opacity:1; transform:scale(1.06) } }
+  @media (max-width:640px) { .hero-sky { width:70%; opacity:.5; top:0; } }
+  .hero h1 { position:relative; font-size:clamp(34px,6vw,60px); line-height:1.25; }
+  .hero h1 em { font-style:normal; background:linear-gradient(100deg,var(--accent),var(--accent-2) 65%,var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p { position:relative; max-width:520px; color:var(--sub); line-height:1.9; font-size:15px; margin:18px 0 26px; }
+  .btns { position:relative; display:flex; gap:12px; flex-wrap:wrap; }
+  .btn { font-size:13.5px; padding:10px 20px; border-radius:999px; text-decoration:none; border:1px solid var(--line); color:var(--ink); transition:.2s; background:var(--bg); }
+  .btn.primary { background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
+  .btn:hover { box-shadow:0 0 0 4px color-mix(in srgb,var(--accent-2) 20%,transparent); }
+  .btn:not(.primary):hover { border-color:var(--accent-2); }
+  .divider { height:1px; border:0; margin:0; background:linear-gradient(90deg,transparent,var(--accent),var(--accent-2),var(--gold),transparent); opacity:.5; }
+
+  /* skills: 夜空パネル（星空と星雲） */
+  .panel { --ink:#eaf2ff; --sub:#a3b6d4; --line:rgba(160,200,255,.14); --accent:#82d2f0; --gold:#f5cf55; --bg:#0a1431; --star-bg:#dbeaff;
+    position:relative; overflow:hidden; border-radius:22px; padding:40px clamp(16px,4vw,44px) 32px; color:var(--ink);
+    background:
+      radial-gradient(700px 360px at 85% 105%, rgba(79,214,138,.10), transparent 65%),
+      radial-gradient(600px 340px at 50% 120%, rgba(108,198,236,.16), transparent 65%),
+      radial-gradient(520px 300px at 0% 0%, rgba(111,140,255,.16), transparent 60%),
+      linear-gradient(180deg,#081030,#0a1a3a 75%,#0b2238);
+    box-shadow:0 24px 60px -34px rgba(8,16,48,.7); }
+  .panel .sky { background:none; padding:0; }
+  .panel .sec-title { margin-bottom:12px; }
+  .spark { fill:#fff; transform-box:fill-box; transform-origin:center; animation:sp 5s ease-in-out infinite; }
+  @keyframes sp { 0%,100% { opacity:.2; transform:scale(.7) } 50% { opacity:1; transform:scale(1.1) } }
+  .legend button:hover,.legend button:focus-visible { color:var(--accent); }
+  .view { margin-left:auto; display:inline-flex; border:1px solid var(--line); border-radius:999px; padding:3px; }
+  .view button { font:inherit; font-size:12.5px; color:var(--sub); background:none; border:0; border-radius:999px; padding:5px 14px; cursor:pointer; transition:.2s; }
+  .view button:hover { color:var(--ink); }
+  .view button[aria-pressed="true"] { background:color-mix(in srgb,var(--accent) 22%,transparent); color:var(--ink); }
+  .panel[data-view="list"] #mapView,.panel[data-view="list"] #mapView2 { display:none; }
+  .panel[data-view="map"] #listView { display:none; }
+  .panel[data-view="list"] .detail { display:none; }
+  .rel { display:none; margin-top:12px; padding-top:10px; border-top:1px dashed var(--line); font-size:12.5px; line-height:1.8; color:var(--sub); }
+  .rel b { color:var(--ink); font-weight:600; margin-right:6px; }
+  .rel.show { display:block; }
+  .list { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px; margin-top:6px; }
+  .lcat { background:rgba(255,255,255,.04); border:1px solid var(--line); border-radius:14px; padding:16px; }
+  .lcat h3 { font-family:inherit; font-size:12.5px; font-weight:500; letter-spacing:.14em; color:var(--sub); margin:0 0 12px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; }
+  .chip { font:inherit; font-size:13px; color:var(--ink); background:rgba(255,255,255,.05); border:1px solid var(--line); border-radius:999px; padding:5px 12px 5px 9px; display:inline-flex; align-items:center; gap:7px; cursor:pointer; transition:.2s; }
+  .chip:hover,.chip:focus-visible,.chip.on { border-color:var(--accent); background:color-mix(in srgb,var(--accent) 14%,transparent); outline:none; }
+  .chip.dim { opacity:.3; }
+  .chip i { display:inline-block; flex:none; }
+  .chip.c1 { border-color:color-mix(in srgb,var(--gold) 45%,transparent); }
+  .chip.c1 i { width:13px; height:13px; background:var(--gold); clip-path:polygon(50% 0,59% 41%,100% 50%,59% 59%,50% 100%,41% 59%,0 50%,41% 41%); }
+  .chip.c2 i { width:8px; height:8px; border-radius:50%; background:var(--accent); }
+  .chip.c3 i { width:8px; height:8px; border-radius:50%; border:1.5px solid var(--accent); }
+
+  .legend { display:flex; flex-wrap:wrap; gap:6px 18px; margin:0 0 6px; font-size:12.5px; color:var(--sub); }
+  .legend button { font:inherit; color:inherit; background:none; border:0; padding:4px 0; cursor:pointer; }
+  .legend button:hover,.legend button:focus-visible { color:var(--accent); }
+  .tiers span { display:inline-flex; align-items:center; gap:7px; }
+  .tiers i { display:inline-block; }
+  .tiers .t1 i { width:16px; height:16px; background:var(--gold); clip-path:polygon(50% 0,59% 41%,100% 50%,59% 59%,50% 100%,41% 59%,0 50%,41% 41%); }
+  .tiers .t2 i { width:9px; height:9px; border-radius:50%; background:var(--accent); }
+  .tiers .t3 i { width:9px; height:9px; border-radius:50%; border:1.5px solid var(--accent); }
+  .tiers { gap:16px; margin-bottom:10px; }
+  .sky { background:linear-gradient(180deg,var(--wash),transparent 70%); border-radius:20px; padding:8px; }
+  svg { display:block; width:100%; height:auto; overflow:visible; }
+  .star { fill:var(--star-bg); animation:tw 4s ease-in-out infinite; }
+  @keyframes tw { 0%,100% { opacity:.2 } 50% { opacity:.9 } }
+  .guide { fill:none; stroke:var(--line); stroke-width:1; }
+  .edge { fill:none; stroke:var(--accent); stroke-width:.9; opacity:.3; stroke-dasharray:1; stroke-dashoffset:1; animation:draw 1.2s ease-out forwards; animation-delay:calc(.6s + var(--i) * .04s); transition:opacity .3s; }
+  @keyframes draw { to { stroke-dashoffset:0 } }
+  .node { cursor:pointer; opacity:0; animation:fade .5s ease forwards; animation-delay:calc(var(--i) * .07s); outline:none; }
+  @keyframes fade { to { opacity:1 } }
+  .node .pop { transform-box:fill-box; transform-origin:center; animation:pop .7s cubic-bezier(.2,.9,.3,1.2) both; animation-delay:calc(var(--i) * .07s); transition:opacity .3s; }
+  @keyframes pop { from { transform:scale(.4) } to { transform:scale(1) } }
+  .node .body { transform-box:fill-box; transform-origin:center; transition:transform .35s cubic-bezier(.2,.9,.3,1.3); }
+  .node:hover .body,.node:focus-visible .body,.node.on .body { transform:scale(1.18); }
+  .node text { font-size:12px; fill:var(--ink); text-anchor:middle; font-weight:500; letter-spacing:.06em; pointer-events:none; }
+  .node .halo { fill:none; stroke:var(--gold); stroke-width:1; opacity:.5; }
+  .node:focus-visible .halo { stroke:var(--accent); stroke-width:1.5; opacity:1; }
+  .t1s { fill:var(--gold); filter:drop-shadow(0 0 6px color-mix(in srgb,var(--gold) 70%,transparent)); }
+  .t2s { fill:var(--accent); }
+  .t3s { fill:var(--bg); stroke:var(--accent); stroke-width:2; }
+  svg[data-active] .edge.dim { opacity:.08; }
+  svg[data-active] .edge.on { opacity:.95; stroke-width:1.7; }
+  svg[data-active] .node.dim .pop { opacity:.2; }
+  .detail { min-height:56px; margin-top:6px; font-size:14px; color:var(--sub); line-height:1.8; }
+  .detail b { color:var(--ink); font-weight:600; margin-right:8px; }
+  .fallback { display:none; }
+  .fallback h3 { font-size:15px; margin:18px 0 6px; }
+  .fallback ul { margin:0; padding-left:1.2em; color:var(--sub); line-height:1.9; font-size:14px; }
+
+  /* cards */
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .card { display:block; text-decoration:none; color:inherit; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px; transition:.25s; }
+  .card:hover { border-color:var(--accent-2); transform:translateY(-2px); box-shadow:0 10px 30px -18px var(--accent-2); }
+  .card time { font-size:12px; color:var(--sub); }
+  .card h3 { font-size:17px; line-height:1.55; margin:8px 0 12px; }
+  .tag:hover { border-color:var(--violet); }
+  .tag { display:inline-block; font-size:11px; color:var(--accent-2); border:1px solid color-mix(in srgb,var(--accent-2) 45%,transparent); border-radius:999px; padding:1px 9px; margin-right:6px; }
+
+  /* article */
+  .article { max-width:680px; margin-top:8px; }
+  .article h3 { font-size:24px; margin-bottom:6px; }
+  .article p { line-height:2; font-size:15px; }
+  .article blockquote { margin:18px 0; padding:4px 18px; border-left:3px solid color-mix(in srgb,var(--sub) 45%,var(--bg)); background:var(--surface); border-radius:0 10px 10px 0; color:var(--sub); }
+  .article code { font-size:13px; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:1px 6px; }
+  .article pre { background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:14px 16px; font-size:13px; overflow:auto; line-height:1.7; }
+  .article pre .k { color:var(--violet); } .article pre .s { color:var(--accent-2); } .article pre .c { color:var(--sub); }
+
+  footer { margin-top:72px; border-top:1px solid transparent; border-image:linear-gradient(90deg,transparent,var(--violet),var(--accent),transparent) 1; padding:28px 0 56px; font-size:12.5px; color:var(--sub); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+  footer a { color:var(--sub); }
+
+  .palette { margin:40px 0 0; } .palette h3 { font-size:13px; color:var(--sub); font-weight:500; margin-bottom:12px; font-family:inherit; }
+  .sw { display:flex; flex-wrap:wrap; gap:10px; } .sw div { font-size:11px; color:var(--sub); text-align:center; }
+  .sw b { display:block; width:72px; height:40px; border-radius:10px; border:1px solid var(--line); margin-bottom:5px; }
+
+  @media (max-width:760px) { .grid { grid-template-columns:1fr; } }
+  @media (max-width:640px) { nav a { display:none; } .view,#mapView,#mapView2 { display:none !important; } #listView { display:grid !important; grid-template-columns:1fr; } }
+  @media (prefers-reduced-motion:reduce) { *,.star,.edge,.node,.node .pop { animation:none !important; transition:none !important; } .node { opacity:1; } .edge { stroke-dashoffset:0; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="note">Mock / Stardust サイト全体（背景 #f9fbfd、銀白基調に青緑〜緑、黄は主戦力の星と光だけ、Skills は夜空パネル。右上でダーク切替。文言は仮）</div>
+  <header>
+    <span class="brand">Sample</span>
+    <nav><a class="cur" href="#">Home</a><a href="#skills">Skills</a><a href="#blog">Blog</a><a href="#contact">Contact</a><button class="toggle" id="toggle" type="button">ダーク</button></nav>
+  </header>
+
+  <div class="hero">
+    <svg class="hero-sky" viewBox="0 0 540 380" aria-hidden="true"><line class="hl" x1="80" y1="150" x2="250" y2="70"/><line class="hl" x1="250" y1="70" x2="330" y2="230"/><line class="hl" x1="330" y1="230" x2="420" y2="300"/><line class="hl" x1="250" y1="70" x2="470" y2="120"/><line class="hl" x1="80" y1="150" x2="150" y2="320"/><line class="hl" x1="150" y1="320" x2="330" y2="230"/><path style="animation-delay:0.0s" class="hs hg" d="M80,133 Q80,150 97,150 Q80,150 80,167 Q80,150 63,150 Q80,150 80,133Z"/><path style="animation-delay:0.9s" class="hs ha" d="M250,61 Q250,70 259,70 Q250,70 250,79 Q250,70 241,70 Q250,70 250,61Z"/><path style="animation-delay:1.8s" class="hs ha" d="M330,219 Q330,230 341,230 Q330,230 330,241 Q330,230 319,230 Q330,230 330,219Z"/><path style="animation-delay:2.7s" class="hs hw" d="M470,113 Q470,120 477,120 Q470,120 470,127 Q470,120 463,120 Q470,120 470,113Z"/><path style="animation-delay:3.6s" class="hs hw" d="M420,292 Q420,300 428,300 Q420,300 420,308 Q420,300 412,300 Q420,300 420,292Z"/><path style="animation-delay:4.5s" class="hs hw" d="M150,314 Q150,320 156,320 Q150,320 150,326 Q150,320 144,320 Q150,320 150,314Z"/></svg>
+    <h1>つながる技術を、<br><em>星座</em>のように。</h1>
+    <p>バックエンドを中心に、インフラからフロントまで。使ってきた技術と、その関係を一枚にまとめました。</p>
+    <div class="btns"><a class="btn primary" href="#skills">Skills を見る</a><a class="btn" href="#blog">Blog</a></div>
+  </div>
+  <hr class="divider" />
+
+  <section id="skills" style="padding-top:40px"><div class="panel">
+    <div class="sec-title"><h2>Skills</h2>
+      <div class="view" role="group" aria-label="表示切り替え"><button type="button" data-v="map" aria-pressed="true">星図</button><button type="button" data-v="list" aria-pressed="false">リスト</button></div>
+    </div>
+    <div id="mapView"><div class="legend" id="legend"></div></div>
+    <div class="legend tiers"><span class="t1"><i></i>主戦力</span><span class="t2"><i></i>実務で使用</span><span class="t3"><i></i>試している</span></div>
+    <div id="mapView2" class="sky"><svg id="sky" viewBox="0 0 1000 560" role="group" aria-label="スキルの関係図"></svg></div>
+    <div id="listView" class="list"></div>
+    <div class="detail" id="detail" aria-live="polite">触れてみてください。</div>
+  </div></section>
+
+  <section id="blog">
+    <div class="sec-title"><h2>Blog</h2><a href="#">すべて見る →</a></div>
+    <div class="grid">
+      <a class="card" href="#"><time>2026.10.20</time><h3>ポートフォリオを Cloudflare Workers に移した</h3><span class="tag">Cloudflare</span><span class="tag">Astro</span></a>
+      <a class="card" href="#"><time>2026.09.28</time><h3>Ktor で小さな API を書いて気づいたこと</h3><span class="tag">Kotlin</span><span class="tag">Ktor</span></a>
+      <a class="card" href="#"><time>2026.09.03</time><h3>GitHub Actions の定期ビルドを整理する</h3><span class="tag">CI/CD</span></a>
+    </div>
+  </section>
+
+  <section id="article">
+    <div class="sec-title"><h2>記事ページの見え方</h2></div>
+    <div class="article">
+      <time style="font-size:12px;color:var(--sub)">2026.10.20</time>
+      <h3>ポートフォリオを Workers に移した</h3>
+      <p>静的アセットのまま <code>wrangler.jsonc</code> だけで動かせました。リンクや強調は水色、補足は銀の面に置きます。</p>
+      <blockquote>Pages ではなく Workers を選んだ理由は、今後の拡張に備えるためです。</blockquote>
+<pre><span class="c">// wrangler.jsonc</span>
+{ <span class="k">"name"</span>: <span class="s">"portfolio"</span>, <span class="k">"assets"</span>: { <span class="k">"directory"</span>: <span class="s">"./dist"</span> } }</pre>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="sec-title"><h2>Contact</h2></div>
+    <div class="btns"><a class="btn primary" href="#">GitHub</a><a class="btn" href="#">Zenn</a><a class="btn" href="#">Mail</a></div>
+  </section>
+
+  <div class="palette">
+    <h3>パレット（現在のテーマ値）</h3>
+    <div class="sw">
+      <div><b style="background:var(--bg)"></b>背景</div><div><b style="background:var(--surface)"></b>面（銀）</div><div><b style="background:var(--wash)"></b>淡い水色</div>
+      <div><b style="background:var(--accent)"></b>水色</div><div><b style="background:var(--accent-2)"></b>緑</div><div><b style="background:var(--gold)"></b>黄</div><div><b style="background:var(--violet)"></b>紫（目）</div>
+    </div>
+  </div>
+
+  <footer><span>© 2026 Sample</span><span><a href="#">GitHub</a> · <a href="#">Zenn</a></span></footer>
+</div>
+
+<script>
+(() => {
+  const root = document.documentElement, tg = document.getElementById('toggle');
+  tg.addEventListener('click', () => {
+    const dark = root.dataset.theme !== 'dark';
+    root.dataset.theme = dark ? 'dark' : 'light'; tg.textContent = dark ? 'ライト' : 'ダーク';
+  });
+
+  const NODES = [
+    ['TypeScript', 'Frontend', 1, 220, 140], ['React', 'Frontend', 2, 110, 235], ['Vue.js', 'Frontend', 2, 300, 255],
+    ['Astro', 'Frontend', 3, 410, 115], ['Tailwind CSS', 'Frontend', 2, 195, 345],
+    ['Cloudflare', 'Infra', 3, 545, 205], ['GitHub', 'Tools', 2, 705, 120], ['GitHub Actions', 'Tools', 1, 695, 255],
+    ['Docker', 'Infra', 2, 480, 355], ['AWS', 'Infra', 1, 330, 450],
+    ['DynamoDB', 'Database', 2, 470, 500], ['MySQL', 'Database', 2, 610, 470],
+    ['Spring Boot', 'Backend', 1, 745, 400], ['Java', 'Backend', 2, 880, 320], ['Kotlin', 'Backend', 1, 890, 450], ['Ktor', 'Backend', 2, 790, 515],
+  ];
+  const EDGES = [
+    ['TypeScript','Astro'],['TypeScript','React'],['TypeScript','Vue.js'],['React','Tailwind CSS'],['Astro','Tailwind CSS'],['Vue.js','Tailwind CSS'],
+    ['Astro','Cloudflare'],['Cloudflare','GitHub Actions'],['GitHub','GitHub Actions'],['GitHub Actions','Docker'],
+    ['Docker','AWS'],['Docker','Spring Boot'],['AWS','DynamoDB'],['Spring Boot','MySQL'],['Ktor','DynamoDB'],
+    ['Java','Spring Boot'],['Java','Kotlin'],['Kotlin','Ktor'],['Kotlin','Spring Boot'],['MySQL','DynamoDB'],
+  ];
+  const CATS = ['Frontend', 'Backend', 'Database', 'Infra', 'Tools'];
+  const TIER = { 1: '主戦力', 2: '実務で使用', 3: '試している' };
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('sky'), detail = document.getElementById('detail');
+  const el = (n, a = {}, p) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+  const byName = Object.fromEntries(NODES.map((n, i) => [n[0], { name: n[0], cat: n[1], tier: n[2], x: n[3], y: n[4], i, nb: new Set() }]));
+  EDGES.forEach(([a, b]) => { byName[a].nb.add(b); byName[b].nb.add(a); });
+
+  const guide = el('g', {}, svg);
+  [150, 290, 430].forEach(r => el('circle', { class: 'guide', cx: 500, cy: 300, r }, guide));
+  el('line', { class: 'guide', x1: 0, y1: 300, x2: 1000, y2: 300 }, guide);
+  el('line', { class: 'guide', x1: 500, y1: 0, x2: 500, y2: 560 }, guide);
+
+  const stars = el('g', {}, svg);
+  for (let i = 0; i < 70; i++) {
+    const s = el('circle', { class: 'star', cx: Math.random() * 1000, cy: Math.random() * 560, r: Math.random() * 1.3 + .4 }, stars);
+    s.style.animationDelay = (Math.random() * 4) + 's';
+  }
+
+  const sp = el('g', {}, svg);
+  [[90,60,9],[930,90,12],[610,40,7],[60,470,8],[960,520,10],[400,540,7]].forEach(([x,y,r],i) => {
+    const s = el('path', { class:'spark', d:`M${x},${y-r} Q${x},${y} ${x+r},${y} Q${x},${y} ${x},${y+r} Q${x},${y} ${x-r},${y} Q${x},${y} ${x},${y-r}Z` }, sp);
+    s.style.animationDelay = (i*.8)+'s';
+  });
+
+  const edgeEls = [];
+  EDGES.forEach(([a, b], i) => {
+    const A = byName[a], B = byName[b], mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2;
+    const dx = B.x - A.x, dy = B.y - A.y, len = Math.hypot(dx, dy), off = ((i % 2) ? 1 : -1) * len * 0.06;
+    const p = el('path', { class: 'edge', d: `M${A.x},${A.y} Q${mx - dy / len * off},${my + dx / len * off} ${B.x},${B.y}`, pathLength: 1 }, svg);
+    p.style.setProperty('--i', i); edgeEls.push({ p, a, b });
+  });
+
+  const nodeEls = {};
+  const RAD = { 1: 14, 2: 8, 3: 7 };
+  for (const n of Object.values(byName)) {
+    const g = el('g', { class: 'node', tabindex: 0, role: 'button', 'aria-label': `${n.name}（${n.cat}、${TIER[n.tier]}）`, transform: `translate(${n.x} ${n.y})` }, svg);
+    g.style.setProperty('--i', n.i);
+    const pop = el('g', { class: 'pop' }, g), body = el('g', { class: 'body' }, pop), r = RAD[n.tier];
+    if (n.tier === 1) {
+      el('circle', { class: 'halo', r: r + 7 }, body);
+      el('path', { class: 't1s', d: `M0,${-r * 1.35} Q0,0 ${r * 1.35},0 Q0,0 0,${r * 1.35} Q0,0 ${-r * 1.35},0 Q0,0 0,${-r * 1.35}Z` }, body);
+    } else if (n.tier === 2) el('circle', { class: 't2s', r }, body);
+    else el('circle', { class: 't3s', r }, body);
+    const t = el('text', { y: r + 20 }, pop); t.textContent = n.name;
+    nodeEls[n.name] = g;
+    g.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') preview(n.name); });
+    g.addEventListener('pointerleave', () => preview(null));
+    g.addEventListener('focus', () => preview(n.name));
+    g.addEventListener('blur', () => preview(null));
+    g.addEventListener('click', () => pin(n.name));
+    g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pin(n.name); } });
+  }
+
+  let pinned = null, hovered = null, catSel = null;
+  var apply = function () {
+    const id = hovered || pinned;
+    let on = null;
+    if (id) on = new Set([id, ...byName[id].nb]);
+    else if (catSel) on = new Set(Object.values(byName).filter(n => n.cat === catSel).map(n => n.name));
+    if (on) svg.setAttribute('data-active', ''); else svg.removeAttribute('data-active');
+    for (const [name, g] of Object.entries(nodeEls)) { const f = on && on.has(name); g.classList.toggle('dim', !!on && !f); g.classList.toggle('on', !!id && name === id); }
+    edgeEls.forEach(({ p, a, b }) => { const f = id ? (a === id || b === id) : (on && on.has(a) && on.has(b)); p.classList.toggle('on', !!f); p.classList.toggle('dim', !!on && !f); });
+    if (id) { const n = byName[id]; detail.innerHTML = `<b>${n.name}</b>${n.cat} ／ ${TIER[n.tier]}<br>つながり: ${[...n.nb].join('、') || '—'}`; }
+    else if (catSel) detail.innerHTML = `<b>${catSel}</b>${Object.values(byName).filter(n => n.cat === catSel).map(n => n.name).join('、')}`;
+    else detail.textContent = '触れてみてください。';
+  };
+  const preview = id => { hovered = id; apply(); };
+  const pin = id => { pinned = pinned === id ? null : id; apply(); };
+
+  const legend = document.getElementById('legend');
+  for (const c of CATS) {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = c;
+    b.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') { catSel = c; apply(); } });
+    b.addEventListener('pointerleave', () => { catSel = null; apply(); });
+    b.addEventListener('focus', () => { catSel = c; apply(); });
+    b.addEventListener('blur', () => { catSel = null; apply(); });
+    legend.appendChild(b);
+  }
+
+  // リスト表示（スマホは常にこちら）
+  const listEl = document.getElementById('listView'), chipEls = {}, relEls = {};
+  for (const c of CATS) {
+    const items = Object.values(byName).filter(n => n.cat === c).sort((a, b) => a.tier - b.tier);
+    const box = document.createElement('div'); box.className = 'lcat';
+    box.innerHTML = `<h3>${c}</h3><div class="chips"></div><div class="rel" aria-live="polite"></div>`; relEls[c] = box.querySelector('.rel');
+    for (const n of items) {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'chip c' + n.tier;
+      b.setAttribute('aria-label', `${n.name}（${TIER[n.tier]}）`);
+      b.innerHTML = `<i></i>${n.name}`;
+      b.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') preview(n.name); });
+      b.addEventListener('pointerleave', () => preview(null));
+      b.addEventListener('click', () => pin(n.name));
+      chipEls[n.name] = b; box.querySelector('.chips').appendChild(b);
+    }
+    listEl.appendChild(box);
+  }
+  const _apply = apply;
+  apply = function () {
+    _apply();
+    const id = hovered || pinned, on = id ? new Set([id, ...byName[id].nb]) : null;
+    for (const [c, r] of Object.entries(relEls)) {
+      const n = pinned && byName[pinned], show = n && n.cat === c;
+      r.classList.toggle('show', !!show);
+      if (show) r.innerHTML = `<b>${n.name}</b>つながり: ${[...n.nb].join('、') || '—'}`;
+    }
+    for (const [name, b] of Object.entries(chipEls)) { b.classList.toggle('dim', !!on && !on.has(name)); b.classList.toggle('on', !!id && name === id); }
+  };
+
+  // 表示切り替え
+  const panel = document.querySelector('.panel'), vbtns = document.querySelectorAll('.view button');
+  const setView = v => { panel.dataset.view = v; vbtns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === v))); try { localStorage.setItem('skillsView', v); } catch {} };
+  vbtns.forEach(b => b.addEventListener('click', () => setView(b.dataset.v)));
+  let saved = null; try { saved = localStorage.getItem('skillsView'); } catch {}
+  setView(saved === 'list' || saved === 'map' ? saved : 'map'); // スマホはCSSで常にリスト
+})();
+</script>
+</body>
+</html>

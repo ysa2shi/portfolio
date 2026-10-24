@@ -1,0 +1,12 @@
+---
+import StatusMessage from "@/components/StatusMessage.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getI18n } from "@/i18n/utils";
+
+// Service Worker が、オフラインで未取得のページを開いたときに返すページ
+const { t } = getI18n(Astro.currentLocale);
+---
+
+<BaseLayout pageTitle={t("error.offline.title")} noindex>
+  <StatusMessage title={t("error.offline.title")} />
+</BaseLayout>

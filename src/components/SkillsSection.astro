@@ -1,84 +1,645 @@
 ---
+import {
+  CATEGORIES,
+  MAP_SIZE,
+  skills,
+  type Skill,
+  type Tier,
+} from "@/config/skills";
+import { getI18n, localized } from "@/i18n/utils";
+import { bgStars, edgePaths, sparks } from "@/utils/skillMap";
+import { sparkPath } from "@/utils/sparkle";
 import { Icon } from "astro-icon/components";
 
-const skills = [
-  // frontend
-  { name: "TypeScript", icon: "simple-icons:typescript", category: "Frontend" },
-  { name: "Astro", icon: "simple-icons:astro", category: "Frontend" },
-  { name: "React", icon: "simple-icons:react", category: "Frontend" },
-  { name: "Vue.js", icon: "simple-icons:vuedotjs", category: "Frontend" },
-  {
-    name: "Tailwind CSS",
-    icon: "simple-icons:tailwindcss",
-    category: "Frontend",
+const { lang, t } = getI18n(Astro.currentLocale);
+const text = localized(lang, {
+  ja: {
+    title: "Skills",
+    viewToggle: "表示の切り替え",
+    viewMap: "Map",
+    viewList: "List",
+    mapLabel: "スキルの関係図",
+    replay: "アニメーションをもう一度再生",
+    related: "関連",
+    // 区分の表示名(区分の意味は src/config/skills.ts)
+    tiers: {
+      1: "主戦力",
+      2: "実務で使用",
+      3: "個人開発でよく使う",
+      4: "試している",
+    },
   },
-
-  // backend
-  { name: "Java", icon: "mdi:language-java", category: "Backend" },
-  { name: "Spring Boot", icon: "simple-icons:springboot", category: "Backend" },
-  { name: "Kotlin", icon: "simple-icons:kotlin", category: "Backend" },
-  { name: "Ktor", icon: "simple-icons:ktor", category: "Backend" },
-
-  // Database
-  { name: "MySQL", icon: "simple-icons:mysql", category: "Database" },
-  {
-    name: "DynamoDB",
-    icon: "simple-icons:amazondynamodb",
-    category: "Database",
+  en: {
+    viewToggle: "Switch view",
+    mapLabel: "Skill map",
+    replay: "Replay animation",
+    related: "Related",
+    tiers: { 1: "Core", 2: "Used at work", 3: "Side projects", 4: "Exploring" },
   },
+});
+const tierLabel = (tier: Tier) => text.tiers[tier];
+const sep = t("common.sep");
 
-  // infra
-  { name: "Docker", icon: "simple-icons:docker", category: "Infra" },
-  { name: "AWS", icon: "simple-icons:amazonwebservices", category: "Infra" },
-  { name: "Cloudflare", icon: "simple-icons:cloudflare", category: "Infra" },
+const RADIUS = { 1: 14, 2: 8, 3: 7, 4: 6 } as const;
+// 凡例には、使っている区分だけを出す
+const usedTiers = ([1, 2, 3, 4] as const).filter((tier) =>
+  skills.some((s) => s.tier === tier),
+);
 
-  // tools
-  { name: "GitHub", icon: "simple-icons:github", category: "Tools" },
-  {
-    name: "GitHub Actions",
-    icon: "simple-icons:githubactions",
-    category: "Tools",
-  },
-];
-
-const categories = ["Frontend", "Backend", "Database", "Infra", "Tools"];
+const byCategory = (category: string): Skill[] =>
+  skills.filter((s) => s.category === category).sort((a, b) => a.tier - b.tier);
 ---
 
-<section class="py-20 bg-white">
+<section id="skills" class="py-16">
   <div class="container mx-auto px-4">
-    <h2 class="text-3xl font-bold mb-12 text-center text-neutral-900">
-      Skills
-    </h2>
-    <div class="text-lg mb-12 text-center text-neutral-600">
-      This section includes both my core skills and technologies I’m currently
-      exploring through personal projects.
-    </div>
-    <div class="space-y-12 max-w-5xl mx-auto">
-      {
-        categories.map((category) => (
-          <div>
-            <h3 class="text-xl font-semibold mb-6 text-neutral-900">
-              {category}
-            </h3>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {skills
-                .filter((skill) => skill.category === category)
-                .map((skill) => (
-                  <div class="bg-white rounded-lg p-4 flex flex-col items-center border border-neutral-200 hover:shadow-md transition-all duration-300 hover:border-neutral-300">
-                    <Icon
-                      name={skill.icon}
-                      class="w-8 h-8 mb-3"
-                      aria-label={`${skill.name} icon`}
-                    />
-                    <span class="text-sm text-center text-neutral-900 font-medium">
-                      {skill.name}
-                    </span>
-                  </div>
+    <div
+      class="panel"
+      data-skills
+      data-view="map"
+      data-related={text.related}
+      data-sep={sep}
+    >
+      <div class="head">
+        <h2 class="section-title text-3xl font-bold md:text-4xl">
+          {text.title}
+        </h2>
+        <div class="view-toggle" role="group" aria-label={text.viewToggle}>
+          <button type="button" data-v="map" aria-pressed="true"
+            >{text.viewMap}</button
+          >
+          <button type="button" data-v="list" aria-pressed="false"
+            >{text.viewList}</button
+          >
+        </div>
+        <button
+          type="button"
+          class="replay"
+          data-map-only
+          aria-label={text.replay}
+          title={text.replay}
+        >
+          <Icon name="mdi:replay" />
+        </button>
+      </div>
+
+      <div class="legend" data-map-only>
+        {
+          CATEGORIES.map((c) => (
+            <button type="button" data-cat={c}>
+              {c}
+            </button>
+          ))
+        }
+      </div>
+      <div class="legend tiers">
+        {
+          usedTiers.map((tier) => (
+            <span class={`t${tier}`}>
+              <i />
+              {tierLabel(tier)}
+            </span>
+          ))
+        }
+      </div>
+
+      <div class="sky" data-map-only>
+        <svg
+          viewBox={`0 0 ${MAP_SIZE.width} ${MAP_SIZE.height}`}
+          role="group"
+          aria-label={text.mapLabel}
+        >
+          <g>
+            {
+              [150, 290, 430].map((r) => (
+                <circle class="guide" cx="500" cy="300" r={r} />
+              ))
+            }
+            <line class="guide" x1="0" y1="300" x2={MAP_SIZE.width} y2="300"
+            ></line>
+            <line class="guide" x1="500" y1="0" x2="500" y2={MAP_SIZE.height}
+            ></line>
+          </g>
+          <g>
+            {
+              bgStars.map((s) => (
+                <circle
+                  class="star"
+                  cx={s.cx}
+                  cy={s.cy}
+                  r={s.r}
+                  style={`animation-delay:${s.delay}s`}
+                />
+              ))
+            }
+          </g>
+          <g>
+            {
+              sparks.map((s) => (
+                <path
+                  class="spark"
+                  d={s.d}
+                  style={`animation-delay:${s.delay}s`}
+                />
+              ))
+            }
+          </g>
+          {
+            edgePaths.map((e) => (
+              <path
+                class="edge"
+                d={e.d}
+                pathLength="1"
+                data-a={e.a}
+                data-b={e.b}
+                style={`--i:${e.i}`}
+              />
+            ))
+          }
+          {
+            skills.map((s, i) => {
+              const r = RADIUS[s.tier];
+              return (
+                <g
+                  class="node"
+                  tabindex="0"
+                  role="button"
+                  aria-label={`${s.name}(${s.category}${sep}${tierLabel(s.tier)})`}
+                  transform={`translate(${s.x} ${s.y})`}
+                  style={`--i:${i}`}
+                  data-id={s.id}
+                  data-name={s.name}
+                  data-cat={s.category}
+                  data-tier={tierLabel(s.tier)}
+                  data-nb={s.neighbors.join(",")}
+                >
+                  <g class="pop">
+                    <g class="body">
+                      {s.tier === 1 && (
+                        <>
+                          <circle class="halo" r={r + 7} />
+                          <path class="t1s" d={sparkPath(0, 0, r * 1.35)} />
+                        </>
+                      )}
+                      {s.tier === 2 && <circle class="t2s" r={r} />}
+                      {s.tier === 3 && <circle class="t3s" r={r} />}
+                      {s.tier === 4 && <circle class="t4s" r={r} />}
+                    </g>
+                    <text y={r + 20}>{s.name}</text>
+                  </g>
+                </g>
+              );
+            })
+          }
+        </svg>
+      </div>
+
+      <div class="list" data-list-only>
+        {
+          CATEGORIES.map((c) => (
+            <div class="lcat" data-cat={c}>
+              <h3>{c}</h3>
+              <div class="chips">
+                {byCategory(c).map((s) => (
+                  <button
+                    type="button"
+                    class={`chip c${s.tier}`}
+                    data-id={s.id}
+                    aria-label={`${s.name}(${tierLabel(s.tier)})`}
+                  >
+                    <i />
+                    {s.name}
+                  </button>
                 ))}
+              </div>
+              <div class="rel" aria-live="polite" />
             </div>
-          </div>
-        ))
-      }
+          ))
+        }
+      </div>
+
+      <div class="detail" data-map-only aria-live="polite"></div>
     </div>
   </div>
 </section>
+
+<script>
+  import "@/scripts/skills";
+</script>
+
+<style>
+  /* 常に夜空。パネルの中だけトークンを夜空用に差し替える */
+  .panel {
+    --c-canvas: 10 20 49;
+    --c-ink: 234 242 255;
+    --c-sub: 163 182 212;
+    --c-line: 160 200 255;
+    --c-accent: 130 210 240;
+    --c-accent-2: 104 222 138;
+    --c-gold: 245 207 85;
+    --c-star: 219 234 255;
+    position: relative;
+    overflow: hidden;
+    border-radius: 22px;
+    padding: 40px clamp(16px, 4vw, 44px) 32px;
+    color: rgb(var(--c-ink));
+    background:
+      radial-gradient(
+        700px 360px at 85% 105%,
+        rgba(79, 214, 138, 0.1),
+        transparent 65%
+      ),
+      radial-gradient(
+        600px 340px at 50% 120%,
+        rgba(108, 198, 236, 0.16),
+        transparent 65%
+      ),
+      radial-gradient(
+        520px 300px at 0% 0%,
+        rgba(111, 140, 255, 0.16),
+        transparent 60%
+      ),
+      linear-gradient(180deg, #081030, #0a1a3a 75%, #0b2238);
+    box-shadow: 0 24px 60px -34px rgba(8, 16, 48, 0.7);
+  }
+  :global(:root[data-theme="dark"]) .panel {
+    border: 1px solid rgb(var(--c-line) / 0.16);
+  }
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .view-toggle {
+    margin-left: auto;
+    display: inline-flex;
+    padding: 3px;
+    border: 1px solid rgb(var(--c-line) / 0.2);
+    border-radius: 999px;
+  }
+  .view-toggle button {
+    padding: 5px 14px;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    color: rgb(var(--c-sub));
+    font: inherit;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .view-toggle button:hover {
+    color: rgb(var(--c-ink));
+  }
+  .view-toggle button[aria-pressed="true"] {
+    background: rgb(var(--c-accent) / 0.22);
+    color: rgb(var(--c-ink));
+  }
+  .replay {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgb(var(--c-line) / 0.2);
+    border-radius: 999px;
+    background: none;
+    color: rgb(var(--c-sub));
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .replay:hover {
+    color: rgb(var(--c-ink));
+    border-color: rgb(var(--c-accent) / 0.5);
+  }
+  .replay :global(svg) {
+    width: 16px;
+    height: 16px;
+  }
+  .panel[data-view="list"] [data-map-only],
+  .panel[data-view="map"] [data-list-only] {
+    display: none;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    margin: 0 0 6px;
+    font-size: 12.5px;
+    color: rgb(var(--c-sub));
+  }
+  .legend button {
+    padding: 4px 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+  .legend button:hover,
+  .legend button:focus-visible {
+    color: rgb(var(--c-accent));
+  }
+  .tiers {
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+  .tiers span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .tiers i,
+  .chip i {
+    display: inline-block;
+    flex: none;
+  }
+  .tiers .t1 i,
+  .chip.c1 i {
+    width: 15px;
+    height: 15px;
+    background: rgb(var(--c-gold));
+    clip-path: polygon(
+      50% 0,
+      59% 41%,
+      100% 50%,
+      59% 59%,
+      50% 100%,
+      41% 59%,
+      0 50%,
+      41% 41%
+    );
+  }
+  .tiers .t2 i,
+  .chip.c2 i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgb(var(--c-accent));
+  }
+  .tiers .t3 i,
+  .chip.c3 i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1.5px solid rgb(var(--c-accent-2));
+  }
+  /* 個人開発(3・4)は緑、実務(2)は水色で分ける。試しているは点線の輪で控えめに */
+  .tiers .t4 i,
+  .chip.c4 i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1.5px dashed rgb(var(--c-accent-2) / 0.7);
+  }
+
+  /* 星図 */
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .star {
+    fill: rgb(var(--c-star));
+    animation: tw 4s ease-in-out infinite;
+  }
+  @keyframes tw {
+    0%,
+    100% {
+      opacity: 0.12;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  .spark {
+    fill: #fff;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: sp 5s ease-in-out infinite;
+  }
+  @keyframes sp {
+    0%,
+    100% {
+      opacity: 0.2;
+      transform: scale(0.7);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+  .guide {
+    fill: none;
+    stroke: rgb(var(--c-line) / 0.14);
+    stroke-width: 1;
+  }
+  .edge {
+    fill: none;
+    stroke: #cfe6ff;
+    stroke-width: 0.9;
+    opacity: 0.3;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: draw 1.2s ease-out forwards;
+    animation-delay: calc(0.6s + var(--i) * 0.04s);
+    transition: opacity 0.3s;
+  }
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .node {
+    cursor: pointer;
+    opacity: 0;
+    outline: none;
+    animation: fade 0.5s ease forwards;
+    animation-delay: calc(var(--i) * 0.07s);
+  }
+  @keyframes fade {
+    to {
+      opacity: 1;
+    }
+  }
+  .node .pop {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pop 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+    animation-delay: calc(var(--i) * 0.07s);
+    transition: opacity 0.3s;
+  }
+  @keyframes pop {
+    from {
+      transform: scale(0.4);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  .node .body {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+  }
+  .node:hover .body,
+  .node:focus-visible .body,
+  .node.on .body {
+    transform: scale(1.18);
+  }
+  .node text {
+    fill: rgb(var(--c-ink));
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-anchor: middle;
+    pointer-events: none;
+  }
+  .halo {
+    fill: none;
+    stroke: rgb(var(--c-gold));
+    stroke-width: 1;
+    opacity: 0.5;
+  }
+  .node:focus-visible .halo {
+    stroke: rgb(var(--c-violet));
+    stroke-width: 1.5;
+    opacity: 1;
+  }
+  .node:focus-visible .t2s,
+  .node:focus-visible .t3s,
+  .node:focus-visible .t4s {
+    stroke: rgb(var(--c-violet));
+    stroke-width: 2.5;
+    stroke-dasharray: none;
+  }
+  .t1s {
+    fill: rgb(var(--c-gold));
+    filter: drop-shadow(0 0 6px rgb(var(--c-gold) / 0.7));
+  }
+  .t2s {
+    fill: rgb(var(--c-accent));
+  }
+  .t3s {
+    fill: rgb(var(--c-canvas));
+    stroke: rgb(var(--c-accent-2));
+    stroke-width: 2;
+  }
+  .t4s {
+    fill: rgb(var(--c-canvas));
+    stroke: rgb(var(--c-accent-2) / 0.7);
+    stroke-width: 1.5;
+    stroke-dasharray: 3 2.5;
+  }
+  svg[data-active] .edge.dim {
+    opacity: 0.08;
+  }
+  svg[data-active] .edge.on {
+    stroke: #fff3c4;
+    stroke-width: 1.7;
+    opacity: 0.95;
+  }
+  svg[data-active] .node.dim .pop {
+    opacity: 0.2;
+  }
+  .detail {
+    min-height: 56px;
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: rgb(var(--c-sub));
+  }
+  .detail :global(b),
+  .rel :global(b) {
+    margin-right: 8px;
+    font-weight: 600;
+    color: rgb(var(--c-ink));
+  }
+
+  /* リスト */
+  .list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 14px;
+    margin-top: 6px;
+  }
+  .lcat {
+    padding: 16px;
+    border: 1px solid rgb(var(--c-line) / 0.14);
+    border-radius: 14px;
+    background: rgb(255 255 255 / 0.04);
+  }
+  .lcat h3 {
+    margin: 0 0 12px;
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: rgb(var(--c-sub));
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px 5px 9px;
+    border: 1px solid rgb(var(--c-line) / 0.14);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.05);
+    color: rgb(var(--c-ink));
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .chip:hover,
+  .chip.on {
+    border-color: rgb(var(--c-accent));
+    background: rgb(var(--c-accent) / 0.14);
+  }
+  .chip.c1 {
+    border-color: rgb(var(--c-gold) / 0.45);
+  }
+  .chip.dim {
+    opacity: 0.3;
+  }
+  .rel {
+    display: none;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed rgb(var(--c-line) / 0.18);
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: rgb(var(--c-sub));
+  }
+  .rel.show {
+    display: block;
+  }
+
+  @media (max-width: 640px) {
+    .view-toggle,
+    [data-map-only] {
+      display: none !important;
+    }
+    .list {
+      display: grid !important;
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .replay {
+      display: none;
+    }
+    .node {
+      opacity: 1;
+    }
+    .edge {
+      stroke-dashoffset: 0;
+    }
+  }
+</style>

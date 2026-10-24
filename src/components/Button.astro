@@ -1,0 +1,29 @@
+---
+export interface Props {
+  href: string;
+  variant?: "primary" | "secondary";
+  external?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  variant = "primary",
+  external = false,
+  class: className,
+} = Astro.props;
+
+const variants = {
+  primary: "border-accent bg-accent text-on-accent",
+  secondary: "border-line bg-canvas text-ink hover:border-accent-2",
+};
+---
+
+<a
+  href={href}
+  class={`inline-flex items-center rounded-full border px-5 py-2.5 text-sm transition hover:ring-4 hover:ring-accent-2/20 ${variants[variant]} ${className ?? ""}`}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+>
+  <slot />
+</a>

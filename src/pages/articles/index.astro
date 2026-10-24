@@ -4,14 +4,15 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { marketingConfig } from "@/config/marketing";
 import PageHeader from "@/components/PageHeader.astro";
 import ArticleCard from "@/components/ArticleCard.astro";
+import { getI18n } from "@/i18n/utils";
+
+const { t } = getI18n(Astro.currentLocale);
+const page = marketingConfig.pageInfo.articles;
 const articles = await fetchZennArticles();
 ---
 
-<BaseLayout pageTitle={marketingConfig.pageInfo.articles.title}>
-  <PageHeader
-    title={marketingConfig.pageInfo.articles.title}
-    description="Thoughts, insights, and tutorials on web development, design, and technology."
-  />
+<BaseLayout pageTitle={t(page.title)} description={t(page.description)}>
+  <PageHeader title={t(page.title)} description={t(page.description)} />
 
   <section class="py-16">
     <div class="container mx-auto px-4">

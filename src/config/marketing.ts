@@ -1,22 +1,28 @@
-import type { MarketingConfig } from "@/types";
+import type { UIKey } from "@/i18n/ui";
 
-export const marketingConfig: MarketingConfig = {
+interface PageInfo {
+  title: UIKey;
+  href: string;
+  description: UIKey;
+}
+
+// 表示名と説明は辞書(src/i18n/ui.ts)のキーで持つ
+export const marketingConfig = {
   pageInfo: {
     home: {
-      title: "Home",
+      title: "page.home.title",
       href: "/",
-      description: "Sharing what I've built and learned along the way.",
+      description: "site.description",
     },
     blog: {
-      title: "Blog",
+      title: "page.blog.title",
       href: "/blog",
-      description: "I run a small, personal blog.",
+      description: "page.blog.description",
     },
     articles: {
-      title: "Articles",
+      title: "page.articles.title",
       href: "/articles",
-      description:
-        "An overview of my recent thoughts and developments within the technology field.",
+      description: "page.articles.description",
     },
   },
-};
+} satisfies { pageInfo: Record<string, PageInfo> };

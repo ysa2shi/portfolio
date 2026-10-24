@@ -1,0 +1,53 @@
+---
+import { Icon } from "astro-icon/components";
+import { getI18n } from "@/i18n/utils";
+
+const { t } = getI18n(Astro.currentLocale);
+---
+
+<button
+  id="themeToggle"
+  type="button"
+  class="flex h-9 w-9 items-center justify-center rounded-full border border-line text-sub transition-colors hover:border-accent hover:text-ink"
+  aria-label={t("theme.toDark")}
+  aria-pressed="false"
+  data-label-dark={t("theme.toDark")}
+  data-label-light={t("theme.toLight")}
+>
+  <Icon name="mdi:weather-night" class="icon-moon h-5 w-5" />
+  <Icon name="mdi:white-balance-sunny" class="icon-sun h-5 w-5" />
+</button>
+
+<style>
+  /* ライト中は月(押すとダーク)、ダーク中は太陽(押すとライト)を出す */
+  .icon-sun {
+    display: none;
+  }
+  :global(:root[data-theme="dark"]) .icon-moon {
+    display: none;
+  }
+  :global(:root[data-theme="dark"]) .icon-sun {
+    display: block;
+  }
+</style>
+
+<script>
+  import { toggleTheme, currentTheme } from "@/scripts/theme";
+
+  const button = document.getElementById("themeToggle");
+
+  const sync = () => {
+    const dark = currentTheme() === "dark";
+    button?.setAttribute("aria-pressed", String(dark));
+    button?.setAttribute(
+      "aria-label",
+      (dark ? button?.dataset.labelLight : button?.dataset.labelDark) ?? "",
+    );
+  };
+
+  sync();
+  button?.addEventListener("click", () => {
+    toggleTheme();
+    sync();
+  });
+</script>

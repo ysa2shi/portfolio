@@ -7,15 +7,17 @@ import TimelineSection from "@/components/TimelineSection.astro";
 import SkillsSection from "@/components/SkillsSection.astro";
 import LatestPosts from "@/components/LatestPosts.astro";
 import LatestArticles from "@/components/LatestArticles.astro";
-import ContactSection from "@/components/ContactSection.astro";
+import { getI18n } from "@/i18n/utils";
+
+const { home } = marketingConfig.pageInfo;
+const { t } = getI18n(Astro.currentLocale);
 ---
 
-<BaseLayout pageTitle={marketingConfig.pageInfo.home.title}>
+<BaseLayout pageTitle={t(home.title)} description={t(home.description)}>
   <Opening />
   <ProfileSection />
   <TimelineSection />
   <SkillsSection />
   <LatestPosts />
   <LatestArticles />
-  <ContactSection />
 </BaseLayout>

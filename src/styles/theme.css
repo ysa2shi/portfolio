@@ -1,0 +1,83 @@
+/*
+ * Stardust テーマのトークン(docs/redesign-spec.md §2)。
+ * 値は「R G B」のチャンネルで持ち、tailwind.config.js 側で
+ * rgb(var(--c-xxx) / <alpha-value>) として参照する。
+ */
+:root {
+  color-scheme: light;
+  --c-canvas: 249 251 253;
+  --c-surface: 241 246 250;
+  --c-wash: 237 245 250;
+  --c-ink: 29 42 58;
+  --c-sub: 91 102 118;
+  --c-line: 223 231 238;
+  --c-accent: 58 159 203;
+  --c-accent-2: 58 168 111;
+  --c-gold: 217 154 0;
+  --c-violet: 122 79 176;
+  --c-on-accent: 255 255 255;
+  --c-star: 183 198 212;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --c-canvas: 7 13 31;
+  --c-surface: 15 26 54;
+  --c-wash: 13 37 64;
+  --c-ink: 234 242 255;
+  --c-sub: 159 178 208;
+  --c-line: 26 39 72;
+  --c-accent: 108 198 236;
+  --c-accent-2: 134 207 180;
+  --c-gold: 245 207 85;
+  --c-violet: 169 139 224;
+  --c-on-accent: 6 16 31;
+  --c-star: 219 234 255;
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--c-violet));
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+body {
+  transition:
+    background-color 0.4s,
+    color 0.4s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* セクション見出しの小さな金の ✦ */
+.section-title::before {
+  content: "✦";
+  color: rgb(var(--c-gold));
+  font-size: 0.5em;
+  margin-right: 0.5em;
+  vertical-align: 0.5em;
+}
+
+/* 見出しのキーワード用グラデーション(空色 → 緑 → 金) */
+.gradient-text {
+  font-style: normal;
+  background: linear-gradient(
+    100deg,
+    rgb(var(--c-accent)),
+    rgb(var(--c-accent-2)) 65%,
+    rgb(var(--c-gold))
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
