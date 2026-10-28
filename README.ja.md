@@ -4,7 +4,7 @@
 
 私の個人的なポートフォリオサイトで、Astroを使って構築されています。開発に関することで学んだことを記録するポートフォリオです。
 
-このサイトはでは私の最新の記事を Zenn から取得して表示しており、GitHub Actions を使用して自動的に更新されます。
+このサイトでは私の最新の記事を Zenn から、登壇資料を Speaker Deck から取得して表示しており（どちらもビルド時に RSS から取得）、GitHub Actions を使用して自動的に更新されます。
 
 ## 🔧 技術スタック
 
@@ -34,7 +34,19 @@ cp .env.example .env
 ```env
 PUBLIC_GITHUB_USER_URL=https://github.com/your-username
 PUBLIC_ZENN_USER_URL=https://zenn.dev/your-username
+PUBLIC_SPEAKERDECK_USER_URL=https://speakerdeck.com/your-username
 ```
+
+`PUBLIC_SPEAKERDECK_USER_URL` は Talks ページに必要です。未設定のときは登壇資料を取得せず、Talks ページには「準備中」と表示されます。
+
+Speaker Deck 側では、各資料の説明文を次のように書きます（イベント名と登壇日をここから読み取ります）。
+
+```
+イベント名（1行目）
+登壇日: 2026-10-22
+```
+
+`登壇日:` の行は省略できます。ない場合は公開日を使います。
 
 - 依存関係をインストール
 
@@ -80,6 +92,8 @@ Astro は `src/pages/` ディレクトリ内の `.astro` または `.md` ファ�
 | `pnpm preview`         | デプロイ前にビルドをローカルでプレビュー     |
 | `pnpm astro ...`       | `astro add` や `astro check` のような CLI コマンドを実行 |
 | `pnpm astro -- --help` | Astro CLI の使い方をヘルプ                       |
+| `pnpm wrangler dev`    | Workers のランタイムで `./dist` をローカル表示（先に `pnpm build` が必要） |
+| `pnpm wrangler preview` | Cloudflare 上にプレビュー版を作成（open beta、`wrangler login` が必要）。プレビュー名は現在の git ブランチ名になる |
 
 ## 🏗️ 仕組み・アーキテクチャ概要
 
@@ -87,6 +101,7 @@ Astro は `src/pages/` ディレクトリ内の `.astro` または `.md` ファ�
 - `src/pages/` 配下の .astro ファイルが自動的にルーティングされる
 - UIは `src/components/` で分割管理し、再利用性を向上
 - Zenn の最新記事は `src/utils/fetchZennFeed.ts` でRSSフィードから取得し、トップページ等で表示
+- 登壇資料は `src/utils/fetchSpeakerDeckTalks.ts` で Speaker Deck の RSS から取得し、Talks ページとトップページで表示
 - サイト設定や定数は `config/` ディレクトリで一元管理
 - 静的アセット（画像・アイコン等）は `public/` 配下に配置
 
@@ -108,7 +123,7 @@ Astro は `src/pages/` ディレクトリ内の `.astro` または `.md` ファ�
    npx wrangler deploy
    ```
 
-5. 環境変数（必要に応じて .env の内容を設定）
+5. 環境変数（必要に応じて .env の内容を設定）。`PUBLIC_SPEAKERDECK_USER_URL` も設定する（未設定だと本番の Talks が空になる）
 6. Deploy Hook を作成し、その URL を GitHub シークレット `CLOUDFLARE_DEPLOY_HOOK_URL` に登録（定期デプロイ用ワークフローで使用）
 
 ## 📬 お問い合わせ
