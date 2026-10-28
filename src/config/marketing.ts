@@ -24,5 +24,10 @@ export const marketingConfig = {
       href: "/articles",
       description: "page.articles.description",
     },
+    talks: {
+      title: "page.talks.title",
+      href: "/talks",
+      description: "page.talks.description",
+    },
   },
 } satisfies { pageInfo: Record<string, PageInfo> };

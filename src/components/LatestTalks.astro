@@ -1,0 +1,33 @@
+---
+import TalkCard from "@/components/TalkCard.astro";
+import SectionPreview from "@/components/SectionPreview.astro";
+import { fetchTalks } from "@/utils/fetchSpeakerDeckTalks";
+import { marketingConfig } from "@/config/marketing";
+import { getI18n, localizePath, localized } from "@/i18n/utils";
+
+const { lang, t } = getI18n(Astro.currentLocale);
+const text = localized(lang, {
+  ja: { title: "Latest Talks", viewAll: "View All Talks" },
+  en: {},
+});
+const page = marketingConfig.pageInfo.talks;
+
+// 資料は大きく見せたいので2列で、最新2件だけ表示
+const latestTalks = (await fetchTalks()).slice(0, 2);
+---
+
+{
+  latestTalks.length > 0 && (
+    <SectionPreview
+      title={text.title}
+      description={t(page.description)}
+      href={localizePath(page.href, lang)}
+      linkLabel={text.viewAll}
+      gridClass="md:grid-cols-2"
+    >
+      {latestTalks.map((talk) => (
+        <TalkCard {...talk} />
+      ))}
+    </SectionPreview>
+  )
+}

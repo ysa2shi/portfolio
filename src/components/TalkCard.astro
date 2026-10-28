@@ -1,0 +1,34 @@
+---
+import { formatDate, toLang } from "@/i18n/utils";
+import type { Talk } from "@/utils/fetchSpeakerDeckTalks";
+
+export type Props = Talk;
+
+const { title, url, date, event, description, thumbnail } = Astro.props;
+const lang = toLang(Astro.currentLocale);
+const cardClass =
+  "group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface transition duration-300 hover:-translate-y-0.5 hover:border-accent-2 hover:shadow-[0_10px_30px_-18px_rgb(var(--c-accent-2))]";
+---
+
+{
+  // 表紙スライドにタイトルが入っているので、画像があるときは画像だけにする
+  thumbnail ? (
+    <a href={url} target="_blank" rel="noopener noreferrer" class={cardClass}>
+      <img
+        src={thumbnail}
+        alt={title}
+        loading="lazy"
+        class="aspect-video w-full object-cover"
+      />
+    </a>
+  ) : (
+    <a href={url} target="_blank" rel="noopener noreferrer" class={cardClass}>
+      <div class="flex flex-grow flex-col p-6">
+        <h3 class="mb-2 text-xl font-semibold text-ink">{title}</h3>
+        {event && <p class="mb-2 text-sm text-accent">{event}</p>}
+        {description && <p class="mb-4 line-clamp-3 text-sub">{description}</p>}
+        <p class="mt-auto pt-4 text-sm text-sub">{formatDate(date, lang)}</p>
+      </div>
+    </a>
+  )
+}
