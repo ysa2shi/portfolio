@@ -54,6 +54,13 @@ function parseDescription(text: string, pubDate: string) {
 export async function fetchTalks(): Promise<Talk[]> {
   if (cache) return cache;
 
+  if (!siteConfig.links.speakerdeck) {
+    console.warn(
+      "PUBLIC_SPEAKERDECK_USER_URL が未設定のため、Talks は取得しません",
+    );
+    return [];
+  }
+
   try {
     const parser = new Parser<object, TalkItem>({
       customFields: { item: [["media:content", "media"]] },
