@@ -7,6 +7,8 @@ export interface ZennArticle {
   link: string;
   pubDate: string;
   contentSnippet?: string;
+  /** Zenn が記事ごとに生成する OGP 画像(RSS の enclosure) */
+  thumbnail?: string;
 }
 
 let cache: ZennArticle[] | null = null;
@@ -25,6 +27,7 @@ export async function fetchZennArticles(): Promise<ZennArticle[]> {
       link: item.link ?? "",
       pubDate: item.pubDate ?? "",
       contentSnippet: item.contentSnippet ?? "",
+      thumbnail: item.enclosure?.url,
     }));
 
     cache = articles;

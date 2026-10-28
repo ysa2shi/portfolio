@@ -6,30 +6,43 @@ export interface Props {
   description: string;
   publishDate: string;
   link: string;
+  thumbnail?: string;
 }
 
-const { title, description, publishDate, link } = Astro.props;
+const { title, description, publishDate, link, thumbnail } = Astro.props;
 const lang = toLang(Astro.currentLocale);
 ---
 
 <article
   class="group overflow-hidden rounded-2xl border border-line bg-surface transition duration-300 hover:-translate-y-0.5 hover:border-accent-2 hover:shadow-[0_10px_30px_-18px_rgb(var(--c-accent-2))] flex flex-col h-full"
 >
-  <div class="p-6 flex-grow flex flex-col">
-    <a
-      href={link}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="block mb-auto"
-    >
-      <h3 class="text-xl font-semibold mb-2 text-ink">
-        {title}
-      </h3>
-      <p class="text-sub mb-4 line-clamp-3">{description}</p>
-    </a>
+  {
+    // 画像(タイトル入りの OGP)があるときは、タイトル・概要・日付が重複するので画像だけにする
+    thumbnail ? (
+      <a href={link} target="_blank" rel="noopener noreferrer" class="block">
+        <img
+          src={thumbnail}
+          alt={title}
+          loading="lazy"
+          class="aspect-[1200/630] w-full object-cover"
+        />
+      </a>
+    ) : (
+      <div class="p-6 flex-grow flex flex-col">
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="block mb-auto"
+        >
+          <h3 class="text-xl font-semibold mb-2 text-ink">{title}</h3>
+          <p class="text-sub mb-4 line-clamp-3">{description}</p>
+        </a>
 
-    <div class="flex items-center mt-4">
-      <p class="text-sm text-sub">{formatDate(publishDate, lang)}</p>
-    </div>
-  </div>
+        <div class="flex items-center mt-4">
+          <p class="text-sm text-sub">{formatDate(publishDate, lang)}</p>
+        </div>
+      </div>
+    )
+  }
 </article>

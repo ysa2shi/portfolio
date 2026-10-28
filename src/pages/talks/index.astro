@@ -1,0 +1,32 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { marketingConfig } from "@/config/marketing";
+import { fetchTalks } from "@/utils/fetchSpeakerDeckTalks";
+import PageHeader from "@/components/PageHeader.astro";
+import TalkCard from "@/components/TalkCard.astro";
+import { getI18n } from "@/i18n/utils";
+
+const { t } = getI18n(Astro.currentLocale);
+const page = marketingConfig.pageInfo.talks;
+const talks = await fetchTalks();
+---
+
+<BaseLayout pageTitle={t(page.title)} description={t(page.description)}>
+  <PageHeader title={t(page.title)} description={t(page.description)} />
+
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      {
+        talks.length === 0 ? (
+          <p class="text-sub">{t("talks.empty")}</p>
+        ) : (
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {talks.map((talk) => (
+              <TalkCard {...talk} />
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

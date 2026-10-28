@@ -6,8 +6,8 @@ import LangSwitch from "@/components/LangSwitch.astro";
 import { getI18n, localizePath } from "@/i18n/utils";
 
 const { lang, t } = getI18n(Astro.currentLocale);
-const { home, blog, articles } = marketingConfig.pageInfo;
-const navItems = [home, blog, articles].map((page) => ({
+const { home, blog, articles, talks } = marketingConfig.pageInfo;
+const navItems = [home, articles, talks, blog].map((page) => ({
   name: t(page.title),
   url: localizePath(page.href, lang),
 }));

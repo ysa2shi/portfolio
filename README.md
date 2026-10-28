@@ -4,7 +4,7 @@
 
 This is my personal portfolio site built with Astro. This is my portfolio recording my development learnings.
 
-The site also features my latest articles from Zenn, and is automatically updated using GitHub Actions.
+The site also features my latest articles from Zenn and my talk slides from Speaker Deck (both fetched from RSS at build time), and is automatically updated using GitHub Actions.
 
 ## 🔧 Tech Stack
 
@@ -34,7 +34,19 @@ cp .env.example .env
 ```env
 PUBLIC_GITHUB_USER_URL=https://github.com/your-username
 PUBLIC_ZENN_USER_URL=https://zenn.dev/your-username
+PUBLIC_SPEAKERDECK_USER_URL=https://speakerdeck.com/your-username
 ```
+
+`PUBLIC_SPEAKERDECK_USER_URL` is required for the Talks page. When it is not set, no talks are fetched and the Talks page shows a "coming soon" message.
+
+On Speaker Deck, write the description of each deck like this (the event name and date are read from it):
+
+```
+Event name (first line)
+登壇日: 2026-10-22
+```
+
+The `登壇日:` line is optional; the publish date is used when it is missing.
 
 - Install dependencies
 
@@ -80,6 +92,8 @@ All commands are run from the root of the project, from a terminal:
 | `pnpm preview`         | Preview your build locally, before deploying     |
 | `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `pnpm astro -- --help` | Get help using the Astro CLI                     |
+| `pnpm wrangler dev`    | Serve `./dist` locally with the Workers runtime (run `pnpm build` first) |
+| `pnpm wrangler preview` | Create a Preview deployment on Cloudflare (open beta, requires `wrangler login`). The Preview is named after the current git branch |
 
 ## 🏗️ Architecture Overview
 
@@ -87,6 +101,7 @@ All commands are run from the root of the project, from a terminal:
 - Automatic routing for .astro files under `src/pages/`
 - UI is modularized in `src/components/` for reusability
 - Latest Zenn articles are fetched via `src/utils/fetchZennFeed.ts` and displayed on the top page
+- Talk slides are fetched from the Speaker Deck RSS via `src/utils/fetchSpeakerDeckTalks.ts` and displayed on the Talks page and the top page
 - Site settings and constants are managed in the `config/` directory
 - Static assets (images, icons, etc.) are placed under `public/`
 
@@ -108,7 +123,7 @@ This project is deployed to Cloudflare Workers (static assets). The `main` branc
    npx wrangler deploy
    ```
 
-5. Set environment variables as needed (see .env)
+5. Set environment variables as needed (see .env). Set `PUBLIC_SPEAKERDECK_USER_URL` too, or the Talks page will be empty in production
 6. Create a Deploy Hook and register its URL as the `CLOUDFLARE_DEPLOY_HOOK_URL` GitHub secret (used by the scheduled workflow)
 
 ## 📬 Contact

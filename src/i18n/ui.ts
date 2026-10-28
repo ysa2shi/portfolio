@@ -32,6 +32,9 @@ const ja = {
   "page.blog.description": "開発で調べたことや、個人開発の記録を書いています。",
   "page.articles.title": "Articles",
   "page.articles.description": "Zenn に投稿した技術記事です。",
+  "page.talks.title": "Talks",
+  "page.talks.description": "LTや勉強会で発表したスライドです。",
+  "talks.empty": "登壇資料は準備中です。",
 
   "error.backHome": "Back to Home",
   "error.404.title": "Not Found",
@@ -58,6 +61,8 @@ const en: Partial<Record<UIKey, string>> = {
   "page.blog.description": "I run a small, personal blog.",
   "page.articles.description":
     "An overview of my recent thoughts and developments within the technology field.",
+  "page.talks.description": "Slides from my lightning talks and meetups.",
+  "talks.empty": "Talk slides are coming soon.",
 
   "rss.title": "RSS Feed",
 };

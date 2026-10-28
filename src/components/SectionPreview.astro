@@ -7,9 +7,18 @@ export interface Props {
   href: string;
   linkLabel: string;
   class?: string;
+  /** カードを並べるグリッドの列指定。省略すると 1/2/3 列 */
+  gridClass?: string;
 }
 
-const { title, description, href, linkLabel, class: className } = Astro.props;
+const {
+  title,
+  description,
+  href,
+  linkLabel,
+  class: className,
+  gridClass = "md:grid-cols-2 lg:grid-cols-3",
+} = Astro.props;
 ---
 
 <section class={`py-16 ${className ?? ""}`}>
@@ -28,7 +37,7 @@ const { title, description, href, linkLabel, class: className } = Astro.props;
       </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class={`grid grid-cols-1 gap-6 ${gridClass}`}>
       <slot />
     </div>
 
