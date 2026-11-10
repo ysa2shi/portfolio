@@ -6,7 +6,7 @@ import "@/styles/theme.css";
 ---
 
 <meta charset="UTF-8" />
-<!-- 初回描画のちらつきを避けるため、保存済みのテーマを先に反映する(既定はライト) -->
+{/* 初回描画のちらつきを避けるため、保存済みのテーマを先に反映する(既定はライト) */}
 <script is:inline>
   try {
     if (localStorage.getItem("theme") === "dark") {
@@ -18,17 +18,17 @@ import "@/styles/theme.css";
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- Favicon -->
+{/* Favicon */}
 <link rel="icon" type="image/webp" href="/favicon.webp" />
 <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="shortcut icon" href="/favicon.ico" />
 
-<!-- Apple Touch Icon -->
+{/* Apple Touch Icon */}
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="sa2shi.dev" />
 
-<!-- Android & PWA Icons -->
+{/* Android & PWA Icons */}
 <link rel="manifest" href="/site.webmanifest" />
 <meta name="theme-color" content="#f9fbfd" />
 
