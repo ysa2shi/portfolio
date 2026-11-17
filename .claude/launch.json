@@ -4,14 +4,33 @@
     {
       "name": "preview",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["preview", "--port", "4321"],
+      "runtimeArgs": [
+        "preview",
+        "--port",
+        "4321"
+      ],
       "port": 4321
     },
     {
       "name": "dev",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev", "--port", "4399"],
+      "runtimeArgs": [
+        "dev",
+        "--port",
+        "4399"
+      ],
       "port": 4399
+    },
+    {
+      "name": "wrangler",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "wrangler",
+        "dev",
+        "--port",
+        "8799"
+      ],
+      "port": 8799
     }
   ]
 }

@@ -1,6 +1,5 @@
 ---
-import { getPosts, sortPosts } from "@/utils/getCollectionPosts";
-import type { Post } from "@/types";
+import { getPublishedPosts } from "@/utils/getCollectionPosts";
 import { marketingConfig } from "@/config/marketing";
 import PostCard from "@/components/PostCard.astro";
 import SectionPreview from "@/components/SectionPreview.astro";
@@ -12,9 +11,8 @@ const text = localized(lang, {
   en: {},
 });
 const page = marketingConfig.pageInfo.blog;
-const posts: Post[] = await getPosts();
 // 最新3件だけ表示
-const latestPosts: Post[] = sortPosts(posts).slice(0, 3);
+const latestPosts = (await getPublishedPosts()).slice(0, 3);
 ---
 
 <SectionPreview
@@ -23,14 +21,5 @@ const latestPosts: Post[] = sortPosts(posts).slice(0, 3);
   href={localizePath(page.href, lang)}
   linkLabel={text.viewAll}
 >
-  {
-    latestPosts.map((post: Post) => (
-      <PostCard
-        id={post.id}
-        title={post.data.title}
-        image={post.data.image}
-        tags={post.data.tags ?? []}
-      />
-    ))
-  }
+  {latestPosts.map((post) => <PostCard post={post} />)}
 </SectionPreview>

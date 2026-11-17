@@ -4,6 +4,11 @@ import ErrorHeader from "@/components/ErrorHeader.astro";
 import Footer from "@/components/Footer.astro";
 import { siteConfig } from "@/config/site";
 import { toLang } from "@/i18n/utils";
+
+interface Props {
+  pageTitle: string;
+}
+
 const { pageTitle } = Astro.props;
 const lang = toLang(Astro.currentLocale);
 ---

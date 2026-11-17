@@ -1,26 +1,16 @@
-import { getCollection } from "astro:content";
-import type { Post } from "@/types";
+import { getCollection, type CollectionEntry } from "astro:content";
 
-export async function getPosts(): Promise<Post[]> {
-  return await getCollection("posts");
+export type Post = CollectionEntry<"posts">;
+
+/** 公開済みの記事を新しい順で返す。ブログ記事の取得はここに閉じる */
+export async function getPublishedPosts(): Promise<Post[]> {
+  const posts = await getCollection("posts", ({ data }) => data.published);
+  return posts.sort(
+    (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+  );
 }
 
-export function normalizeSlug(id: string): string {
-  return id.replace(/\.(md|mdx)$/, "");
-}
-
-export function sortPosts(posts: Post[]): Post[] {
-  return [...posts]
-    .filter((post) => post.data.published === true)
-    .sort(
-      (
-        oldPost: { data: { publishDate: Date } },
-        latestPost: { data: { publishDate: Date } },
-      ) => {
-        return (
-          latestPost.data.publishDate.valueOf() -
-          oldPost.data.publishDate.valueOf()
-        );
-      },
-    );
+/** 記事ページのパス。記事は日本語だけなので、言語の接頭辞は付けない */
+export function postPath(post: Pick<Post, "id">): string {
+  return `/blog/${post.id}`;
 }

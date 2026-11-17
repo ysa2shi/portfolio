@@ -10,10 +10,21 @@ on:
   # 手動実行も可能にする
   workflow_dispatch:
 
+# リポジトリには触らないので、GITHUB_TOKEN の権限をすべて外す
+permissions: {}
+
+concurrency:
+  group: scheduled-deploy
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       # Workers Builds の Deploy Hook を叩いて main をビルド・デプロイする
       - name: Trigger Workers Builds deploy hook
-        run: curl -fsS -X POST "${{ secrets.CLOUDFLARE_DEPLOY_HOOK_URL }}"
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_URL }}
+        # URL 自体が秘密なので、エラー時にも表示されないよう出力を捨てる
+        run: curl --fail --silent --show-error --max-time 60 --retry 3 -o /dev/null -X POST "$DEPLOY_HOOK_URL"

@@ -1,5 +1,7 @@
 import Parser from "rss-parser";
 import { siteConfig } from "@/config/site";
+import { handleFeedError } from "@/utils/feedError";
+import { httpUrl } from "@/utils/url";
 
 export interface Talk {
   title: string;
@@ -24,13 +26,13 @@ let cache: Talk[] | null = null;
  *   登壇日: 2026-10-22   ← 省略すると公開日になる
  *   そのほかの行は概要として表示する(URL だけの行は除く)
  */
-function parseDescription(text: string, pubDate: string) {
+function parseDescription(text: string, fallbackDate: string) {
   const lines = text
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean);
 
-  let date = new Date(pubDate).toISOString().slice(0, 10);
+  let date = fallbackDate;
   const rest: string[] = [];
   for (const line of lines) {
     const m = line.match(
@@ -68,19 +70,29 @@ export async function fetchTalks(): Promise<Talk[]> {
     const feed = await parser.parseURL(`${siteConfig.links.speakerdeck}.rss`);
 
     const talks = feed.items
-      .map((item) => ({
-        title: item.title ?? "",
-        url: item.link ?? "",
-        // RSS の画像は 640px 幅の preview。大きく表示するので 1920px 版にする
-        thumbnail: item.media?.$?.url?.replace("/preview_slide_0", "/slide_0"),
-        ...parseDescription(item.contentSnippet ?? "", item.pubDate ?? ""),
-      }))
+      .flatMap((item) => {
+        const url = httpUrl(item.link);
+        const published = new Date(item.pubDate ?? "");
+        // リンク先や公開日が読めない項目は載せない
+        if (!url || Number.isNaN(published.valueOf())) return [];
+        return {
+          title: item.title ?? "",
+          url,
+          // RSS の画像は 640px 幅の preview。大きく表示するので 1920px 版にする
+          thumbnail: httpUrl(
+            item.media?.$?.url?.replace("/preview_slide_0", "/slide_0"),
+          ),
+          ...parseDescription(
+            item.contentSnippet ?? "",
+            published.toISOString().slice(0, 10),
+          ),
+        };
+      })
       .sort((a, b) => b.date.localeCompare(a.date));
 
     cache = talks;
     return talks;
   } catch (error) {
-    console.error("Speaker Deck RSS取得失敗:", error);
-    return [];
+    return handleFeedError("Speaker Deck", error);
   }
 }

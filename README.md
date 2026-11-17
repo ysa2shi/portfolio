@@ -102,6 +102,7 @@ All commands are run from the root of the project, from a terminal:
 - UI is modularized in `src/components/` for reusability
 - Latest Zenn articles are fetched via `src/utils/fetchZennFeed.ts` and displayed on the top page
 - Talk slides are fetched from the Speaker Deck RSS via `src/utils/fetchSpeakerDeckTalks.ts` and displayed on the Talks page and the top page
+- In production builds (`pnpm build`), a failed feed fetch fails the build, so the site is never deployed with empty lists and the previous deployment stays live. In development (`pnpm dev`), it only logs a warning and continues with an empty list
 - Site settings and constants are managed in the `config/` directory
 - Static assets (images, icons, etc.) are placed under `public/`
 

@@ -23,15 +23,9 @@ importers:
       astro:
         specifier: ^6.1.2
         version: 6.1.2(@types/node@25.5.0)(jiti@2.6.1)(rollup@4.60.1)(supports-color@10.2.2)(typescript@6.0.3)(yaml@2.8.3)
-      astro-google-fonts-optimizer:
-        specifier: ^0.2.2
-        version: 0.2.2
       astro-icon:
         specifier: ^1.1.5
         version: 1.1.5(supports-color@10.2.2)
-      open-graph-scraper:
-        specifier: ^6.10.0
-        version: 6.11.0
       remark-link-card-plus:
         specifier: ^0.7.1
         version: 0.7.4(supports-color@10.2.2)
@@ -48,9 +42,6 @@ importers:
       '@eslint/js':
         specifier: ^9.39.1
         version: 9.39.4
-      '@tailwindcss/line-clamp':
-        specifier: ^0.4.4
-        version: 0.4.4(tailwindcss@3.4.17)
       '@typescript-eslint/parser':
         specifier: ^8.48.1
         version: 8.58.0(eslint@9.39.4(jiti@2.6.1)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
@@ -1199,11 +1190,6 @@ packages:
   '@speed-highlight/core@1.2.24':
     resolution: {integrity: sha512-qeW2e1l78afw8VhRPfPQ1Gjj+KU5XFQ/OFV5ti6eTa9bruO7mJyZtA4vw0ofqmA3tKCkROE9xLk3VZoeRc98nw==}
 
-  '@tailwindcss/line-clamp@0.4.4':
-    resolution: {integrity: sha512-5U6SY5z8N42VtrCrKlsTAA35gy2VSyYtHWCsg1H87NU1SXnEfekTVlrga9fzUDrrHcGi2Lb5KenUWb4lRQT5/g==}
-    peerDependencies:
-      tailwindcss: '>=2.0.0 || >=3.0.0 || >=3.0.0-alpha.1'
-
   '@tokenizer/inflate@0.4.1':
     resolution: {integrity: sha512-2mAv+8pkG6GIZiF1kNg1jAjh27IDxEPKwdGul3snfztFerfPGI1LjDezZp3i7BElXompqEtPmoPx6c2wgtWsOA==}
     engines: {node: '>=18'}
@@ -1412,9 +1398,6 @@ packages:
   astro-eslint-parser@1.4.0:
     resolution: {integrity: sha512-+QDcgc7e+au6EZ0YjMmRRjNoQo5bDMlaR45aWDoFsuxQTCM9qmCHRoiKJPELgckJ8Wmr7vcfpa9eCDHBFh6G4w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  astro-google-fonts-optimizer@0.2.2:
-    resolution: {integrity: sha512-YQxp/ExF3NzUomAGuu1VKecO7/ETRnhnE50gqwAqfpbGPZFj4MYa4XxK1ukBg3R63QmKuE5uurOiKmXiLzttuw==}
 
   astro-icon@1.1.5:
     resolution: {integrity: sha512-CJYS5nWOw9jz4RpGWmzNQY7D0y2ZZacH7atL2K9DeJXJVaz7/5WrxeyIxO8KASk1jCM96Q4LjRx/F3R+InjJrw==}
@@ -4168,10 +4151,6 @@ snapshots:
 
   '@speed-highlight/core@1.2.24': {}
 
-  '@tailwindcss/line-clamp@0.4.4(tailwindcss@3.4.17)':
-    dependencies:
-      tailwindcss: 3.4.17
-
   '@tokenizer/inflate@0.4.1(supports-color@10.2.2)':
     dependencies:
       debug: 4.4.3(supports-color@10.2.2)
@@ -4435,8 +4414,6 @@ snapshots:
       semver: 7.7.4
     transitivePeerDependencies:
       - supports-color
-
-  astro-google-fonts-optimizer@0.2.2: {}
 
   astro-icon@1.1.5(supports-color@10.2.2):
     dependencies:

@@ -7,13 +7,17 @@ import { getI18n, localizePath } from "@/i18n/utils";
 
 const { lang, t } = getI18n(Astro.currentLocale);
 const { home, blog, articles, talks } = marketingConfig.pageInfo;
-const navItems = [home, articles, talks, blog].map((page) => ({
-  name: t(page.title),
-  url: localizePath(page.href, lang),
-}));
-
 const currentPath =
   Astro.url.pathname === "/" ? "/" : Astro.url.pathname.replace(/\/$/, "");
+const homeUrl = localizePath(home.href, lang);
+const navItems = [home, articles, talks, blog].map((page) => {
+  const url = localizePath(page.href, lang);
+  // 配下のページ(ブログ記事など)でも、そのナビを現在地として示す。トップだけは完全一致
+  const current =
+    currentPath === url ||
+    (url !== homeUrl && currentPath.startsWith(`${url}/`));
+  return { name: t(page.title), url, current };
+});
 ---
 
 <header
@@ -21,7 +25,7 @@ const currentPath =
 >
   <div class="container mx-auto px-4 flex justify-between items-center">
     <a
-      href={localizePath("/", lang)}
+      href={homeUrl}
       class="py-4 text-xl font-bold text-ink transition-colors hover:text-accent"
     >
       {siteConfig.name}
@@ -36,11 +40,11 @@ const currentPath =
                 <a
                   href={item.url}
                   class={`border-b pb-0.5 transition-colors hover:border-accent-2 hover:text-ink ${
-                    currentPath === item.url
+                    item.current
                       ? "border-accent-2 text-ink"
                       : "border-transparent text-sub"
                   }`}
-                  aria-current={currentPath === item.url ? "page" : undefined}
+                  aria-current={item.current ? "page" : undefined}
                 >
                   {item.name}
                 </a>
@@ -54,6 +58,7 @@ const currentPath =
       <ThemeToggle />
       <button
         id="menuToggle"
+        type="button"
         class="md:hidden p-2 text-ink"
         aria-label={t("nav.openMenu")}
         aria-controls="mobileMenu"
@@ -66,13 +71,14 @@ const currentPath =
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
           class="w-6 h-6"
+          aria-hidden="true"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"></path>
+          <path class="icon-open" d="M4 6h16M4 12h16M4 18h16"></path>
+          <path class="icon-close" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
     </div>
@@ -90,9 +96,9 @@ const currentPath =
               <a
                 href={item.url}
                 class={`block py-2 transition-colors hover:text-ink ${
-                  currentPath === item.url ? "text-ink" : "text-sub"
+                  item.current ? "text-ink" : "text-sub"
                 }`}
-                aria-current={currentPath === item.url ? "page" : undefined}
+                aria-current={item.current ? "page" : undefined}
               >
                 {item.name}
               </a>
@@ -104,34 +110,31 @@ const currentPath =
   </div>
 </header>
 
+<style>
+  /* 開いているあいだは × を出す(状態は aria-expanded で持つ) */
+  #menuToggle .icon-close,
+  #menuToggle[aria-expanded="true"] .icon-open {
+    display: none;
+  }
+  #menuToggle[aria-expanded="true"] .icon-close {
+    display: inline;
+  }
+</style>
+
 <script>
   const menuToggle = document.getElementById("menuToggle");
   const mobileMenu = document.getElementById("mobileMenu");
 
   if (menuToggle && mobileMenu) {
     menuToggle.addEventListener("click", () => {
-      const expanded =
-        menuToggle.getAttribute("aria-expanded") === "true" || false;
-      menuToggle.setAttribute("aria-expanded", (!expanded).toString());
+      const open = menuToggle.getAttribute("aria-expanded") !== "true";
+      menuToggle.setAttribute("aria-expanded", String(open));
       menuToggle.setAttribute(
         "aria-label",
-        (expanded
-          ? menuToggle.dataset.labelOpen
-          : menuToggle.dataset.labelClose) ?? "",
+        (open ? menuToggle.dataset.labelClose : menuToggle.dataset.labelOpen) ??
+          "",
       );
-      mobileMenu.classList.toggle("hidden");
-
-      // Change the icon when menu is open
-      const svg = menuToggle.querySelector("svg");
-      if (svg) {
-        if (expanded) {
-          svg.innerHTML =
-            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>';
-        } else {
-          svg.innerHTML =
-            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
-        }
-      }
+      mobileMenu.classList.toggle("hidden", !open);
     });
   }
 </script>

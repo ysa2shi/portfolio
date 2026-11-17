@@ -1,0 +1,16 @@
+# Cloudflare Workers の静的アセットに付けるレスポンスヘッダー
+# https://developers.cloudflare.com/workers/static-assets/headers/
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  # スクリプトとスタイルは Astro がページ内に埋め込むので 'unsafe-inline' が要る。
+  # 画像は Zenn・Speaker Deck・リンクカードなど外部のものを表示するので https: を許可している。
+  # 記事に外部の iframe(動画など)を埋め込むときは frame-src を足す
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+
+# ファイル名にハッシュが付くので、長くキャッシュしてよい
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
