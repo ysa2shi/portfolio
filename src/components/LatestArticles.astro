@@ -17,21 +17,24 @@ const articles = await fetchZennArticles();
 const latestArticles = articles.slice(0, 3);
 ---
 
-<SectionPreview
-  title={text.title}
-  description={t(page.description)}
-  href={localizePath(page.href, lang)}
-  linkLabel={text.viewAll}
->
-  {
-    latestArticles.map((article) => (
-      <ArticleCard
-        title={article.title}
-        description={article.description}
-        publishDate={article.pubDate}
-        link={article.link}
-        thumbnail={article.thumbnail}
-      />
-    ))
-  }
-</SectionPreview>
+{
+  // フィードを取得できなかったときは、見出しだけの空のセクションを出さない
+  latestArticles.length > 0 && (
+    <SectionPreview
+      title={text.title}
+      description={t(page.description)}
+      href={localizePath(page.href, lang)}
+      linkLabel={text.viewAll}
+    >
+      {latestArticles.map((article) => (
+        <ArticleCard
+          title={article.title}
+          description={article.description}
+          publishDate={article.pubDate}
+          link={article.link}
+          thumbnail={article.thumbnail}
+        />
+      ))}
+    </SectionPreview>
+  )
+}

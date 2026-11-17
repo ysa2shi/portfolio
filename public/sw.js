@@ -4,7 +4,7 @@
 // - 画像などその他の同一オリジンの資産: キャッシュを先に返し、裏で更新する
 // 中身を変えたら VERSION を上げる(古いキャッシュは activate で消える)
 
-const VERSION = "v2";
+const VERSION = "v3";
 const PAGES = `pages-${VERSION}`;
 const ASSETS = `assets-${VERSION}`;
 const OFFLINE_URL = "/offline/";
@@ -52,6 +52,8 @@ self.addEventListener("fetch", (event) => {
 
 // 書き込みはレスポンスを返したあとも続くので、waitUntil でワーカーが止まらないようにする
 function store(event, cache, request, response) {
+  // リダイレクトをたどった結果は保存しない(ページ遷移の応答として返すと、ブラウザがエラーにする)
+  if (!response.ok || response.redirected) return;
   event.waitUntil(
     cache
       .put(request, response)
@@ -77,7 +79,7 @@ async function networkFirst(event) {
   const cache = await caches.open(PAGES);
   try {
     const response = await fetch(request);
-    if (response.ok) store(event, cache, request, response.clone());
+    store(event, cache, request, response.clone());
     return response;
   } catch {
     const isEnglish = new URL(request.url).pathname.startsWith("/en/");
@@ -95,7 +97,7 @@ async function cacheFirst(event) {
   const cached = await cache.match(request);
   if (cached) return cached;
   const response = await fetch(request);
-  if (response.ok) store(event, cache, request, response.clone());
+  store(event, cache, request, response.clone());
   return response;
 }
 
@@ -105,7 +107,7 @@ async function staleWhileRevalidate(event) {
   const cached = await cache.match(request);
   const update = fetch(request)
     .then((response) => {
-      if (response.ok) store(event, cache, request, response.clone());
+      store(event, cache, request, response.clone());
       return response;
     })
     .catch(() => cached ?? Response.error());

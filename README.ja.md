@@ -102,6 +102,7 @@ Astro は `src/pages/` ディレクトリ内の `.astro` または `.md` ファ�
 - UIは `src/components/` で分割管理し、再利用性を向上
 - Zenn の最新記事は `src/utils/fetchZennFeed.ts` でRSSフィードから取得し、トップページ等で表示
 - 登壇資料は `src/utils/fetchSpeakerDeckTalks.ts` で Speaker Deck の RSS から取得し、Talks ページとトップページで表示
+- 本番ビルド（`pnpm build`）では、フィードを取得できないとビルドが失敗します（記事が空のままデプロイされず、前回のデプロイが残ります）。開発中（`pnpm dev`）は警告だけ出して空で続行します
 - サイト設定や定数は `config/` ディレクトリで一元管理
 - 静的アセット（画像・アイコン等）は `public/` 配下に配置
 

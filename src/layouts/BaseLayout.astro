@@ -33,8 +33,8 @@ const fullTitle = `${pageTitle} | ${siteConfig.name}`;
     <title>{fullTitle}</title>
 
     <script>
-      // Service Workerの登録
-      if ("serviceWorker" in navigator) {
+      // Service Worker の登録。開発中はキャッシュが邪魔になるので、本番ビルドだけ
+      if (import.meta.env.PROD && "serviceWorker" in navigator) {
         window.addEventListener("load", () => {
           navigator.serviceWorker.register("/sw.js");
         });
@@ -54,7 +54,6 @@ const fullTitle = `${pageTitle} | ${siteConfig.name}`;
   html {
     font-family: system-ui, sans-serif;
     background-color: rgb(var(--c-canvas));
-    scroll-behavior: smooth;
   }
 
   body {
@@ -108,16 +107,5 @@ const fullTitle = `${pageTitle} | ${siteConfig.name}`;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 1rem;
-  }
-
-  @keyframes slideUp {
-    0% {
-      transform: translateY(20px);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
   }
 </style>

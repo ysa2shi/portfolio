@@ -1,16 +1,14 @@
 ---
-import type { Post } from "@/types";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PageHeader from "@/components/PageHeader.astro";
 import PostCard from "@/components/PostCard.astro";
 import { marketingConfig } from "@/config/marketing";
-import { getPosts, sortPosts } from "@/utils/getCollectionPosts";
+import { getPublishedPosts } from "@/utils/getCollectionPosts";
 import { getI18n } from "@/i18n/utils";
 
 const { t } = getI18n(Astro.currentLocale);
 const page = marketingConfig.pageInfo.blog;
-const posts: Post[] = await getPosts();
-const sortedPosts: Post[] = sortPosts(posts);
+const posts = await getPublishedPosts();
 ---
 
 <BaseLayout pageTitle={t(page.title)} description={t(page.description)}>
@@ -19,16 +17,7 @@ const sortedPosts: Post[] = sortPosts(posts);
   <section class="py-16">
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {
-          sortedPosts.map((post: Post) => (
-            <PostCard
-              id={post.id}
-              title={post.data.title}
-              image={post.data.image}
-              tags={post.data.tags}
-            />
-          ))
-        }
+        {posts.map((post) => <PostCard post={post} />)}
       </div>
     </div>
   </section>

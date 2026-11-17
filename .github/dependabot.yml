@@ -1,0 +1,21 @@
+# 脆弱性の修正だけを PR にする(通常のバージョン更新の PR は作らない)。
+# セキュリティ更新そのものの有効・無効は、GitHub のリポジトリ設定
+# (Settings > Advanced Security > Dependabot security updates)で切り替える
+version: 2
+updates:
+  - package-ecosystem: npm # pnpm もこの指定(pnpm-lock.yaml を更新する)
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Asia/Tokyo
+    # 0 にすると、バージョン更新の PR は作らず、セキュリティ更新だけになる
+    open-pull-requests-limit: 0
+    # 脆弱性の修正は、まとめて1つの PR にする
+    groups:
+      security:
+        applies-to: security-updates
+        patterns: ["*"]
+    commit-message:
+      prefix: deps

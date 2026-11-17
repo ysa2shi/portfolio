@@ -1,5 +1,5 @@
 ---
-import { siteConfig } from "@/config/site";
+import { resolveSiteUrl, siteConfig } from "@/config/site";
 import { languages } from "@/i18n/ui";
 import { getI18n, hasTranslation, localizePath, stripLang } from "@/i18n/utils";
 
@@ -25,10 +25,7 @@ const {
 
 const { lang, t } = getI18n(Astro.currentLocale);
 const desc = description ?? t("site.description");
-// PUBLIC_SITE_URL が未設定・不正(http(s):// がないなど)のときは、表示中のオリジンを使う
-const base = /^https?:\/\//.test(siteConfig.url)
-  ? siteConfig.url
-  : Astro.url.origin;
+const base = resolveSiteUrl(Astro.url.origin);
 const canonical = new URL(Astro.url.pathname, base).href;
 const imageUrl = new URL(image, base).href;
 const ogLocale = { ja: "ja_JP", en: "en_US" } satisfies Record<
